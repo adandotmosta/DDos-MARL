@@ -12,7 +12,12 @@ __pycache__/
 # Large datasets and artifacts
 BCC-2024/*.csv
 BCC-2024 copy/
-Risk_Model/artifacts/
+Risk_Model/artifacts/*
+!Risk_Model/artifacts/vae/
+Risk_Model/artifacts/vae/*
+!Risk_Model/artifacts/vae/v1/
+Risk_Model/artifacts/vae/v1/*
+!Risk_Model/artifacts/vae/v1/selected_features.json
 
 # Model binaries / arrays
 *.npy

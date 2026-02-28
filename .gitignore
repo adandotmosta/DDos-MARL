@@ -1,0 +1,21 @@
+# OS / editor
+.DS_Store
+.vscode/
+
+# Python environments / cache
+.venv/
+my_env/
+my_env312/
+__pycache__/
+*.pyc
+
+# Large datasets and artifacts
+BCC-2024/*.csv
+BCC-2024 copy/
+Risk_Model/artifacts/
+
+# Model binaries / arrays
+*.npy
+*.pt
+*.pkl
+*.npz

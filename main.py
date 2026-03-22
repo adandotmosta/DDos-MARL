@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "lgbm", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "eval"],
+        choices=["all", "lgbm", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "eval"],
         help="Which stage to run",
     )
     parser.add_argument(
@@ -112,6 +112,22 @@ def main() -> None:
         from src.train_s12 import train as train_s12
 
         train_s12()
+
+    if args.stage in ("s13",):
+        print("\n" + "=" * 55)
+        print("STAGE 2h: MAPPO + Local Reward + Puzzle Cost 0.05 (S13)")
+        print("=" * 55)
+        from src.train_s13 import train as train_s13
+
+        train_s13()
+
+    if args.stage in ("s14",):
+        print("\n" + "=" * 55)
+        print("STAGE 2i: MAPPO + Local Reward + Puzzle Block Rate State (S14)")
+        print("=" * 55)
+        from src.train_s14 import train as train_s14
+
+        train_s14()
 
     if args.stage in ("all", "eval"):
         print("\n" + "=" * 55)

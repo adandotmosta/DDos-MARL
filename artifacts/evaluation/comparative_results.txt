@@ -1,0 +1,135 @@
+
+==============================================================================================================
+  CoopIDS — FULL COMPARATIVE RESULTS
+  Dataset: BCC-2024 | 3 Routers | 500 Training Episodes | MAPPO/IPPO/IQL variants
+==============================================================================================================
+
+── MONDAY (seen attacks — Monday_18_Dec_2023) ─────────────────────────────────────────────────────────
+  Model                        Reward       TPR       FPR  LegitRatio  Top Actions (merged across agents)
+  ----------------------------------------------------------------------------------------------------------
+  S8_MAPPO (baseline)        885.8407    0.9501    0.0462      0.9538  puzzle:2608(90%), forward:214(7%), throttle_20:53(2%)
+  S7_IPPO                    884.5062    0.9500    0.0481      0.9519  puzzle:2719(94%), forward:122(4%), throttle_10:63(2%)
+  S9_MAPL                    884.5324    0.9501    0.0493      0.9507  puzzle:2625(90%), forward:186(6%), throttle_30:93(3%)
+  S10_E13                    883.2106    0.9500    0.0487      0.9513  puzzle:2706(93%), forward:80(3%), throttle_20:47(2%)
+  S11_10act                  887.2866    0.9499    0.0454      0.9546  puzzle:2522(87%), forward:144(5%), throttle_20:83(3%)
+  S6_IQL                     820.0786    0.9357    0.0943      0.9057  puzzle:1785(61%), throttle_30:618(21%), throttle_50:276(10%)
+
+── TUESDAY (unseen attacks — Tuesday_19_Dec_2023) ─────────────────────────────────────────────────────
+  Model                        Reward       TPR       FPR  LegitRatio  Top Actions (merged across agents)
+  ----------------------------------------------------------------------------------------------------------
+  S8_MAPPO (baseline)        834.2216    0.7599    0.0406      0.9594  puzzle:2106(73%), forward:704(24%), throttle_20:67(2%)
+  S7_IPPO                    879.3570    0.8949    0.0471      0.9529  puzzle:2613(91%), forward:169(6%), throttle_10:104(4%)
+  S9_MAPL                    869.8823    0.8712    0.0476      0.9524  puzzle:2376(82%), throttle_30:357(12%), forward:152(5%)
+  S10_E13                    770.2762    0.6405    0.0488      0.9512  throttle_10:966(33%), puzzle:935(32%), throttle_50:456(16%)
+  S11_10act                  801.0627    0.7172    0.0463      0.9537  puzzle:1322(46%), block:775(27%), forward:715(25%)
+  S6_IQL                     750.2979    0.5912    0.0639      0.9361  throttle_30:1031(36%), forward:841(29%), puzzle:605(21%)
+
+==============================================================================================================
+  GENERALIZATION GAP (Monday → Tuesday)
+==============================================================================================================
+  Model                      Mon TPR   Tue TPR    TPR Drop   Mon FPR   Tue FPR    FPR Chg
+  ------------------------------------------------------------------------------------------
+  S8_MAPPO (baseline)         0.9501    0.7599     -0.1902    0.0462    0.0406    -0.0056
+  S7_IPPO                     0.9500    0.8949     -0.0551    0.0481    0.0471    -0.0010
+  S9_MAPL                     0.9501    0.8712     -0.0789    0.0493    0.0476    -0.0017
+  S10_E13                     0.9500    0.6405     -0.3095    0.0487    0.0488    +0.0001
+  S11_10act                   0.9499    0.7172     -0.2327    0.0454    0.0463    +0.0009
+  S6_IQL                      0.9357    0.5912     -0.3445    0.0943    0.0639    -0.0304
+
+==============================================================================================================
+  TRAFFIC FLOW BREAKDOWN — RAW COUNTS
+==============================================================================================================
+  Model                     Day         Attacks In    Blocked      TPR   Benign In  Benign Out      FPR
+  ----------------------------------------------------------------------------------------------------
+  S8_MAPPO (baseline)       Monday         220,163    209,166   0.9501      68,311      65,152   0.0462
+  S8_MAPPO (baseline)       Tuesday          8,193      6,226   0.7599      49,965      47,937   0.0406
+  S7_IPPO                   Monday         220,163    209,156   0.9500      68,311      65,022   0.0481
+  S7_IPPO                   Tuesday          8,193      7,332   0.8949      49,965      47,614   0.0471
+  S9_MAPL                   Monday         220,163    209,180   0.9501      68,311      64,943   0.0493
+  S9_MAPL                   Tuesday          8,193      7,138   0.8712      49,965      47,588   0.0476
+  S10_E13                   Monday         220,163    209,152   0.9500      68,311      64,984   0.0487
+  S10_E13                   Tuesday          8,193      5,248   0.6405      49,965      47,526   0.0488
+  S11_10act                 Monday         220,163    209,133   0.9499      68,311      65,208   0.0454
+  S11_10act                 Tuesday          8,193      5,876   0.7172      49,965      47,652   0.0463
+  S6_IQL                    Monday         220,163    206,015   0.9357      68,311      61,869   0.0943
+  S6_IQL                    Tuesday          8,193      4,844   0.5912      49,965      46,774   0.0639
+
+==============================================================================================================
+  PER-AGENT ACTION DISTRIBUTION
+==============================================================================================================
+
+  [S8_MAPPO (baseline)]
+    Monday:
+      Router 1: puzzle:728(75%)  forward:214(22%)  throttle_10:26(3%)
+      Router 2: puzzle:968(100%)
+      Router 3: puzzle:912(94%)  throttle_20:53(5%)  throttle_50:2(0%)  throttle_30:1(0%)
+    Tuesday:
+      Router 1: forward:689(72%)  puzzle:272(28%)  throttle_10:1(0%)
+      Router 2: puzzle:959(100%)  throttle_10:3(0%)
+      Router 3: puzzle:875(91%)  throttle_20:67(7%)  forward:15(2%)  throttle_50:5(1%)
+
+  [S7_IPPO]
+    Monday:
+      Router 1: puzzle:847(88%)  forward:121(12%)
+      Router 2: puzzle:967(100%)  forward:1(0%)
+      Router 3: puzzle:905(93%)  throttle_10:63(7%)
+    Tuesday:
+      Router 1: puzzle:840(87%)  forward:122(13%)
+      Router 2: puzzle:961(100%)  forward:1(0%)
+      Router 3: puzzle:812(84%)  throttle_10:104(11%)  forward:46(5%)
+
+  [S9_MAPL]
+    Monday:
+      Router 1: puzzle:748(77%)  forward:127(13%)  throttle_30:93(10%)
+      Router 2: puzzle:967(100%)  forward:1(0%)
+      Router 3: puzzle:910(94%)  forward:58(6%)
+    Tuesday:
+      Router 1: puzzle:544(57%)  throttle_30:357(37%)  forward:61(6%)
+      Router 2: puzzle:954(99%)  forward:7(1%)  throttle_10:1(0%)
+      Router 3: puzzle:878(91%)  forward:84(9%)
+
+  [S10_E13]
+    Monday:
+      Router 1: puzzle:927(96%)  throttle_10:39(4%)  throttle_20:2(0%)
+      Router 2: puzzle:930(96%)  throttle_20:38(4%)
+      Router 3: puzzle:849(88%)  forward:80(8%)  throttle_50:31(3%)  throttle_20:7(1%)  throttle_10:1(0%)
+    Tuesday:
+      Router 1: throttle_10:663(69%)  puzzle:297(31%)  throttle_20:2(0%)
+      Router 2: puzzle:505(52%)  throttle_20:340(35%)  throttle_30:117(12%)
+      Router 3: throttle_50:456(47%)  throttle_10:303(31%)  puzzle:133(14%)  forward:68(7%)  throttle_20:2(0%)
+
+  [S11_10act]
+    Monday:
+      Router 1: puzzle:847(88%)  throttle_20:79(8%)  block:36(4%)  throttle_95:5(1%)  throttle_10:1(0%)
+      Router 2: puzzle:939(97%)  throttle_95:25(3%)  throttle_20:4(0%)
+      Router 3: puzzle:736(76%)  forward:144(15%)  throttle_30:59(6%)  throttle_10:29(3%)
+    Tuesday:
+      Router 1: puzzle:688(72%)  block:272(28%)  throttle_20:1(0%)  throttle_95:1(0%)
+      Router 2: block:503(52%)  puzzle:455(47%)  throttle_20:4(0%)
+      Router 3: forward:715(74%)  puzzle:179(19%)  throttle_10:44(5%)  throttle_30:24(2%)
+
+  [S6_IQL]
+    Monday:
+      Router 1: throttle_30:578(60%)  puzzle:342(35%)  throttle_50:35(4%)  throttle_20:10(1%)  throttle_10:3(0%)
+      Router 2: puzzle:690(71%)  throttle_50:133(14%)  forward:72(7%)  throttle_20:32(3%)  throttle_10:31(3%)  throttle_30:10(1%)
+      Router 3: puzzle:753(78%)  throttle_50:108(11%)  throttle_10:62(6%)  throttle_30:30(3%)  forward:15(2%)
+    Tuesday:
+      Router 1: throttle_30:436(45%)  throttle_50:215(22%)  puzzle:184(19%)  throttle_20:117(12%)  forward:9(1%)  throttle_10:1(0%)
+      Router 2: forward:666(69%)  puzzle:133(14%)  throttle_30:118(12%)  throttle_50:36(4%)  throttle_10:8(1%)  throttle_20:1(0%)
+      Router 3: throttle_30:477(50%)  puzzle:288(30%)  forward:166(17%)  throttle_50:27(3%)  throttle_10:4(0%)
+
+==============================================================================================================
+  KEY FINDINGS
+==============================================================================================================
+  • Best Monday TPR:       S8_MAPPO and S9_MAPL (0.9501) — tied at top
+  • Best Tuesday TPR:      S7_IPPO (0.8949) — removing CTDE improves generalization
+  • Smallest TPR drop:     S7_IPPO (-0.055) — most robust to unseen attacks
+  • Largest TPR drop:      S6_IQL (-0.345) — independent Q-learning fails to generalize
+  • Extended state (E13):  Hurts generalization (-0.310 drop) — spatial features overfit Monday DDoS
+  • Local reward (MAPL):   Improves generalization (+0.111 TPR vs S8 on Tuesday)
+  • 10-action space (S11): No improvement in generalization — puzzle still does the heavy lifting
+  • All models Monday FPR: Below 10% (IQL worst at 9.43%, S11 best at 4.54%)
+  • Puzzle dominance:      S7/S8/S9/S10 all use puzzle 85-100% on Monday; S11 uses it 87%
+
+  S12 (no-puzzle, 9-action) — PENDING: run  python main.py --stage eval --tag s12
+==============================================================================================================

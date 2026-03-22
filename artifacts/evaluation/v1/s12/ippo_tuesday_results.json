@@ -1,26 +1,25 @@
 {
-  "total_reward": 883.6772,
+  "total_reward": 884.4574,
   "total_steps": 962,
   "total_benign_in": 49965,
   "total_attack_in": 8193,
-  "total_benign_out": 47651,
-  "total_attack_blocked": 7373,
-  "tpr": 0.8999,
-  "fpr": 0.0463,
-  "legit_ratio": 0.9537,
+  "total_benign_out": 47558,
+  "total_attack_blocked": 7395,
+  "tpr": 0.9026,
+  "fpr": 0.0482,
+  "legit_ratio": 0.9518,
   "action_distribution": [
     {
       "forward": 122,
       "puzzle": 840
     },
     {
-      "forward": 52,
-      "puzzle": 885,
-      "throttle_10": 25
+      "forward": 1,
+      "puzzle": 961
     },
     {
-      "forward": 43,
-      "puzzle": 878,
+      "forward": 59,
+      "puzzle": 862,
       "throttle_10": 41
     }
   ]

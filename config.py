@@ -29,6 +29,8 @@ MAPL_DIR          = MARL_DIR / "ablation" / "S9"    # MAPPO + local reward
 E13_DIR           = MARL_DIR / "ablation" / "S10"   # MAPPO + extended state (E13)
 S11_DIR           = MARL_DIR / "ablation" / "S11"   # MAPPO + 10-action space
 S12_DIR           = MARL_DIR / "ablation" / "S12"   # MAPPO + no puzzle, 9-action space
+S13_DIR           = MARL_DIR / "ablation" / "S13"   # MAPPO + local reward + puzzle cost 0.05
+S14_DIR           = MARL_DIR / "ablation" / "S14"   # MAPPO + local reward + puzzle_block_rate state
 EVAL_DIR          = ARTIFACT_DIR / "evaluation"     / VERSION
 
 # CSV filenames
@@ -107,6 +109,10 @@ PUZZLE_PASS = {
 # Asymmetric (attacks more important): REWARD_ATTACK_W > 1.0
 REWARD_LEGIT_W  = 1.0
 REWARD_ATTACK_W = 1.0
+# Cost subtracted per puzzle action taken each step (summed across agents).
+# 0.0 = no penalty (default, preserves all prior experiments).
+# Try 0.01 / 0.05 / 0.10 to study the TPR–puzzle-use tradeoff.
+PUZZLE_COST = 0.0
 
 # Per-agent local reward experiment
 # False → shared global reward (default, all experiments above)
@@ -188,4 +194,5 @@ ABLATION_STAGES = {
     "S10": "3 agents, LightGBM risk, selective + puzzle, MAPPO + extended state (7-dim)",
     "S11": "3 agents, LightGBM risk, selective + puzzle, MAPPO + 10-action space",
     "S12": "3 agents, LightGBM risk, no puzzle, MAPPO + 9-action space",
+    "S13": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle cost 0.05",
 }

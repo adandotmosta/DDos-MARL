@@ -1,35 +1,36 @@
 {
-  "total_reward": 737.2935,
+  "total_reward": 715.112,
   "total_steps": 968,
   "total_benign_in": 68311,
   "total_attack_in": 220163,
-  "total_benign_out": 57057,
-  "total_attack_blocked": 204221,
-  "tpr": 0.9276,
-  "fpr": 0.1647,
-  "legit_ratio": 0.8353,
+  "total_benign_out": 55675,
+  "total_attack_blocked": 196834,
+  "tpr": 0.894,
+  "fpr": 0.185,
+  "legit_ratio": 0.815,
   "action_distribution": [
     {
-      "forward": 3,
-      "puzzle": 118,
-      "throttle_10": 10,
-      "throttle_20": 19,
-      "throttle_30": 798,
-      "throttle_50": 20
+      "forward": 1,
+      "puzzle": 211,
+      "throttle_20": 2,
+      "throttle_30": 753,
+      "throttle_50": 1
     },
     {
-      "forward": 34,
-      "puzzle": 800,
-      "throttle_10": 23,
-      "throttle_20": 41,
-      "throttle_30": 3,
-      "throttle_50": 67
+      "forward": 128,
+      "puzzle": 351,
+      "throttle_10": 3,
+      "throttle_20": 7,
+      "throttle_30": 9,
+      "throttle_50": 470
     },
     {
-      "forward": 41,
-      "puzzle": 666,
-      "throttle_30": 109,
-      "throttle_50": 152
+      "forward": 45,
+      "puzzle": 776,
+      "throttle_10": 9,
+      "throttle_20": 1,
+      "throttle_30": 72,
+      "throttle_50": 65
     }
   ]
 }

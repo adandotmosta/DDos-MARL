@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "dataset_train": "BCC-2024 Monday_18_Dec_2023",
+    "dataset_test_seen": "BCC-2024 Monday_18_Dec_2023 (held-out)",
+    "dataset_test_unseen": "BCC-2024 Tuesday_19_Dec_2023",
+    "n_agents": 3,
+    "n_episodes_train": 500,
+    "state_dim_baseline": 5,
+    "state_dim_extended": 7,
+    "note": "S12 pending — eval blocked by venv issue, will be added after fix"
+  },
+
+  "experiments": {
+
+    "S6_IQL": {
+      "description": "3 agents, LightGBM risk, selective + puzzle, IQL (no CTDE, no shared critic)",
+      "action_dim": 6,
+      "state_dim": 5,
+      "monday": {
+        "total_reward": 820.0786,
+        "tpr": 0.9357,
+        "fpr": 0.0943,
+        "legit_ratio": 0.9057,
+        "total_benign_in": 68311,
+        "total_attack_in": 220163,
+        "total_benign_out": 61869,
+        "total_attack_blocked": 206015,
+        "total_steps": 968,
+        "action_distribution": [
+          {"puzzle": 342, "throttle_10": 3, "throttle_20": 10, "throttle_30": 578, "throttle_50": 35},
+          {"forward": 72, "puzzle": 690, "throttle_10": 31, "throttle_20": 32, "throttle_30": 10, "throttle_50": 133},
+          {"forward": 15, "puzzle": 753, "throttle_10": 62, "throttle_30": 30, "throttle_50": 108}
+        ]
+      },
+      "tuesday": {
+        "total_reward": 750.2979,
+        "tpr": 0.5912,
+        "fpr": 0.0639,
+        "legit_ratio": 0.9361,
+        "total_benign_in": 49965,
+        "total_attack_in": 8193,
+        "total_benign_out": 46774,
+        "total_attack_blocked": 4844,
+        "total_steps": 962,
+        "action_distribution": [
+          {"forward": 9, "puzzle": 184, "throttle_10": 1, "throttle_20": 117, "throttle_30": 436, "throttle_50": 215},
+          {"forward": 666, "puzzle": 133, "throttle_10": 8, "throttle_20": 1, "throttle_30": 118, "throttle_50": 36},
+          {"forward": 166, "puzzle": 288, "throttle_10": 4, "throttle_30": 477, "throttle_50": 27}
+        ]
+      },
+      "generalization_gap": {
+        "tpr_drop": -0.3445,
+        "fpr_change": -0.0304
+      }
+    },
+
+    "S7_IPPO": {
+      "description": "3 agents, LightGBM risk, selective + puzzle, IPPO (local critics, no CTDE)",
+      "action_dim": 6,
+      "state_dim": 5,
+      "monday": {
+        "total_reward": 884.5062,
+        "tpr": 0.95,
+        "fpr": 0.0481,
+        "legit_ratio": 0.9519,
+        "total_benign_in": 68311,
+        "total_attack_in": 220163,
+        "total_benign_out": 65022,
+        "total_attack_blocked": 209156,
+        "total_steps": 968,
+        "action_distribution": [
+          {"forward": 121, "puzzle": 847},
+          {"forward": 1, "puzzle": 967},
+          {"puzzle": 905, "throttle_10": 63}
+        ]
+      },
+      "tuesday": {
+        "total_reward": 879.357,
+        "tpr": 0.8949,
+        "fpr": 0.0471,
+        "legit_ratio": 0.9529,
+        "total_benign_in": 49965,
+        "total_attack_in": 8193,
+        "total_benign_out": 47614,
+        "total_attack_blocked": 7332,
+        "total_steps": 962,
+        "action_distribution": [
+          {"forward": 122, "puzzle": 840},
+          {"forward": 1, "puzzle": 961},
+          {"forward": 46, "puzzle": 812, "throttle_10": 104}
+        ]
+      },
+      "generalization_gap": {
+        "tpr_drop": -0.0551,
+        "fpr_change": -0.001
+      }
+    },
+
+    "S8_MAPPO": {
+      "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + CTDE (baseline)",
+      "action_dim": 6,
+      "state_dim": 5,
+      "monday": {
+        "total_reward": 885.8407,
+        "tpr": 0.9501,
+        "fpr": 0.0462,
+        "legit_ratio": 0.9538,
+        "total_benign_in": 68311,
+        "total_attack_in": 220163,
+        "total_benign_out": 65152,
+        "total_attack_blocked": 209166,
+        "total_steps": 968,
+        "action_distribution": [
+          {"forward": 214, "puzzle": 728, "throttle_10": 26},
+          {"puzzle": 968},
+          {"puzzle": 912, "throttle_20": 53, "throttle_30": 1, "throttle_50": 2}
+        ]
+      },
+      "tuesday": {
+        "total_reward": 834.2216,
+        "tpr": 0.7599,
+        "fpr": 0.0406,
+        "legit_ratio": 0.9594,
+        "total_benign_in": 49965,
+        "total_attack_in": 8193,
+        "total_benign_out": 47937,
+        "total_attack_blocked": 6226,
+        "total_steps": 962,
+        "action_distribution": [
+          {"forward": 689, "puzzle": 272, "throttle_10": 1},
+          {"puzzle": 959, "throttle_10": 3},
+          {"forward": 15, "puzzle": 875, "throttle_20": 67, "throttle_50": 5}
+        ]
+      },
+      "generalization_gap": {
+        "tpr_drop": -0.1902,
+        "fpr_change": -0.0056
+      }
+    },
+
+    "S9_MAPL": {
+      "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward",
+      "action_dim": 6,
+      "state_dim": 5,
+      "monday": {
+        "total_reward": 884.5324,
+        "tpr": 0.9501,
+        "fpr": 0.0493,
+        "legit_ratio": 0.9507,
+        "total_benign_in": 68311,
+        "total_attack_in": 220163,
+        "total_benign_out": 64943,
+        "total_attack_blocked": 209180,
+        "total_steps": 968,
+        "action_distribution": [
+          {"forward": 127, "puzzle": 748, "throttle_30": 93},
+          {"forward": 1, "puzzle": 967},
+          {"forward": 58, "puzzle": 910}
+        ]
+      },
+      "tuesday": {
+        "total_reward": 869.8823,
+        "tpr": 0.8712,
+        "fpr": 0.0476,
+        "legit_ratio": 0.9524,
+        "total_benign_in": 49965,
+        "total_attack_in": 8193,
+        "total_benign_out": 47588,
+        "total_attack_blocked": 7138,
+        "total_steps": 962,
+        "action_distribution": [
+          {"forward": 61, "puzzle": 544, "throttle_30": 357},
+          {"forward": 7, "puzzle": 954, "throttle_10": 1},
+          {"forward": 84, "puzzle": 878}
+        ]
+      },
+      "generalization_gap": {
+        "tpr_drop": -0.0789,
+        "fpr_change": -0.0017
+      }
+    },
+
+    "S10_E13": {
+      "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + extended 7-dim state (spatial features)",
+      "action_dim": 6,
+      "state_dim": 7,
+      "monday": {
+        "total_reward": 883.2106,
+        "tpr": 0.95,
+        "fpr": 0.0487,
+        "legit_ratio": 0.9513,
+        "total_benign_in": 68311,
+        "total_attack_in": 220163,
+        "total_benign_out": 64984,
+        "total_attack_blocked": 209152,
+        "total_steps": 968,
+        "action_distribution": [
+          {"puzzle": 927, "throttle_10": 39, "throttle_20": 2},
+          {"puzzle": 930, "throttle_20": 38},
+          {"forward": 80, "puzzle": 849, "throttle_10": 1, "throttle_20": 7, "throttle_50": 31}
+        ]
+      },
+      "tuesday": {
+        "total_reward": 770.2762,
+        "tpr": 0.6405,
+        "fpr": 0.0488,
+        "legit_ratio": 0.9512,
+        "total_benign_in": 49965,
+        "total_attack_in": 8193,
+        "total_benign_out": 47526,
+        "total_attack_blocked": 5248,
+        "total_steps": 962,
+        "action_distribution": [
+          {"puzzle": 297, "throttle_10": 663, "throttle_20": 2},
+          {"puzzle": 505, "throttle_20": 340, "throttle_30": 117},
+          {"forward": 68, "puzzle": 133, "throttle_10": 303, "throttle_20": 2, "throttle_50": 456}
+        ]
+      },
+      "generalization_gap": {
+        "tpr_drop": -0.3095,
+        "fpr_change": 0.0001
+      }
+    },
+
+    "S11_MAPPO_10action": {
+      "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + 10-action space (finer throttle granularity)",
+      "action_dim": 10,
+      "state_dim": 7,
+      "note": "Trained with EXTENDED_STATE=True (unintended), hence state_dim=7",
+      "monday": {
+        "total_reward": 887.2866,
+        "tpr": 0.9499,
+        "fpr": 0.0454,
+        "legit_ratio": 0.9546,
+        "total_benign_in": 68311,
+        "total_attack_in": 220163,
+        "total_benign_out": 65208,
+        "total_attack_blocked": 209133,
+        "total_steps": 968,
+        "action_distribution": [
+          {"puzzle": 847, "throttle_10": 1, "throttle_20": 79, "throttle_95": 5, "block": 36},
+          {"puzzle": 939, "throttle_20": 4, "throttle_95": 25},
+          {"forward": 144, "puzzle": 736, "throttle_10": 29, "throttle_30": 59}
+        ]
+      },
+      "tuesday": {
+        "total_reward": 801.0627,
+        "tpr": 0.7172,
+        "fpr": 0.0463,
+        "legit_ratio": 0.9537,
+        "total_benign_in": 49965,
+        "total_attack_in": 8193,
+        "total_benign_out": 47652,
+        "total_attack_blocked": 5876,
+        "total_steps": 962,
+        "action_distribution": [
+          {"puzzle": 688, "throttle_20": 1, "throttle_95": 1, "block": 272},
+          {"puzzle": 455, "throttle_20": 4, "block": 503},
+          {"forward": 715, "puzzle": 179, "throttle_10": 44, "throttle_30": 24}
+        ]
+      },
+      "generalization_gap": {
+        "tpr_drop": -0.2327,
+        "fpr_change": 0.0009
+      }
+    },
+
+    "S12_MAPPO_nopuzzle": {
+      "description": "3 agents, LightGBM risk, no puzzle, MAPPO + 9-action space (throttle/block only)",
+      "action_dim": 9,
+      "state_dim": 5,
+      "monday": "PENDING — venv issue, run: python main.py --stage eval --tag s12",
+      "tuesday": "PENDING",
+      "generalization_gap": "PENDING"
+    }
+
+  },
+
+  "summary_table": {
+    "columns": ["model", "mon_tpr", "mon_fpr", "mon_reward", "tue_tpr", "tue_fpr", "tue_reward", "tpr_drop"],
+    "rows": [
+      ["S6_IQL",              0.9357, 0.0943, 820.08, 0.5912, 0.0639, 750.30, -0.3445],
+      ["S7_IPPO",             0.9500, 0.0481, 884.51, 0.8949, 0.0471, 879.36, -0.0551],
+      ["S8_MAPPO (baseline)", 0.9501, 0.0462, 885.84, 0.7599, 0.0406, 834.22, -0.1902],
+      ["S9_MAPL",             0.9501, 0.0493, 884.53, 0.8712, 0.0476, 869.88, -0.0789],
+      ["S10_E13",             0.9500, 0.0487, 883.21, 0.6405, 0.0488, 770.28, -0.3095],
+      ["S11_10action",        0.9499, 0.0454, 887.29, 0.7172, 0.0463, 801.06, -0.2327],
+      ["S12_nopuzzle",        "TBD",  "TBD",  "TBD",  "TBD",  "TBD",  "TBD",  "TBD"]
+    ]
+  },
+
+  "key_findings": {
+    "best_monday_tpr": "S8_MAPPO and S9_MAPL (0.9501) — tied",
+    "best_tuesday_tpr": "S7_IPPO (0.8949) — best generalization",
+    "best_monday_fpr": "S11_10action (0.0454) — lowest false positive",
+    "best_tuesday_fpr": "S8_MAPPO (0.0406) — cleanest on unseen",
+    "worst_generalization": "S6_IQL (TPR drop -0.3445) and S10_E13 (TPR drop -0.3095)",
+    "puzzle_impact": "S12 vs S8 comparison pending",
+    "ctde_impact": "S8 (CTDE) Monday TPR matches S7 (no CTDE), but Tuesday S7 >> S8 — CTDE hurts generalization",
+    "local_reward_impact": "S9 (local reward) Tuesday TPR 0.8712 vs S8 0.7599 — local reward improves generalization",
+    "extended_state_impact": "S10 (7-dim) Tuesday TPR 0.6405 vs S8 0.7599 — spatial features overfit to Monday attacks",
+    "action_granularity_impact": "S11 (10-action) Tuesday TPR 0.7172 vs S8 0.7599 — finer granularity doesn't help generalization"
+  }
+}

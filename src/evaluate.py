@@ -27,7 +27,7 @@ try:
     from config import (
         CSV_MONDAY, CSV_TUESDAY, LGBM_BUNDLE,
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
-        ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR,
+        ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR, S13_DIR,
     )
     from src.environment import MultiAgentEnv
     import src.environment as _env_module
@@ -442,6 +442,20 @@ def ablation_study(
             else:
                 print(f"  No saved model for {stage} — skipping.")
                 metrics = {"note": "not trained yet"}
+        elif stage == "S12":
+            # S12: 5-dim state, 9-action space (no puzzle)
+            if stage_dir.exists():
+                _env_module.PUZZLE_ENABLED = False
+                _env_module.DROP_PROBS = _DROP_PROBS_s12
+                env_s12 = MultiAgentEnv(df=df_monday, bundle=bundle, n_agents=N_AGENTS)
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=9)
+                agent.load(stage_dir)
+                metrics = run_episode(env_s12, agent)
+                _env_module.PUZZLE_ENABLED = True
+                _env_module.DROP_PROBS = _DROP_PROBS_6
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
         else:
             # All other stages use MAPPO with 5-dim state, 6-action space
             agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
@@ -723,15 +737,49 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
         print(f"\nNo S12 model found at {S12_DIR} — skipping.")
         print("Run: python main.py --stage s12")
 
-    # ── Full 7×2 comparison table
+    # ── S13 evaluation (MAPPO + local reward + puzzle cost 0.05)
+    s13_monday_metrics  = {}
+    s13_tuesday_metrics = {}
+
+    if S13_DIR.exists():
+        print(f"\nLoading trained S13 from {S13_DIR}...")
+        _env_module.EXTENDED_STATE = False
+        _env_module.STATE_DIM      = 5
+        _env_module.PUZZLE_ENABLED = True
+        _env_module.DROP_PROBS     = _DROP_PROBS_6
+        s13_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s13_mappo.load(S13_DIR)
+
+        s13_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s13_mappo,
+            label    = "Monday — S13 (MAPL + puzzle cost 0.05, seen attacks)",
+        )
+        with open(out_dir / "s13_monday_results.json", "w") as f:
+            json.dump(s13_monday_metrics, f, indent=2)
+
+        s13_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s13_mappo,
+            label    = "Tuesday — S13 (MAPL + puzzle cost 0.05, unseen attacks)",
+        )
+        with open(out_dir / "s13_tuesday_results.json", "w") as f:
+            json.dump(s13_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S13 model found at {S13_DIR} — skipping.")
+        print("Run: python main.py --stage s13")
+
+    # ── Full comparison table
     print("\n" + "="*150)
-    print("FULL COMPARISON: MAPPO (S8) vs IPPO (S7) vs MAPL (S9) vs E13 (S10) vs S11 (10-act) vs S12 (no-puzzle) vs IQL (S6)")
+    print("FULL COMPARISON: MAPPO (S8) vs IPPO (S7) vs MAPL (S9) vs E13 (S10) vs S11 (10-act) vs S12 (no-puzzle) vs S13 (MAPL+cost) vs IQL (S6)")
     print("="*150)
     print(f"{'Metric':<18} {'MAPPO Mon':>11} {'IPPO Mon':>10} {'MAPL Mon':>10} {'E13 Mon':>9} "
-          f"{'S11 Mon':>9} {'S12 Mon':>9} {'IQL Mon':>10} "
+          f"{'S11 Mon':>9} {'S12 Mon':>9} {'S13 Mon':>9} {'IQL Mon':>10} "
           f"{'MAPPO Tue':>11} {'IPPO Tue':>10} {'MAPL Tue':>10} {'E13 Tue':>9} "
-          f"{'S11 Tue':>9} {'S12 Tue':>9} {'IQL Tue':>10}")
-    print("-"*150)
+          f"{'S11 Tue':>9} {'S12 Tue':>9} {'S13 Tue':>9} {'IQL Tue':>10}")
+    print("-"*170)
     for key in ["total_reward", "tpr", "fpr", "legit_ratio"]:
         mm  = monday_metrics.get(key, "-")
         pm  = ippo_monday_metrics.get(key, "-")
@@ -739,6 +787,7 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
         em  = e13_monday_metrics.get(key, "-")
         sm  = s11_monday_metrics.get(key, "-")
         xm  = s12_monday_metrics.get(key, "-")
+        nm  = s13_monday_metrics.get(key, "-")
         im  = iql_monday_metrics.get(key, "-")
         mt  = tuesday_metrics.get(key, "-")
         pt  = ippo_tuesday_metrics.get(key, "-")
@@ -746,11 +795,12 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
         et  = e13_tuesday_metrics.get(key, "-")
         st  = s11_tuesday_metrics.get(key, "-")
         xt  = s12_tuesday_metrics.get(key, "-")
+        nt  = s13_tuesday_metrics.get(key, "-")
         it  = iql_tuesday_metrics.get(key, "-")
         print(f"{key:<18} {str(mm):>11} {str(pm):>10} {str(lm):>10} {str(em):>9} "
-              f"{str(sm):>9} {str(xm):>9} {str(im):>10} "
+              f"{str(sm):>9} {str(xm):>9} {str(nm):>9} {str(im):>10} "
               f"{str(mt):>11} {str(pt):>10} {str(lt):>10} {str(et):>9} "
-              f"{str(st):>9} {str(xt):>9} {str(it):>10}")
+              f"{str(st):>9} {str(xt):>9} {str(nt):>9} {str(it):>10}")
 
     # ── Ablation study
     df_monday = load_day(CSV_MONDAY, features)

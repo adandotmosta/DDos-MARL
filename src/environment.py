@@ -25,18 +25,22 @@ try:
         N_AGENTS, WINDOW_SIZE, Us, IP_TIMEOUT, BASE_THRESHOLD,
         VICTIM_IPS, PUZZLE_PASS, DROP_PROBS, STATE_DIM, JOINT_DIM,
         ACTION_DIM, FLOW_COUNT_MAX, IP_TABLE_MAX, UNIQUE_IP_MAX,
-        REWARD_LEGIT_W, REWARD_ATTACK_W, LOCAL_REWARD, EXTENDED_STATE,
+        REWARD_LEGIT_W, REWARD_ATTACK_W, LOCAL_REWARD, EXTENDED_STATE, PUZZLE_COST,
     )
 except ImportError:
     from coopids.config import (
         N_AGENTS, WINDOW_SIZE, Us, IP_TIMEOUT, BASE_THRESHOLD,
         VICTIM_IPS, PUZZLE_PASS, DROP_PROBS, STATE_DIM, JOINT_DIM,
         ACTION_DIM, FLOW_COUNT_MAX, IP_TABLE_MAX, UNIQUE_IP_MAX,
-        REWARD_LEGIT_W, REWARD_ATTACK_W, LOCAL_REWARD, EXTENDED_STATE,
+        REWARD_LEGIT_W, REWARD_ATTACK_W, LOCAL_REWARD, EXTENDED_STATE, PUZZLE_COST,
     )
 
 # Patch this to False in train_s12 / evaluate.py S12 block to disable puzzle action.
 PUZZLE_ENABLED = True
+
+# Patch this to True in train_s14 to add puzzle_block_rate as 6th state feature.
+# 0.0 = default (no tracking, preserves all prior experiments).
+PUZZLE_STATE = False
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -128,6 +132,11 @@ class RouterEnvironment:
         self.t_min = float(self._ts_sec.min()) if len(self._ts_sec) else 0.0
         self.t_max = float(self._ts_sec.max()) if len(self._ts_sec) else 0.0
 
+        # Rolling puzzle outcome tracking for PUZZLE_STATE feature
+        # Tracks attacks blocked vs total flows passed through puzzle over last N steps
+        self._puzzle_attacks_blocked = 0
+        self._puzzle_total_passed    = 0
+
         # Precompute LightGBM probabilities for ALL flows once.
         # Monday data is fixed — probabilities are identical every episode.
         # Eliminates ~5,808 predict_proba calls/episode at runtime.
@@ -147,6 +156,8 @@ class RouterEnvironment:
     def reset(self) -> None:
         """Clear IP risk table at start of each episode."""
         self.ip_risk_table = {}
+        self._puzzle_attacks_blocked = 0
+        self._puzzle_total_passed    = 0
 
     # ── Feature preparation ──────────────────────────────────────────────────
 
@@ -224,6 +235,15 @@ class RouterEnvironment:
         flow_count_norm = min(len(window) / FLOW_COUNT_MAX, 1.0)
 
         base_state = [p_attack, p_benign, p_suspicious, ip_table_ratio, flow_count_norm]
+
+        if PUZZLE_STATE:
+            # puzzle_block_rate: fraction of puzzle-stopped flows that were attacks
+            # High → puzzle is effectively blocking real attacks → keep using it
+            # Low  → puzzle is mostly blocking benign → stop using it
+            puzzle_block_rate = (
+                self._puzzle_attacks_blocked / max(self._puzzle_total_passed, 1)
+            )
+            return np.array(base_state + [puzzle_block_rate], dtype=np.float32)
 
         if not EXTENDED_STATE:
             return np.array(base_state, dtype=np.float32)
@@ -317,7 +337,13 @@ class RouterEnvironment:
             # Vectorised: map labels → pass rates, then compare against random draws.
             pass_rates = window["label"].map(PUZZLE_PASS).fillna(0.5).values
             keep_mask  = rng.random(n) < pass_rates
-            return window[keep_mask].copy()
+            forwarded  = window[keep_mask].copy()
+            # Track puzzle outcomes for PUZZLE_STATE feature
+            if PUZZLE_STATE:
+                blocked = int((window[~keep_mask]["label"] == "Attack").sum())
+                self._puzzle_attacks_blocked += blocked
+                self._puzzle_total_passed    += int((~keep_mask).sum())
+            return forwarded
 
         if action in DROP_PROBS:
             # Throttle / block — only affects IPs in the risk table.
@@ -451,6 +477,16 @@ class MultiAgentEnv:
             reward = self._compute_local_rewards(all_forwarded, t + self.window_size)
         else:
             reward = self._compute_reward(all_forwarded, t + self.window_size)
+
+        # ── Puzzle cost — penalise each puzzle action taken this step
+        # PUZZLE_COST = 0.0 by default (no-op, preserves all prior experiments).
+        # Set > 0 in config or patch _env_module.PUZZLE_COST to study tradeoff.
+        if PUZZLE_COST > 0.0:
+            puzzle_count = sum(1 for a in actions if a == 1 and PUZZLE_ENABLED)
+            if isinstance(reward, list):
+                reward = [r - PUZZLE_COST * puzzle_count for r in reward]
+            else:
+                reward = reward - PUZZLE_COST * puzzle_count
 
         # ── Advance clock
         self.t_current = t + self.window_size

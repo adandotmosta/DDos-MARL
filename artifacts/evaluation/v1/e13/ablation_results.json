@@ -1,0 +1,166 @@
+{
+  "S1": {
+    "description": "Single agent, load-only state, blind throttle (Malialis baseline)",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S2": {
+    "description": "Single agent, 5 raw features, blind throttle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S3": {
+    "description": "Single agent, LightGBM risk, blind throttle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S4": {
+    "description": "Single agent, LightGBM risk, selective IP blocking",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S5": {
+    "description": "Single agent, LightGBM risk, selective + puzzle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S6": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, IQL",
+    "metrics": {
+      "total_reward": 703.8897,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 54967,
+      "total_attack_blocked": 196246,
+      "tpr": 0.8914,
+      "fpr": 0.1953,
+      "legit_ratio": 0.8047,
+      "action_distribution": [
+        {
+          "forward": 1,
+          "puzzle": 163,
+          "throttle_medium": 37,
+          "throttle_heavy": 754,
+          "block": 13
+        },
+        {
+          "forward": 206,
+          "puzzle": 255,
+          "throttle_light": 1,
+          "throttle_medium": 8,
+          "throttle_heavy": 3,
+          "block": 495
+        },
+        {
+          "forward": 87,
+          "puzzle": 606,
+          "throttle_light": 29,
+          "throttle_medium": 27,
+          "throttle_heavy": 121,
+          "block": 98
+        }
+      ]
+    }
+  },
+  "S7": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, IPPO (local critics, no CTDE)",
+    "metrics": {
+      "total_reward": 885.6277,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65095,
+      "total_attack_blocked": 209166,
+      "tpr": 0.9501,
+      "fpr": 0.0471,
+      "legit_ratio": 0.9529,
+      "action_distribution": [
+        {
+          "forward": 139,
+          "puzzle": 829
+        },
+        {
+          "forward": 39,
+          "puzzle": 898,
+          "throttle_light": 31
+        },
+        {
+          "puzzle": 968
+        }
+      ]
+    }
+  },
+  "S8": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + CTDE",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S9": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward",
+    "metrics": {
+      "total_reward": 884.3822,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65054,
+      "total_attack_blocked": 209122,
+      "tpr": 0.9499,
+      "fpr": 0.0477,
+      "legit_ratio": 0.9523,
+      "action_distribution": [
+        {
+          "forward": 148,
+          "puzzle": 773,
+          "throttle_heavy": 47
+        },
+        {
+          "forward": 85,
+          "puzzle": 873,
+          "throttle_light": 10
+        },
+        {
+          "forward": 2,
+          "puzzle": 966
+        }
+      ]
+    }
+  },
+  "S10": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + extended state (7-dim)",
+    "metrics": {
+      "total_reward": 884.4849,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65050,
+      "total_attack_blocked": 207975,
+      "tpr": 0.9446,
+      "fpr": 0.0477,
+      "legit_ratio": 0.9523,
+      "action_distribution": [
+        {
+          "puzzle": 904,
+          "throttle_light": 53,
+          "throttle_medium": 10,
+          "throttle_heavy": 1
+        },
+        {
+          "puzzle": 746,
+          "throttle_medium": 206,
+          "throttle_heavy": 16
+        },
+        {
+          "puzzle": 967,
+          "block": 1
+        }
+      ]
+    }
+  }
+}

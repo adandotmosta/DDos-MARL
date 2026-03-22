@@ -1,0 +1,106 @@
+{
+  "S1": {
+    "description": "Single agent, load-only state, blind throttle (Malialis baseline)",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S2": {
+    "description": "Single agent, 5 raw features, blind throttle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S3": {
+    "description": "Single agent, LightGBM risk, blind throttle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S4": {
+    "description": "Single agent, LightGBM risk, selective IP blocking",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S5": {
+    "description": "Single agent, LightGBM risk, selective + puzzle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S6": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, IQL",
+    "metrics": {
+      "total_reward": 846.1801,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 62775,
+      "total_attack_blocked": 201387,
+      "tpr": 0.9147,
+      "fpr": 0.081,
+      "legit_ratio": 0.919,
+      "action_distribution": [
+        {
+          "forward": 14,
+          "puzzle": 599,
+          "throttle_medium": 50,
+          "throttle_heavy": 214,
+          "block": 91
+        },
+        {
+          "forward": 63,
+          "puzzle": 776,
+          "throttle_light": 3,
+          "throttle_medium": 8,
+          "throttle_heavy": 23,
+          "block": 95
+        },
+        {
+          "forward": 26,
+          "puzzle": 591,
+          "throttle_light": 19,
+          "throttle_medium": 1,
+          "throttle_heavy": 91,
+          "block": 240
+        }
+      ]
+    }
+  },
+  "S7": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, IPPO (local critics, no CTDE)",
+    "metrics": {
+      "total_reward": 887.6273,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65187,
+      "total_attack_blocked": 209184,
+      "tpr": 0.9501,
+      "fpr": 0.0457,
+      "legit_ratio": 0.9543,
+      "action_distribution": [
+        {
+          "forward": 56,
+          "puzzle": 912
+        },
+        {
+          "forward": 104,
+          "puzzle": 860,
+          "throttle_light": 4
+        },
+        {
+          "puzzle": 900,
+          "throttle_light": 68
+        }
+      ]
+    }
+  },
+  "S8": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + CTDE",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  }
+}

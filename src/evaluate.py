@@ -29,7 +29,7 @@ try:
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR, S13_DIR,
         S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
-        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from src.environment import MultiAgentEnv
@@ -43,7 +43,7 @@ except ImportError:
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR,
         S13_DIR, S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
-        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from coopids.src.environment import MultiAgentEnv
@@ -97,6 +97,7 @@ def load_day(csv_path: Path, features: list) -> pd.DataFrame:
 def run_episode(
     env: MultiAgentEnv,
     mappo: MAPPO,
+    action_labels: dict = None,
 ) -> Dict:
     """
     Run one greedy evaluation episode.
@@ -144,8 +145,9 @@ def run_episode(
     fpr         = 1.0 - legit_ratio   # fraction of legit traffic incorrectly blocked
 
     # Convert action counts to labelled dicts
+    labels = action_labels if action_labels is not None else ACTIONS
     action_dist = [
-        {ACTIONS.get(k, str(k)): v for k, v in sorted(ac.items())}
+        {labels.get(k, str(k)): v for k, v in sorted(ac.items())}
         for ac in action_counts
     ]
 
@@ -536,6 +538,22 @@ def ablation_study(
             else:
                 print(f"  No saved model for {stage} — skipping.")
                 metrics = {"note": "not trained yet"}
+        elif stage == "S25":
+            # S25: puzzle on flagged IPs only + p_attack pass rates + combined LightGBM
+            if stage_dir.exists() and LGBM_BUNDLE_COMBINED.exists():
+                with open(LGBM_BUNDLE_COMBINED, "rb") as _f:
+                    _bundle_combined = pickle.load(_f)
+                _env_module.PUZZLE_FLAGGED_ONLY = True
+                _env_module.LOCAL_REWARD        = True
+                env_s25 = MultiAgentEnv(df=df_monday, bundle=_bundle_combined, n_agents=N_AGENTS)
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=10)
+                agent.load(stage_dir)
+                metrics = run_episode(env_s25, agent)
+                _env_module.PUZZLE_FLAGGED_ONLY = False
+                _env_module.LOCAL_REWARD        = False
+            else:
+                print(f"  No saved model or combined bundle for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
         else:
             # All other stages use MAPPO with 5-dim state, 6-action space
             agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
@@ -564,7 +582,7 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
     models: optional set of lowercase model names to evaluate, e.g. {"s23", "s24", "ippo"}.
             If None, all models are evaluated.
     Valid names: mappo, iql, ippo, mapl, e13, s11, s12, s13, s14, s15, s16,
-                 s17, s18, s19, s21, s22, s23, s24
+                 s17, s18, s19, s21, s22, s23, s24, s25, s26, s26b, s27
     """
     def _should_run(name: str) -> bool:
         return models is None or name.lower() in models
@@ -1217,6 +1235,207 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
             print(f"\nNo S24 model found at {S24_DIR} — skipping.")
             print("Run: python main.py --stage s24")
 
+    # ── S25 evaluation (MAPPO + puzzle on flagged IPs + p_attack pass rates + combined LightGBM)
+    s25_monday_metrics  = {}
+    s25_tuesday_metrics = {}
+
+    if _should_run("s25") and S25_DIR.exists() and LGBM_BUNDLE_COMBINED.exists():
+        print(f"\nLoading trained S25 from {S25_DIR}...")
+        print("  (Puzzle on flagged IPs only, pass_rate = 1 - p_attack, combined LightGBM)")
+
+        with open(LGBM_BUNDLE_COMBINED, "rb") as _f:
+            bundle_combined = pickle.load(_f)
+
+        _env_module.PUZZLE_FLAGGED_ONLY = True
+        _env_module.LOCAL_REWARD        = True
+
+        s25_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=10)
+        s25_mappo.load(S25_DIR)
+
+        s25_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle_combined,
+            mappo    = s25_mappo,
+            label    = "Monday — S25 (flagged-only puzzle + p_attack pass rates)",
+        )
+        with open(out_dir / "s25_monday_results.json", "w") as f:
+            json.dump(s25_monday_metrics, f, indent=2)
+
+        s25_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle_combined,
+            mappo    = s25_mappo,
+            label    = "Tuesday — S25 (flagged-only puzzle + p_attack pass rates, unseen attacks)",
+        )
+        with open(out_dir / "s25_tuesday_results.json", "w") as f:
+            json.dump(s25_tuesday_metrics, f, indent=2)
+
+        _env_module.PUZZLE_FLAGGED_ONLY = False
+        _env_module.LOCAL_REWARD        = False
+    else:
+        if not LGBM_BUNDLE_COMBINED.exists():
+            print(f"\nNo combined LightGBM bundle found — skipping S25.")
+            print("Run: python train_lgbm_combined.py")
+        else:
+            print(f"\nNo S25 model found at {S25_DIR} — skipping.")
+            print("Run: python main.py --stage s25")
+
+    # ── S26 evaluation (MAPPO + tiered action profiles)
+    # Uses its own environment (environment_tiered.py) — completely different action space.
+    s26_monday_metrics  = {}
+    s26_tuesday_metrics = {}
+
+    if _should_run("s26") and S26_DIR.exists() and LGBM_BUNDLE_COMBINED.exists():
+        print(f"\nLoading trained S26 from {S26_DIR}...")
+        print("  (Tiered action profiles: block/puzzle/forward by p_attack, combined LightGBM)")
+
+        from src.environment_tiered import (
+            MultiAgentEnv as TieredMultiAgentEnv,
+            STATE_DIM as T_STATE_DIM,
+            JOINT_DIM as T_JOINT_DIM,
+            ACTION_DIM as T_ACTION_DIM,
+            ACTION_LABELS as T_ACTION_LABELS,
+        )
+
+        with open(LGBM_BUNDLE_COMBINED, "rb") as _f:
+            bundle_combined = pickle.load(_f)
+
+        s26_mappo = MAPPO(state_dim=T_STATE_DIM, joint_dim=T_JOINT_DIM, action_dim=T_ACTION_DIM)
+        s26_mappo.load(S26_DIR)
+        features_combined = bundle_combined["features"]
+
+        # Monday
+        df_mon = load_day(CSV_MONDAY, features_combined)
+        env_s26_mon = TieredMultiAgentEnv(df=df_mon, bundle=bundle_combined, n_agents=N_AGENTS)
+        print(f"\nEvaluating S26 on Monday (seen attacks)...")
+        print(df_mon["label"].value_counts().to_string())
+        s26_monday_metrics = run_episode(env_s26_mon, s26_mappo, action_labels=T_ACTION_LABELS)
+        print(f"  TPR: {s26_monday_metrics['tpr']:.4f}  FPR: {s26_monday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s26_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s26_monday_results.json", "w") as f:
+            json.dump(s26_monday_metrics, f, indent=2)
+
+        # Tuesday
+        df_tue = load_day(CSV_TUESDAY, features_combined)
+        env_s26_tue = TieredMultiAgentEnv(df=df_tue, bundle=bundle_combined, n_agents=N_AGENTS)
+        print(f"\nEvaluating S26 on Tuesday (unseen attacks)...")
+        print(df_tue["label"].value_counts().to_string())
+        s26_tuesday_metrics = run_episode(env_s26_tue, s26_mappo, action_labels=T_ACTION_LABELS)
+        print(f"  TPR: {s26_tuesday_metrics['tpr']:.4f}  FPR: {s26_tuesday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s26_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s26_tuesday_results.json", "w") as f:
+            json.dump(s26_tuesday_metrics, f, indent=2)
+    else:
+        if not LGBM_BUNDLE_COMBINED.exists():
+            print(f"\nNo combined LightGBM bundle found — skipping S26.")
+            print("Run: python train_lgbm_combined.py")
+        else:
+            print(f"\nNo S26 model found at {S26_DIR} — skipping.")
+            print("Run: python main.py --stage s26")
+
+    # ── S26b evaluation (S26 + Monday-only LightGBM — isolates MARL contribution)
+    s26b_monday_metrics  = {}
+    s26b_tuesday_metrics = {}
+
+    if _should_run("s26b") and S26B_DIR.exists():
+        print(f"\nLoading trained S26b from {S26B_DIR}...")
+        print("  (Tiered action profiles + Monday-only LightGBM — MARL contribution isolation)")
+
+        from src.environment_tiered import (
+            MultiAgentEnv as TieredMultiAgentEnv,
+            STATE_DIM as T_STATE_DIM,
+            JOINT_DIM as T_JOINT_DIM,
+            ACTION_DIM as T_ACTION_DIM,
+            ACTION_LABELS as T_ACTION_LABELS,
+        )
+
+        s26b_mappo = MAPPO(state_dim=T_STATE_DIM, joint_dim=T_JOINT_DIM, action_dim=T_ACTION_DIM)
+        s26b_mappo.load(S26B_DIR)
+        features_monday = bundle["features"]
+
+        # Monday
+        df_mon_b = load_day(CSV_MONDAY, features_monday)
+        env_s26b_mon = TieredMultiAgentEnv(df=df_mon_b, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S26b on Monday (seen attacks)...")
+        print(df_mon_b["label"].value_counts().to_string())
+        s26b_monday_metrics = run_episode(env_s26b_mon, s26b_mappo, action_labels=T_ACTION_LABELS)
+        print(f"  TPR: {s26b_monday_metrics['tpr']:.4f}  FPR: {s26b_monday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s26b_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s26b_monday_results.json", "w") as f:
+            json.dump(s26b_monday_metrics, f, indent=2)
+
+        # Tuesday
+        df_tue_b = load_day(CSV_TUESDAY, features_monday)
+        env_s26b_tue = TieredMultiAgentEnv(df=df_tue_b, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S26b on Tuesday (unseen attacks)...")
+        print(df_tue_b["label"].value_counts().to_string())
+        s26b_tuesday_metrics = run_episode(env_s26b_tue, s26b_mappo, action_labels=T_ACTION_LABELS)
+        print(f"  TPR: {s26b_tuesday_metrics['tpr']:.4f}  FPR: {s26b_tuesday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s26b_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s26b_tuesday_results.json", "w") as f:
+            json.dump(s26b_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S26b model found at {S26B_DIR} — skipping.")
+        print("Run: python main.py --stage s26b")
+
+    # ── S27 evaluation (p_risk tiered profiles + Monday-only LightGBM)
+    # Routing signal: p_risk = 1 - p_benign. Compare vs S26b to isolate routing score.
+    s27_monday_metrics  = {}
+    s27_tuesday_metrics = {}
+
+    if _should_run("s27") and S27_DIR.exists():
+        print(f"\nLoading trained S27 from {S27_DIR}...")
+        print("  (p_risk = 1-p_benign routing + Monday-only LightGBM)")
+
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            JOINT_DIM as T2_JOINT_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+
+        s27_mappo = MAPPO(state_dim=T2_STATE_DIM, joint_dim=T2_JOINT_DIM, action_dim=T2_ACTION_DIM)
+        s27_mappo.load(S27_DIR)
+        features_monday = bundle["features"]
+
+        # Monday
+        df_mon_27 = load_day(CSV_MONDAY, features_monday)
+        env_s27_mon = TieredEnvV2(df=df_mon_27, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S27 on Monday (seen attacks)...")
+        print(df_mon_27["label"].value_counts().to_string())
+        s27_monday_metrics = run_episode(env_s27_mon, s27_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s27_monday_metrics['tpr']:.4f}  FPR: {s27_monday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s27_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s27_monday_results.json", "w") as f:
+            json.dump(s27_monday_metrics, f, indent=2)
+
+        # Tuesday
+        df_tue_27 = load_day(CSV_TUESDAY, features_monday)
+        env_s27_tue = TieredEnvV2(df=df_tue_27, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S27 on Tuesday (unseen attacks)...")
+        print(df_tue_27["label"].value_counts().to_string())
+        s27_tuesday_metrics = run_episode(env_s27_tue, s27_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s27_tuesday_metrics['tpr']:.4f}  FPR: {s27_tuesday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s27_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s27_tuesday_results.json", "w") as f:
+            json.dump(s27_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S27 model found at {S27_DIR} — skipping.")
+        print("Run: python main.py --stage s27")
+
     # ── Full comparison table (Monday)
     print("\n" + "="*150)
     print("FULL COMPARISON — MONDAY (seen attacks)")
@@ -1240,6 +1459,9 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S22",    s22_monday_metrics),
         ("S23",    s23_monday_metrics),
         ("S24",    s24_monday_metrics),
+        ("S25",    s25_monday_metrics),
+        ("S26",    s26_monday_metrics),
+        ("S26b",   s26b_monday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_mon)
     print(hdr)
@@ -1271,6 +1493,9 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S22",    s22_tuesday_metrics),
         ("S23",    s23_tuesday_metrics),
         ("S24",    s24_tuesday_metrics),
+        ("S25",    s25_tuesday_metrics),
+        ("S26",    s26_tuesday_metrics),
+        ("S26b",   s26b_tuesday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_tue)
     print(hdr)

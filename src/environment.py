@@ -55,6 +55,11 @@ ENTROPY_STATE = False
 # forcing agents to use throttle/block for high-confidence attack flows.
 SELECTIVE_PUZZLE = False
 
+# S25: Puzzle restricted to flagged IPs only, pass_rate = 1 - p_attack per flow.
+# Removes oracle advantage: pass rates now follow LightGBM confidence, not ground-truth labels.
+# Unflagged IPs (likely benign) pass through without any puzzle challenge.
+PUZZLE_FLAGGED_ONLY = False
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helper — load lgbm bundle
@@ -358,7 +363,18 @@ class RouterEnvironment:
 
         if action == 1 and PUZZLE_ENABLED:
             # Puzzle — applies to ALL flows; pass rate depends on true label.
-            if SELECTIVE_PUZZLE:
+            if PUZZLE_FLAGGED_ONLY:
+                # S25: puzzle only on IPs already in the risk table.
+                # Pass rate = 1 - p_attack per flow (LightGBM-based, not oracle).
+                # Unflagged IPs (pass_rate=1.0) pass through unchanged.
+                flagged_mask = window["src_ip"].astype(str).isin(self.ip_risk_table).values
+                idx = window.index.values
+                pass_rates = np.where(
+                    flagged_mask,
+                    1.0 - self._p_attack_all[idx],
+                    1.0,
+                ).astype(np.float32)
+            elif SELECTIVE_PUZZLE:
                 # S23: pass rate based on LightGBM predicted class, not ground truth.
                 # Attack-predicted → pass_rate=1.0 (puzzle useless, must block/throttle)
                 # Suspicious-predicted → pass_rate=0.5 (genuine uncertainty, verify)

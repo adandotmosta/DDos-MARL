@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "eval"],
+        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "eval"],
         help="Which stage to run",
     )
     parser.add_argument(
@@ -211,6 +211,38 @@ def main() -> None:
         from src.train_s23 import train as train_s23
 
         train_s23()
+
+    if args.stage in ("s25",):
+        print("\n" + "=" * 55)
+        print("STAGE 2s: MAPPO + Puzzle on Flagged IPs + p_attack Pass Rates (S25)")
+        print("=" * 55)
+        from src.train_s25 import train as train_s25
+
+        train_s25()
+
+    if args.stage in ("s26",):
+        print("\n" + "=" * 55)
+        print("STAGE 2t: MAPPO + Tiered Action Profiles (S26)")
+        print("=" * 55)
+        from src.train_s26 import train as train_s26
+
+        train_s26()
+
+    if args.stage in ("s26b",):
+        print("\n" + "=" * 55)
+        print("STAGE 2u: MAPPO + Tiered Profiles + Monday-only LightGBM (S26b)")
+        print("=" * 55)
+        from src.train_s26b import train as train_s26b
+
+        train_s26b()
+
+    if args.stage in ("s27",):
+        print("\n" + "=" * 55)
+        print("STAGE 2v: MAPPO + p_risk Tiered Profiles + Monday-only LightGBM (S27)")
+        print("=" * 55)
+        from src.train_s27 import train as train_s27
+
+        train_s27()
 
     if args.stage in ("s18",):
         print("\n" + "=" * 55)

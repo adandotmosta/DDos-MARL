@@ -40,6 +40,10 @@ S21_DIR           = MARL_DIR / "ablation" / "S21"   # MAPPO + local reward + low
 S22_DIR           = MARL_DIR / "ablation" / "S22"   # MAPPO + counterfactual reward (COMA-style)
 S23_DIR           = MARL_DIR / "ablation" / "S23"   # MAPPO + selective puzzle (LightGBM-predicted class)
 S24_DIR           = MARL_DIR / "ablation" / "S24"   # MAPPO + selective puzzle + combined LightGBM (Monday+Tuesday)
+S25_DIR           = MARL_DIR / "ablation" / "S25"   # MAPPO + puzzle on flagged IPs + p_attack pass rates + combined LightGBM
+S26_DIR           = MARL_DIR / "ablation" / "S26"   # MAPPO + tiered action profiles (block/puzzle/forward by p_attack)
+S26B_DIR          = MARL_DIR / "ablation" / "S26b"  # S26 + Monday-only LightGBM (isolates MARL contribution)
+S27_DIR           = MARL_DIR / "ablation" / "S27"   # MAPPO + p_risk tiered profiles (1-p_benign routing, Monday-only)
 EVAL_DIR          = ARTIFACT_DIR / "evaluation"     / VERSION
 
 # CSV filenames
@@ -216,4 +220,8 @@ ABLATION_STAGES = {
     "S22": "3 agents, LightGBM risk, selective + puzzle, MAPPO + counterfactual reward (COMA-style)",
     "S23": "3 agents, LightGBM risk, selective puzzle (suspicious-only), MAPPO + local reward",
     "S24": "3 agents, LightGBM (Mon+Tue), selective puzzle (suspicious-only), MAPPO + local reward — isolates MARL throttling quality",
+    "S25": "3 agents, LightGBM (Mon+Tue), puzzle on flagged IPs + p_attack pass rates, MAPPO + local reward — oracle-free puzzle",
+    "S26": "3 agents, LightGBM (Mon+Tue), tiered action profiles (block/puzzle/forward by p_attack), MAPPO + local reward — no IP table, no throttle",
+    "S26b": "3 agents, LightGBM (Mon only), tiered action profiles (block/puzzle/forward by p_attack), MAPPO + local reward — isolates MARL contribution",
+    "S27": "3 agents, LightGBM (Mon only), tiered profiles routing on p_risk=1-p_benign, MAPPO + local reward — tests p_risk generalisation",
 }

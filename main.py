@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "eval"],
+        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "s28", "s29", "eval"],
         help="Which stage to run",
     )
     parser.add_argument(
@@ -243,6 +243,22 @@ def main() -> None:
         from src.train_s27 import train as train_s27
 
         train_s27()
+
+    if args.stage in ("s28",):
+        print("\n" + "=" * 55)
+        print("STAGE 2w: MAPPO + p_risk Tiered Profiles + Mixed Training Monday+Thursday (S28)")
+        print("=" * 55)
+        from src.train_s28 import train as train_s28
+
+        train_s28()
+
+    if args.stage in ("s29",):
+        print("\n" + "=" * 55)
+        print("STAGE 2x: IPPO + p_risk Tiered Profiles + Monday-only LightGBM (S29)")
+        print("=" * 55)
+        from src.train_s29 import train as train_s29
+
+        train_s29()
 
     if args.stage in ("s18",):
         print("\n" + "=" * 55)

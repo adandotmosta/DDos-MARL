@@ -25,11 +25,11 @@ import torch
 
 try:
     from config import (
-        CSV_MONDAY, CSV_TUESDAY, LGBM_BUNDLE,
+        CSV_MONDAY, CSV_TUESDAY, CSV_THURSDAY, CSV_SATURDAY, LGBM_BUNDLE,
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR, S13_DIR,
         S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
-        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from src.environment import MultiAgentEnv
@@ -39,11 +39,11 @@ try:
     from src.ippo import IPPO
 except ImportError:
     from coopids.config import (
-        CSV_MONDAY, CSV_TUESDAY, LGBM_BUNDLE,
+        CSV_MONDAY, CSV_TUESDAY, CSV_THURSDAY, CSV_SATURDAY, LGBM_BUNDLE,
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR,
         S13_DIR, S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
-        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from coopids.src.environment import MultiAgentEnv
@@ -582,7 +582,7 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
     models: optional set of lowercase model names to evaluate, e.g. {"s23", "s24", "ippo"}.
             If None, all models are evaluated.
     Valid names: mappo, iql, ippo, mapl, e13, s11, s12, s13, s14, s15, s16,
-                 s17, s18, s19, s21, s22, s23, s24, s25, s26, s26b, s27
+                 s17, s18, s19, s21, s22, s23, s24, s25, s26, s26b, s27, s28, s29
     """
     def _should_run(name: str) -> bool:
         return models is None or name.lower() in models
@@ -742,7 +742,7 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         _env_module.PUZZLE_STATE    = False
         _env_module.ENTROPY_STATE   = False
         _env_module.EXTENDED_STATE  = True
-        _env_module.STATE_DIM       = 7
+        _env_module.STATE_DIM       = 5   # env adds 2 for extended → 7 total
         e13_mappo = MAPPO(state_dim=7, joint_dim=21, action_dim=6)
         e13_mappo.load(e13_dir)
 
@@ -1329,6 +1329,32 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
             print(f"    Router {i+1}: {dist}")
         with open(out_dir / "s26_tuesday_results.json", "w") as f:
             json.dump(s26_tuesday_metrics, f, indent=2)
+
+        # Thursday
+        if CSV_THURSDAY.exists():
+            df_thu = load_day(CSV_THURSDAY, features_combined)
+            env_s26_thu = TieredMultiAgentEnv(df=df_thu, bundle=bundle_combined, n_agents=N_AGENTS)
+            print(f"\nEvaluating S26 on Thursday (unseen)...")
+            print(df_thu["label"].value_counts().to_string())
+            s26_thu = run_episode(env_s26_thu, s26_mappo, action_labels=T_ACTION_LABELS)
+            print(f"  TPR: {s26_thu['tpr']:.4f}  FPR: {s26_thu['fpr']:.4f}")
+            for i, dist in enumerate(s26_thu["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s26_thursday_results.json", "w") as f:
+                json.dump(s26_thu, f, indent=2)
+
+        # Saturday
+        if CSV_SATURDAY.exists():
+            df_sat = load_day(CSV_SATURDAY, features_combined)
+            env_s26_sat = TieredMultiAgentEnv(df=df_sat, bundle=bundle_combined, n_agents=N_AGENTS)
+            print(f"\nEvaluating S26 on Saturday (unseen)...")
+            print(df_sat["label"].value_counts().to_string())
+            s26_sat = run_episode(env_s26_sat, s26_mappo, action_labels=T_ACTION_LABELS)
+            print(f"  TPR: {s26_sat['tpr']:.4f}  FPR: {s26_sat['fpr']:.4f}")
+            for i, dist in enumerate(s26_sat["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s26_saturday_results.json", "w") as f:
+                json.dump(s26_sat, f, indent=2)
     else:
         if not LGBM_BUNDLE_COMBINED.exists():
             print(f"\nNo combined LightGBM bundle found — skipping S26.")
@@ -1382,6 +1408,32 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
             print(f"    Router {i+1}: {dist}")
         with open(out_dir / "s26b_tuesday_results.json", "w") as f:
             json.dump(s26b_tuesday_metrics, f, indent=2)
+
+        # Thursday
+        if CSV_THURSDAY.exists():
+            df_thu = load_day(CSV_THURSDAY, features_monday)
+            env_s26b_thu = TieredMultiAgentEnv(df=df_thu, bundle=bundle, n_agents=N_AGENTS)
+            print(f"\nEvaluating S26b on Thursday (unseen)...")
+            print(df_thu["label"].value_counts().to_string())
+            s26b_thu = run_episode(env_s26b_thu, s26b_mappo, action_labels=T_ACTION_LABELS)
+            print(f"  TPR: {s26b_thu['tpr']:.4f}  FPR: {s26b_thu['fpr']:.4f}")
+            for i, dist in enumerate(s26b_thu["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s26b_thursday_results.json", "w") as f:
+                json.dump(s26b_thu, f, indent=2)
+
+        # Saturday
+        if CSV_SATURDAY.exists():
+            df_sat = load_day(CSV_SATURDAY, features_monday)
+            env_s26b_sat = TieredMultiAgentEnv(df=df_sat, bundle=bundle, n_agents=N_AGENTS)
+            print(f"\nEvaluating S26b on Saturday (unseen)...")
+            print(df_sat["label"].value_counts().to_string())
+            s26b_sat = run_episode(env_s26b_sat, s26b_mappo, action_labels=T_ACTION_LABELS)
+            print(f"  TPR: {s26b_sat['tpr']:.4f}  FPR: {s26b_sat['fpr']:.4f}")
+            for i, dist in enumerate(s26b_sat["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s26b_saturday_results.json", "w") as f:
+                json.dump(s26b_sat, f, indent=2)
     else:
         print(f"\nNo S26b model found at {S26B_DIR} — skipping.")
         print("Run: python main.py --stage s26b")
@@ -1432,9 +1484,148 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
             print(f"    Router {i+1}: {dist}")
         with open(out_dir / "s27_tuesday_results.json", "w") as f:
             json.dump(s27_tuesday_metrics, f, indent=2)
+
+        # Thursday
+        if CSV_THURSDAY.exists():
+            df_thu = load_day(CSV_THURSDAY, features_monday)
+            env_s27_thu = TieredEnvV2(df=df_thu, bundle=bundle, n_agents=N_AGENTS)
+            print(f"\nEvaluating S27 on Thursday (unseen)...")
+            print(df_thu["label"].value_counts().to_string())
+            s27_thu = run_episode(env_s27_thu, s27_mappo, action_labels=T2_ACTION_LABELS)
+            print(f"  TPR: {s27_thu['tpr']:.4f}  FPR: {s27_thu['fpr']:.4f}")
+            for i, dist in enumerate(s27_thu["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s27_thursday_results.json", "w") as f:
+                json.dump(s27_thu, f, indent=2)
+
+        # Saturday
+        if CSV_SATURDAY.exists():
+            df_sat = load_day(CSV_SATURDAY, features_monday)
+            env_s27_sat = TieredEnvV2(df=df_sat, bundle=bundle, n_agents=N_AGENTS)
+            print(f"\nEvaluating S27 on Saturday (unseen)...")
+            print(df_sat["label"].value_counts().to_string())
+            s27_sat = run_episode(env_s27_sat, s27_mappo, action_labels=T2_ACTION_LABELS)
+            print(f"  TPR: {s27_sat['tpr']:.4f}  FPR: {s27_sat['fpr']:.4f}")
+            for i, dist in enumerate(s27_sat["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s27_saturday_results.json", "w") as f:
+                json.dump(s27_sat, f, indent=2)
     else:
         print(f"\nNo S27 model found at {S27_DIR} — skipping.")
         print("Run: python main.py --stage s27")
+
+    # ── S28 evaluation (p_risk tiered profiles + Monday+Thursday mixed training)
+    # Key test: does Saturday FPR drop vs S27?  Tuesday TPR must stay high.
+    # Thursday is EXCLUDED — it was seen during training.
+    s28_monday_metrics  = {}
+    s28_tuesday_metrics = {}
+    if _should_run("s28") and S28_DIR.exists():
+        print(f"\nLoading trained S28 from {S28_DIR}...")
+        print("  (p_risk routing + mixed Monday+Thursday training — benign-day FPR fix)")
+
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            JOINT_DIM as T2_JOINT_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+
+        s28_mappo = MAPPO(state_dim=T2_STATE_DIM, joint_dim=T2_JOINT_DIM, action_dim=T2_ACTION_DIM)
+        s28_mappo.load(S28_DIR)
+        features_s28 = bundle["features"]
+
+        # Monday — sanity check (seen attacks, seen benign)
+        df_mon_28 = load_day(CSV_MONDAY, features_s28)
+        env_s28_mon = TieredEnvV2(df=df_mon_28, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S28 on Monday (sanity — seen attacks)...")
+        print(df_mon_28["label"].value_counts().to_string())
+        s28_monday_metrics = run_episode(env_s28_mon, s28_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s28_monday_metrics['tpr']:.4f}  FPR: {s28_monday_metrics['fpr']:.4f}")
+        for i, dist in enumerate(s28_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s28_monday_results.json", "w") as f:
+            json.dump(s28_monday_metrics, f, indent=2)
+
+        # Tuesday — primary test (unseen attack types)
+        df_tue_28 = load_day(CSV_TUESDAY, features_s28)
+        env_s28_tue = TieredEnvV2(df=df_tue_28, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S28 on Tuesday (unseen attacks)...")
+        print(df_tue_28["label"].value_counts().to_string())
+        s28_tuesday_metrics = run_episode(env_s28_tue, s28_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s28_tuesday_metrics['tpr']:.4f}  FPR: {s28_tuesday_metrics['fpr']:.4f}")
+        for i, dist in enumerate(s28_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s28_tuesday_results.json", "w") as f:
+            json.dump(s28_tuesday_metrics, f, indent=2)
+
+        # Saturday — KEY test (unseen benign-only day — did stand-down generalise?)
+        # Thursday is intentionally skipped — it was in the training set.
+        if CSV_SATURDAY.exists():
+            df_sat_28 = load_day(CSV_SATURDAY, features_s28)
+            env_s28_sat = TieredEnvV2(df=df_sat_28, bundle=bundle, n_agents=N_AGENTS)
+            print(f"\nEvaluating S28 on Saturday (KEY: unseen benign-only day)...")
+            print(df_sat_28["label"].value_counts().to_string())
+            s28_sat_metrics = run_episode(env_s28_sat, s28_mappo, action_labels=T2_ACTION_LABELS)
+            print(f"  TPR: {s28_sat_metrics['tpr']:.4f}  FPR: {s28_sat_metrics['fpr']:.4f}")
+            print(f"  (S27 Saturday FPR was 0.4881 — did it drop?)")
+            for i, dist in enumerate(s28_sat_metrics["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s28_saturday_results.json", "w") as f:
+                json.dump(s28_sat_metrics, f, indent=2)
+    else:
+        print(f"\nNo S28 model found at {S28_DIR} — skipping.")
+        print("Run: python main.py --stage s28")
+
+    # ── S29 evaluation (IPPO + p_risk tiered profiles — no cooperation)
+    # Cooperation isolation: S27 (MAPPO, joint obs) vs S29 (IPPO, local obs only)
+    # run_episode() works directly — IPPO has same .actors and .n_agents as MAPPO
+    s29_monday_metrics  = {}
+    s29_tuesday_metrics = {}
+    if _should_run("s29") and S29_DIR.exists():
+        print(f"\nLoading trained S29 from {S29_DIR}...")
+        print("  (IPPO — no joint observation, no centralised critic)")
+        print("  Comparing vs S27 (MAPPO) to isolate cooperation contribution")
+
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+        s29_ippo = IPPO(state_dim=T2_STATE_DIM, action_dim=T2_ACTION_DIM, n_agents=N_AGENTS)
+        s29_ippo.load(S29_DIR)
+        features_s29 = bundle["features"]
+
+        # Monday
+        df_mon_29 = load_day(CSV_MONDAY, features_s29)
+        env_s29_mon = TieredEnvV2(df=df_mon_29, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S29 on Monday (seen attacks)...")
+        print(df_mon_29["label"].value_counts().to_string())
+        s29_monday_metrics = run_episode(env_s29_mon, s29_ippo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s29_monday_metrics['tpr']:.4f}  FPR: {s29_monday_metrics['fpr']:.4f}")
+        print(f"  (S27 MAPPO Monday: TPR=0.9956, FPR=0.0276)")
+        for i, dist in enumerate(s29_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s29_monday_results.json", "w") as f:
+            json.dump(s29_monday_metrics, f, indent=2)
+
+        # Tuesday
+        df_tue_29 = load_day(CSV_TUESDAY, features_s29)
+        env_s29_tue = TieredEnvV2(df=df_tue_29, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S29 on Tuesday (unseen attacks)...")
+        print(df_tue_29["label"].value_counts().to_string())
+        s29_tuesday_metrics = run_episode(env_s29_tue, s29_ippo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s29_tuesday_metrics['tpr']:.4f}  FPR: {s29_tuesday_metrics['fpr']:.4f}")
+        print(f"  (S27 MAPPO Tuesday: TPR=0.8716, FPR=0.0668)")
+        print(f"  → If S29 ≈ S27: cooperation not needed. If S29 < S27: CTDE contributing.")
+        for i, dist in enumerate(s29_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s29_tuesday_results.json", "w") as f:
+            json.dump(s29_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S29 model found at {S29_DIR} — skipping.")
+        print("Run: python main.py --stage s29")
 
     # ── Full comparison table (Monday)
     print("\n" + "="*150)
@@ -1462,6 +1653,9 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S25",    s25_monday_metrics),
         ("S26",    s26_monday_metrics),
         ("S26b",   s26b_monday_metrics),
+        ("S27",    s27_monday_metrics),
+        ("S28",    s28_monday_metrics),
+        ("S29",    s29_monday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_mon)
     print(hdr)
@@ -1496,6 +1690,9 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S25",    s25_tuesday_metrics),
         ("S26",    s26_tuesday_metrics),
         ("S26b",   s26b_tuesday_metrics),
+        ("S27",    s27_tuesday_metrics),
+        ("S28",    s28_tuesday_metrics),
+        ("S29",    s29_tuesday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_tue)
     print(hdr)
@@ -1515,8 +1712,20 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
 
 if __name__ == "__main__":
     import argparse
-    p = argparse.ArgumentParser()
-    p.add_argument("--tag", type=str, default="baseline")
-    p.add_argument("--model_tag", type=str, default=None)
+    p = argparse.ArgumentParser(description="CoopIDS evaluation. Runs all ablations by default.")
+    p.add_argument("--tag", type=str, default="baseline",
+                   help="Results saved to artifacts/evaluation/v1/<tag>/")
+    p.add_argument("--model_tag", type=str, default=None,
+                   help="Model tag for MAPPO checkpoint directory.")
+    p.add_argument("--models", type=str, default=None,
+                   help="Comma-separated models to evaluate "
+                        "(e.g. s23,s24,s27,s29). If omitted, all are evaluated. "
+                        "Valid names: mappo, iql, ippo, mapl, e13, s11, s12, s13, s14, "
+                        "s15, s16, s17, s18, s19, s21, s22, s23, s24, s25, s26, s26b, "
+                        "s27, s28, s29")
     args = p.parse_args()
-    main(tag=args.tag, model_tag=args.model_tag)
+    models_set = (
+        {m.strip().lower() for m in args.models.split(",")}
+        if args.models else None
+    )
+    main(tag=args.tag, model_tag=args.model_tag, models=models_set)

@@ -1,0 +1,23 @@
+{
+  "total_reward": 481.8299,
+  "total_steps": 960,
+  "total_benign_in": 105005,
+  "total_attack_in": 0,
+  "total_benign_out": 51522,
+  "total_attack_blocked": 0,
+  "tpr": 0.0,
+  "fpr": 0.5093,
+  "legit_ratio": 0.4907,
+  "action_distribution": [
+    {
+      "firm": 30,
+      "lockdown": 930
+    },
+    {
+      "aggressive": 960
+    },
+    {
+      "lockdown": 960
+    }
+  ]
+}

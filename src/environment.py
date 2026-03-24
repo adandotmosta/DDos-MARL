@@ -39,8 +39,21 @@ except ImportError:
 PUZZLE_ENABLED = True
 
 # Patch this to True in train_s14 to add puzzle_block_rate as 6th state feature.
-# 0.0 = default (no tracking, preserves all prior experiments).
 PUZZLE_STATE = False
+
+# S15: Risk-aware throttle — drop high P(attack) flows instead of random drops.
+SMART_THROTTLE = False
+
+# S16: Dynamic puzzle — attack pass rate drifts up during episode.
+DYNAMIC_PUZZLE = False
+
+# S17: LightGBM prediction entropy as 6th state feature.
+ENTROPY_STATE = False
+
+# S23: Selective puzzle — puzzle only challenges flows predicted as Suspicious.
+# Attack-predicted and Benign-predicted flows pass through puzzle unchanged,
+# forcing agents to use throttle/block for high-confidence attack flows.
+SELECTIVE_PUZZLE = False
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -218,7 +231,8 @@ class RouterEnvironment:
           bytes_rate ~570 B/s, Us=1e8); effectively constant, no signal.
         """
         if len(window) == 0:
-            return np.zeros(STATE_DIM, dtype=np.float32)
+            dim = STATE_DIM + (1 if PUZZLE_STATE else 0) + (1 if ENTROPY_STATE else 0) + (2 if EXTENDED_STATE else 0)
+            return np.zeros(dim, dtype=np.float32)
 
         # Use precomputed probability arrays — zero inference at runtime.
         # window.index.values = [lo, lo+1, ..., hi-1] (positions in self.flows
@@ -238,12 +252,22 @@ class RouterEnvironment:
 
         if PUZZLE_STATE:
             # puzzle_block_rate: fraction of puzzle-stopped flows that were attacks
-            # High → puzzle is effectively blocking real attacks → keep using it
-            # Low  → puzzle is mostly blocking benign → stop using it
             puzzle_block_rate = (
                 self._puzzle_attacks_blocked / max(self._puzzle_total_passed, 1)
             )
             return np.array(base_state + [puzzle_block_rate], dtype=np.float32)
+
+        if ENTROPY_STATE:
+            # S17: Shannon entropy of LightGBM predictions — model confidence signal
+            idx = window.index.values
+            probs = np.stack([
+                self._p_attack_all[idx],
+                self._p_benign_all[idx],
+                self._p_susp_all[idx],
+            ], axis=1)
+            entropy = -np.sum(probs * np.log(probs + 1e-8), axis=1)
+            prediction_entropy = float(entropy.mean()) / np.log(3)  # normalize [0,1]
+            return np.array(base_state + [prediction_entropy], dtype=np.float32)
 
         if not EXTENDED_STATE:
             return np.array(base_state, dtype=np.float32)
@@ -334,8 +358,29 @@ class RouterEnvironment:
 
         if action == 1 and PUZZLE_ENABLED:
             # Puzzle — applies to ALL flows; pass rate depends on true label.
-            # Vectorised: map labels → pass rates, then compare against random draws.
-            pass_rates = window["label"].map(PUZZLE_PASS).fillna(0.5).values
+            if SELECTIVE_PUZZLE:
+                # S23: pass rate based on LightGBM predicted class, not ground truth.
+                # Attack-predicted → pass_rate=1.0 (puzzle useless, must block/throttle)
+                # Suspicious-predicted → pass_rate=0.5 (genuine uncertainty, verify)
+                # Benign-predicted → pass_rate=1.0 (passes through, no need to challenge)
+                idx = window.index.values
+                pred_class = np.argmax(
+                    np.stack([self._p_benign_all[idx],
+                              self._p_susp_all[idx],
+                              self._p_attack_all[idx]], axis=1), axis=1
+                )  # 0=benign-predicted, 1=suspicious-predicted, 2=attack-predicted
+                pass_rates = np.where(pred_class == 1, 0.50, 1.00).astype(np.float32)
+            elif DYNAMIC_PUZZLE:
+                # S16: attack pass rate drifts up during episode
+                progress = getattr(self, '_episode_progress', 0.0)
+                dynamic_pass = {
+                    "Benign":     0.95 - 0.10 * progress,
+                    "Suspicious": 0.50 - 0.10 * progress,
+                    "Attack":     0.05 + 0.25 * progress,
+                }
+                pass_rates = window["label"].map(dynamic_pass).fillna(0.5).values
+            else:
+                pass_rates = window["label"].map(PUZZLE_PASS).fillna(0.5).values
             keep_mask  = rng.random(n) < pass_rates
             forwarded  = window[keep_mask].copy()
             # Track puzzle outcomes for PUZZLE_STATE feature
@@ -347,9 +392,15 @@ class RouterEnvironment:
 
         if action in DROP_PROBS:
             # Throttle / block — only affects IPs in the risk table.
-            # pd.Series.isin(dict) checks key membership in vectorised C.
-            flagged   = window["src_ip"].astype(str).isin(self.ip_risk_table).values
-            drop_mask = flagged & (rng.random(n) < DROP_PROBS[action])
+            flagged = window["src_ip"].astype(str).isin(self.ip_risk_table).values
+            if SMART_THROTTLE:
+                # S15: drop flows with highest P(attack) instead of random
+                idx = window.index.values
+                flow_risks = self._p_attack_all[idx]
+                risk_threshold = 1.0 - DROP_PROBS[action]
+                drop_mask = flagged & (flow_risks > risk_threshold)
+            else:
+                drop_mask = flagged & (rng.random(n) < DROP_PROBS[action])
             return window[~drop_mask].copy()
 
         return window
@@ -454,6 +505,12 @@ class MultiAgentEnv:
         assert len(actions) == self.n_agents
 
         t = self.t_current
+
+        # S16: propagate episode progress for dynamic puzzle pass rates
+        if DYNAMIC_PUZZLE:
+            progress = (t - self.t_start) / max(self.t_end - self.t_start, 1)
+            for router in self.routers:
+                router._episode_progress = progress
 
         # ── For each router: observe t, update table, act on t+1
         all_forwarded: List[pd.DataFrame] = []
@@ -597,10 +654,13 @@ class MultiAgentEnv:
         Returns a list of N_AGENTS floats.
         """
         rewards = []
+        per_agent_data = []
         for i, (router, forwarded) in enumerate(zip(self.routers, all_forwarded)):
             window = router.get_window(t_window)
             if "label" not in window.columns:
                 rewards.append(0.0)
+                per_agent_data.append({"benign_total": 0, "attack_total": 0,
+                                       "benign_passed": 0, "attack_passed": 0})
                 continue
 
             legit_total  = int((window["label"] == "Benign").sum())
@@ -608,15 +668,21 @@ class MultiAgentEnv:
 
             if legit_total == 0 and attack_total == 0:
                 rewards.append(0.0)
+                per_agent_data.append({"benign_total": 0, "attack_total": 0,
+                                       "benign_passed": 0, "attack_passed": 0})
                 continue
 
             if len(forwarded) == 0:
                 r = -1.0 if legit_total > 0 else 0.0
                 rewards.append(r)
+                per_agent_data.append({"benign_total": legit_total, "attack_total": attack_total,
+                                       "benign_passed": 0, "attack_passed": 0})
                 continue
 
             legit_passed  = int((forwarded["label"] == "Benign").sum())
             attack_passed = int((forwarded["label"] == "Attack").sum())
+            per_agent_data.append({"benign_total": legit_total, "attack_total": attack_total,
+                                   "benign_passed": legit_passed, "attack_passed": attack_passed})
 
             legit_ratio  = legit_passed  / max(legit_total,  1)
             attack_ratio = attack_passed / max(attack_total, 1)
@@ -624,6 +690,8 @@ class MultiAgentEnv:
 
         # Update last_step_info using global totals for logging consistency
         self._compute_reward(all_forwarded, t_window)
+        # Expose per-agent breakdowns for counterfactual reward computation (S22)
+        self.last_step_info["per_agent"] = per_agent_data
         return rewards
 
     # ── Info ──────────────────────────────────────────────────────────────────

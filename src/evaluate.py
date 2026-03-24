@@ -28,6 +28,9 @@ try:
         CSV_MONDAY, CSV_TUESDAY, LGBM_BUNDLE,
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR, S13_DIR,
+        S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR,
+        LGBM_BUNDLE_COMBINED,
     )
     from src.environment import MultiAgentEnv
     import src.environment as _env_module
@@ -39,6 +42,9 @@ except ImportError:
         CSV_MONDAY, CSV_TUESDAY, LGBM_BUNDLE,
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR,
+        S13_DIR, S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR,
+        LGBM_BUNDLE_COMBINED,
     )
     from coopids.src.environment import MultiAgentEnv
     import coopids.src.environment as _env_module
@@ -127,7 +133,7 @@ def run_episode(
         total_benign_out     += info["benign_forwarded"]
         total_attack_blocked += info["attack_blocked"]
 
-        total_reward += reward
+        total_reward += float(np.mean(reward)) if isinstance(reward, list) else reward
         total_steps  += 1
         local_states  = next_local
         joint_obs     = next_joint
@@ -190,7 +196,7 @@ def run_episode_iql(
         total_benign_out     += info["benign_forwarded"]
         total_attack_blocked += info["attack_blocked"]
 
-        total_reward += reward
+        total_reward += float(np.mean(reward)) if isinstance(reward, list) else reward
         total_steps  += 1
         local_states  = next_local
 
@@ -255,7 +261,7 @@ def run_episode_ippo(
         total_benign_out     += info["benign_forwarded"]
         total_attack_blocked += info["attack_blocked"]
 
-        total_reward += reward
+        total_reward += float(np.mean(reward)) if isinstance(reward, list) else reward
         total_steps  += 1
         local_states  = next_local
 
@@ -456,6 +462,80 @@ def ablation_study(
             else:
                 print(f"  No saved model for {stage} — skipping.")
                 metrics = {"note": "not trained yet"}
+        elif stage in ("S14", "S17"):
+            # S14/S17: 6-dim state (puzzle_block_rate or entropy)
+            if stage_dir.exists():
+                if stage == "S14":
+                    _env_module.PUZZLE_STATE = True
+                else:
+                    _env_module.ENTROPY_STATE = True
+                agent = MAPPO(state_dim=6, joint_dim=18, action_dim=6)
+                agent.load(stage_dir)
+                env_6d = MultiAgentEnv(df=df_monday, bundle=bundle, n_agents=N_AGENTS)
+                metrics = run_episode(env_6d, agent)
+                _env_module.PUZZLE_STATE = False
+                _env_module.ENTROPY_STATE = False
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
+        elif stage == "S15":
+            # S15: risk-aware throttle
+            if stage_dir.exists():
+                _env_module.SMART_THROTTLE = True
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+                agent.load(stage_dir)
+                metrics = run_episode(env, agent)
+                _env_module.SMART_THROTTLE = False
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
+        elif stage == "S16":
+            # S16: dynamic puzzle
+            if stage_dir.exists():
+                _env_module.DYNAMIC_PUZZLE = True
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+                agent.load(stage_dir)
+                metrics = run_episode(env, agent)
+                _env_module.DYNAMIC_PUZZLE = False
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
+        elif stage == "S19":
+            # S19: asymmetric reward (attack_w=3.0)
+            if stage_dir.exists():
+                _env_module.REWARD_ATTACK_W = 3.0
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+                agent.load(stage_dir)
+                metrics = run_episode(env, agent)
+                _env_module.REWARD_ATTACK_W = 1.0
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
+        elif stage == "S21":
+            # S21: lower BASE_THRESHOLD (0.20)
+            if stage_dir.exists():
+                _env_module.BASE_THRESHOLD = 0.20
+                env_s21 = MultiAgentEnv(df=df_monday, bundle=bundle, n_agents=N_AGENTS)
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+                agent.load(stage_dir)
+                metrics = run_episode(env_s21, agent)
+                _env_module.BASE_THRESHOLD = 0.35
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
+        elif stage in ("S23", "S24"):
+            # S23/S24: selective puzzle, 10-action space
+            if stage_dir.exists():
+                _env_module.SELECTIVE_PUZZLE = True
+                _env_module.LOCAL_REWARD     = True
+                agent = MAPPO(state_dim=5, joint_dim=15, action_dim=10)
+                agent.load(stage_dir)
+                metrics = run_episode(env, agent)
+                _env_module.SELECTIVE_PUZZLE = False
+                _env_module.LOCAL_REWARD     = False
+            else:
+                print(f"  No saved model for {stage} — skipping.")
+                metrics = {"note": "not trained yet"}
         else:
             # All other stages use MAPPO with 5-dim state, 6-action space
             agent = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
@@ -479,7 +559,16 @@ def ablation_study(
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
 
-def main(tag: str = "baseline", model_tag: str | None = None) -> None:
+def main(tag: str = "baseline", model_tag: str | None = None, models: set | None = None) -> None:
+    """
+    models: optional set of lowercase model names to evaluate, e.g. {"s23", "s24", "ippo"}.
+            If None, all models are evaluated.
+    Valid names: mappo, iql, ippo, mapl, e13, s11, s12, s13, s14, s15, s16,
+                 s17, s18, s19, s21, s22, s23, s24
+    """
+    def _should_run(name: str) -> bool:
+        return models is None or name.lower() in models
+
     out_dir  = EVAL_DIR / tag
     mappo_dir = MARL_DIR / "experiments" / model_tag if model_tag else MARL_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -490,29 +579,30 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     bundle   = load_bundle(LGBM_BUNDLE)
     features = bundle["features"]
 
-    print(f"Loading trained MAPPO from {mappo_dir}...")
-    mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
-    mappo.load(mappo_dir)
+    monday_metrics  = {}
+    tuesday_metrics = {}
+    if _should_run("mappo"):
+        print(f"Loading trained MAPPO from {mappo_dir}...")
+        mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        mappo.load(mappo_dir)
 
-    # ── Monday evaluation (seen attacks — same day as training)
-    monday_metrics = evaluate_day(
-        csv_path = CSV_MONDAY,
-        bundle   = bundle,
-        mappo    = mappo,
-        label    = "Monday (seen attacks)",
-    )
-    with open(out_dir / "monday_results.json", "w") as f:
-        json.dump(monday_metrics, f, indent=2)
+        monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = mappo,
+            label    = "Monday (seen attacks)",
+        )
+        with open(out_dir / "monday_results.json", "w") as f:
+            json.dump(monday_metrics, f, indent=2)
 
-    # ── Tuesday evaluation (unseen attacks — generalization test)
-    tuesday_metrics = evaluate_day(
-        csv_path = CSV_TUESDAY,
-        bundle   = bundle,
-        mappo    = mappo,
-        label    = "Tuesday (unseen attacks)",
-    )
-    with open(out_dir / "tuesday_results.json", "w") as f:
-        json.dump(tuesday_metrics, f, indent=2)
+        tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = mappo,
+            label    = "Tuesday (unseen attacks)",
+        )
+        with open(out_dir / "tuesday_results.json", "w") as f:
+            json.dump(tuesday_metrics, f, indent=2)
 
     # ── Comparison table
     print("\n" + "="*60)
@@ -531,7 +621,7 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     iql_monday_metrics  = {}
     iql_tuesday_metrics = {}
 
-    if iql_dir.exists():
+    if _should_run("iql") and iql_dir.exists():
         print(f"\nLoading trained IQL from {iql_dir}...")
         iql = IQL(state_dim=5, action_dim=6)
         iql.load(iql_dir)
@@ -562,7 +652,7 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     ippo_monday_metrics  = {}
     ippo_tuesday_metrics = {}
 
-    if ippo_dir.exists():
+    if _should_run("ippo") and ippo_dir.exists():
         print(f"\nLoading trained IPPO from {ippo_dir}...")
         ippo = IPPO(state_dim=5, action_dim=6)
         ippo.load(ippo_dir)
@@ -594,7 +684,7 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     mapl_monday_metrics  = {}
     mapl_tuesday_metrics = {}
 
-    if mapl_dir.exists():
+    if _should_run("mapl") and mapl_dir.exists():
         print(f"\nLoading trained MAPL (S9) from {mapl_dir}...")
         mapl = _MAPPO(state_dim=5, joint_dim=15, action_dim=6)
         mapl.load(mapl_dir)
@@ -625,12 +715,16 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     e13_monday_metrics  = {}
     e13_tuesday_metrics = {}
 
-    if e13_dir.exists():
+    if _should_run("e13") and e13_dir.exists():
         print(f"\nLoading trained E13 (S10) from {e13_dir}...")
         # E13 uses 7-dim state / 21-dim joint — instantiate explicitly
         # and temporarily enable EXTENDED_STATE + STATE_DIM in the environment module.
-        _env_module.EXTENDED_STATE = True
-        _env_module.STATE_DIM = 7
+        # Explicitly reset all other state-altering flags to prevent leakage from
+        # the ablation study section (S14 sets PUZZLE_STATE, S17 sets ENTROPY_STATE).
+        _env_module.PUZZLE_STATE    = False
+        _env_module.ENTROPY_STATE   = False
+        _env_module.EXTENDED_STATE  = True
+        _env_module.STATE_DIM       = 7
         e13_mappo = MAPPO(state_dim=7, joint_dim=21, action_dim=6)
         e13_mappo.load(e13_dir)
 
@@ -663,11 +757,12 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     s11_monday_metrics  = {}
     s11_tuesday_metrics = {}
 
-    if S11_DIR.exists():
+    if _should_run("s11") and S11_DIR.exists():
         print(f"\nLoading trained S11 from {S11_DIR}...")
-        # S11 was trained with EXTENDED_STATE=True (7-dim) + 10-action space.
-        _env_module.EXTENDED_STATE = True
-        _env_module.STATE_DIM = 7
+        _env_module.PUZZLE_STATE    = False
+        _env_module.ENTROPY_STATE   = False
+        _env_module.EXTENDED_STATE  = True
+        _env_module.STATE_DIM       = 7
         _env_module.DROP_PROBS = _DROP_PROBS_10
         s11_mappo = MAPPO(state_dim=7, joint_dim=21, action_dim=10)
         s11_mappo.load(S11_DIR)
@@ -702,9 +797,11 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     s12_monday_metrics  = {}
     s12_tuesday_metrics = {}
 
-    if S12_DIR.exists():
+    if _should_run("s12") and S12_DIR.exists():
         print(f"\nLoading trained S12 from {S12_DIR}...")
         # S12: 5-dim state, 9-action (no puzzle). Disable puzzle in env module.
+        _env_module.PUZZLE_STATE    = False
+        _env_module.ENTROPY_STATE   = False
         _env_module.EXTENDED_STATE  = False
         _env_module.STATE_DIM       = 5
         _env_module.PUZZLE_ENABLED  = False
@@ -741,7 +838,7 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
     s13_monday_metrics  = {}
     s13_tuesday_metrics = {}
 
-    if S13_DIR.exists():
+    if _should_run("s13") and S13_DIR.exists():
         print(f"\nLoading trained S13 from {S13_DIR}...")
         _env_module.EXTENDED_STATE = False
         _env_module.STATE_DIM      = 5
@@ -771,36 +868,416 @@ def main(tag: str = "baseline", model_tag: str | None = None) -> None:
         print(f"\nNo S13 model found at {S13_DIR} — skipping.")
         print("Run: python main.py --stage s13")
 
-    # ── Full comparison table
+    # ── S14 evaluation (MAPPO + local reward + puzzle_block_rate state)
+    s14_monday_metrics  = {}
+    s14_tuesday_metrics = {}
+
+    if _should_run("s14") and S14_DIR.exists():
+        print(f"\nLoading trained S14 from {S14_DIR}...")
+        _env_module.PUZZLE_STATE = True
+        s14_mappo = MAPPO(state_dim=6, joint_dim=18, action_dim=6)
+        s14_mappo.load(S14_DIR)
+
+        s14_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s14_mappo,
+            label    = "Monday — S14 (puzzle block rate state, seen attacks)",
+        )
+        with open(out_dir / "s14_monday_results.json", "w") as f:
+            json.dump(s14_monday_metrics, f, indent=2)
+
+        s14_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s14_mappo,
+            label    = "Tuesday — S14 (puzzle block rate state, unseen attacks)",
+        )
+        with open(out_dir / "s14_tuesday_results.json", "w") as f:
+            json.dump(s14_tuesday_metrics, f, indent=2)
+
+        _env_module.PUZZLE_STATE = False
+    else:
+        print(f"\nNo S14 model found at {S14_DIR} — skipping.")
+        print("Run: python main.py --stage s14")
+
+    # ── S15 evaluation (MAPPO + local reward + risk-aware throttle)
+    s15_monday_metrics  = {}
+    s15_tuesday_metrics = {}
+
+    if _should_run("s15") and S15_DIR.exists():
+        print(f"\nLoading trained S15 from {S15_DIR}...")
+        _env_module.SMART_THROTTLE = True
+        s15_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s15_mappo.load(S15_DIR)
+
+        s15_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s15_mappo,
+            label    = "Monday — S15 (risk-aware throttle, seen attacks)",
+        )
+        with open(out_dir / "s15_monday_results.json", "w") as f:
+            json.dump(s15_monday_metrics, f, indent=2)
+
+        s15_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s15_mappo,
+            label    = "Tuesday — S15 (risk-aware throttle, unseen attacks)",
+        )
+        with open(out_dir / "s15_tuesday_results.json", "w") as f:
+            json.dump(s15_tuesday_metrics, f, indent=2)
+
+        _env_module.SMART_THROTTLE = False
+    else:
+        print(f"\nNo S15 model found at {S15_DIR} — skipping.")
+        print("Run: python main.py --stage s15")
+
+    # ── S16 evaluation (MAPPO + local reward + dynamic puzzle)
+    s16_monday_metrics  = {}
+    s16_tuesday_metrics = {}
+
+    if _should_run("s16") and S16_DIR.exists():
+        print(f"\nLoading trained S16 from {S16_DIR}...")
+        _env_module.DYNAMIC_PUZZLE = True
+        s16_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s16_mappo.load(S16_DIR)
+
+        s16_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s16_mappo,
+            label    = "Monday — S16 (dynamic puzzle, seen attacks)",
+        )
+        with open(out_dir / "s16_monday_results.json", "w") as f:
+            json.dump(s16_monday_metrics, f, indent=2)
+
+        s16_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s16_mappo,
+            label    = "Tuesday — S16 (dynamic puzzle, unseen attacks)",
+        )
+        with open(out_dir / "s16_tuesday_results.json", "w") as f:
+            json.dump(s16_tuesday_metrics, f, indent=2)
+
+        _env_module.DYNAMIC_PUZZLE = False
+    else:
+        print(f"\nNo S16 model found at {S16_DIR} — skipping.")
+        print("Run: python main.py --stage s16")
+
+    # ── S17 evaluation (MAPPO + local reward + entropy state)
+    s17_monday_metrics  = {}
+    s17_tuesday_metrics = {}
+
+    if _should_run("s17") and S17_DIR.exists():
+        print(f"\nLoading trained S17 from {S17_DIR}...")
+        _env_module.ENTROPY_STATE = True
+        s17_mappo = MAPPO(state_dim=6, joint_dim=18, action_dim=6)
+        s17_mappo.load(S17_DIR)
+
+        s17_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s17_mappo,
+            label    = "Monday — S17 (entropy state, seen attacks)",
+        )
+        with open(out_dir / "s17_monday_results.json", "w") as f:
+            json.dump(s17_monday_metrics, f, indent=2)
+
+        s17_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s17_mappo,
+            label    = "Tuesday — S17 (entropy state, unseen attacks)",
+        )
+        with open(out_dir / "s17_tuesday_results.json", "w") as f:
+            json.dump(s17_tuesday_metrics, f, indent=2)
+
+        _env_module.ENTROPY_STATE = False
+    else:
+        print(f"\nNo S17 model found at {S17_DIR} — skipping.")
+        print("Run: python main.py --stage s17")
+
+    # ── S18 evaluation (MAPPO + local reward + curriculum learning)
+    s18_monday_metrics  = {}
+    s18_tuesday_metrics = {}
+
+    if _should_run("s18") and S18_DIR.exists():
+        print(f"\nLoading trained S18 from {S18_DIR}...")
+        # Eval with puzzle enabled (Phase 2 policy)
+        _env_module.PUZZLE_ENABLED = True
+        s18_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s18_mappo.load(S18_DIR)
+
+        s18_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s18_mappo,
+            label    = "Monday — S18 (curriculum learning, seen attacks)",
+        )
+        with open(out_dir / "s18_monday_results.json", "w") as f:
+            json.dump(s18_monday_metrics, f, indent=2)
+
+        s18_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s18_mappo,
+            label    = "Tuesday — S18 (curriculum learning, unseen attacks)",
+        )
+        with open(out_dir / "s18_tuesday_results.json", "w") as f:
+            json.dump(s18_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S18 model found at {S18_DIR} — skipping.")
+        print("Run: python main.py --stage s18")
+
+    # ── S19 evaluation (MAPPO + local reward + asymmetric reward, attack_w=3.0)
+    s19_monday_metrics  = {}
+    s19_tuesday_metrics = {}
+
+    if _should_run("s19") and S19_DIR.exists():
+        print(f"\nLoading trained S19 from {S19_DIR}...")
+        _env_module.REWARD_ATTACK_W = 3.0
+        s19_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s19_mappo.load(S19_DIR)
+
+        s19_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s19_mappo,
+            label    = "Monday — S19 (asymmetric reward attack_w=3, seen attacks)",
+        )
+        with open(out_dir / "s19_monday_results.json", "w") as f:
+            json.dump(s19_monday_metrics, f, indent=2)
+
+        s19_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s19_mappo,
+            label    = "Tuesday — S19 (asymmetric reward attack_w=3, unseen attacks)",
+        )
+        with open(out_dir / "s19_tuesday_results.json", "w") as f:
+            json.dump(s19_tuesday_metrics, f, indent=2)
+
+        _env_module.REWARD_ATTACK_W = 1.0
+    else:
+        print(f"\nNo S19 model found at {S19_DIR} — skipping.")
+        print("Run: python main.py --stage s19")
+
+    # ── S21 evaluation (MAPPO + local reward + lower threshold 0.20)
+    s21_monday_metrics  = {}
+    s21_tuesday_metrics = {}
+
+    if _should_run("s21") and S21_DIR.exists():
+        print(f"\nLoading trained S21 from {S21_DIR}...")
+        _env_module.BASE_THRESHOLD = 0.20
+        s21_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s21_mappo.load(S21_DIR)
+
+        s21_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s21_mappo,
+            label    = "Monday — S21 (lower threshold 0.20, seen attacks)",
+        )
+        with open(out_dir / "s21_monday_results.json", "w") as f:
+            json.dump(s21_monday_metrics, f, indent=2)
+
+        s21_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s21_mappo,
+            label    = "Tuesday — S21 (lower threshold 0.20, unseen attacks)",
+        )
+        with open(out_dir / "s21_tuesday_results.json", "w") as f:
+            json.dump(s21_tuesday_metrics, f, indent=2)
+
+        _env_module.BASE_THRESHOLD = 0.35
+    else:
+        print(f"\nNo S21 model found at {S21_DIR} — skipping.")
+        print("Run: python main.py --stage s21")
+
+    # ── S22 evaluation (MAPPO + counterfactual reward)
+    s22_monday_metrics  = {}
+    s22_tuesday_metrics = {}
+
+    if _should_run("s22") and S22_DIR.exists():
+        print(f"\nLoading trained S22 from {S22_DIR}...")
+        # S22 trains with LOCAL_REWARD=True (to trigger per_agent tracking),
+        # but eval uses standard global reward for fair comparison
+        s22_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=6)
+        s22_mappo.load(S22_DIR)
+
+        s22_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s22_mappo,
+            label    = "Monday — S22 (counterfactual reward, seen attacks)",
+        )
+        with open(out_dir / "s22_monday_results.json", "w") as f:
+            json.dump(s22_monday_metrics, f, indent=2)
+
+        s22_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s22_mappo,
+            label    = "Tuesday — S22 (counterfactual reward, unseen attacks)",
+        )
+        with open(out_dir / "s22_tuesday_results.json", "w") as f:
+            json.dump(s22_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S22 model found at {S22_DIR} — skipping.")
+        print("Run: python main.py --stage s22")
+
+    # ── S23 evaluation (MAPPO + selective puzzle — suspicious-only)
+    s23_monday_metrics  = {}
+    s23_tuesday_metrics = {}
+
+    if _should_run("s23") and S23_DIR.exists():
+        print(f"\nLoading trained S23 from {S23_DIR}...")
+        # S23 trains with SELECTIVE_PUZZLE=True — must patch during eval so puzzle
+        # behaves the same way the agent was trained under.
+        _env_module.SELECTIVE_PUZZLE = True
+        _env_module.LOCAL_REWARD     = True
+
+        s23_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=10)
+        s23_mappo.load(S23_DIR)
+
+        s23_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle,
+            mappo    = s23_mappo,
+            label    = "Monday — S23 (selective puzzle, seen attacks)",
+        )
+        with open(out_dir / "s23_monday_results.json", "w") as f:
+            json.dump(s23_monday_metrics, f, indent=2)
+
+        s23_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle,
+            mappo    = s23_mappo,
+            label    = "Tuesday — S23 (selective puzzle, unseen attacks)",
+        )
+        with open(out_dir / "s23_tuesday_results.json", "w") as f:
+            json.dump(s23_tuesday_metrics, f, indent=2)
+
+        # Restore defaults
+        _env_module.SELECTIVE_PUZZLE = False
+        _env_module.LOCAL_REWARD     = False
+    else:
+        print(f"\nNo S23 model found at {S23_DIR} — skipping.")
+        print("Run: python main.py --stage s23")
+
+    # ── S24 evaluation (MAPPO + selective puzzle + combined LightGBM)
+    # Isolates MARL throttling quality: LightGBM trained on Mon+Tue → accurate on Tuesday.
+    # Compare S24 vs S23 Tuesday TPR to measure how much of the gap is LightGBM's fault.
+    s24_monday_metrics  = {}
+    s24_tuesday_metrics = {}
+
+    if _should_run("s24") and S24_DIR.exists() and LGBM_BUNDLE_COMBINED.exists():
+        print(f"\nLoading trained S24 from {S24_DIR}...")
+        print("  (Uses combined Monday+Tuesday LightGBM bundle)")
+
+        # Load the combined bundle for inference
+        with open(LGBM_BUNDLE_COMBINED, "rb") as _f:
+            bundle_combined = pickle.load(_f)
+
+        _env_module.SELECTIVE_PUZZLE = True
+        _env_module.LOCAL_REWARD     = True
+
+        s24_mappo = MAPPO(state_dim=5, joint_dim=15, action_dim=10)
+        s24_mappo.load(S24_DIR)
+
+        s24_monday_metrics = evaluate_day(
+            csv_path = CSV_MONDAY,
+            bundle   = bundle_combined,
+            mappo    = s24_mappo,
+            label    = "Monday — S24 (selective puzzle + combined LightGBM)",
+        )
+        with open(out_dir / "s24_monday_results.json", "w") as f:
+            json.dump(s24_monday_metrics, f, indent=2)
+
+        s24_tuesday_metrics = evaluate_day(
+            csv_path = CSV_TUESDAY,
+            bundle   = bundle_combined,
+            mappo    = s24_mappo,
+            label    = "Tuesday — S24 (selective puzzle + combined LightGBM, MARL policy isolated)",
+        )
+        with open(out_dir / "s24_tuesday_results.json", "w") as f:
+            json.dump(s24_tuesday_metrics, f, indent=2)
+
+        _env_module.SELECTIVE_PUZZLE = False
+        _env_module.LOCAL_REWARD     = False
+    else:
+        if not LGBM_BUNDLE_COMBINED.exists():
+            print(f"\nNo combined LightGBM bundle found — skipping S24.")
+            print("Run: python train_lgbm_combined.py")
+        else:
+            print(f"\nNo S24 model found at {S24_DIR} — skipping.")
+            print("Run: python main.py --stage s24")
+
+    # ── Full comparison table (Monday)
     print("\n" + "="*150)
-    print("FULL COMPARISON: MAPPO (S8) vs IPPO (S7) vs MAPL (S9) vs E13 (S10) vs S11 (10-act) vs S12 (no-puzzle) vs S13 (MAPL+cost) vs IQL (S6)")
+    print("FULL COMPARISON — MONDAY (seen attacks)")
     print("="*150)
-    print(f"{'Metric':<18} {'MAPPO Mon':>11} {'IPPO Mon':>10} {'MAPL Mon':>10} {'E13 Mon':>9} "
-          f"{'S11 Mon':>9} {'S12 Mon':>9} {'S13 Mon':>9} {'IQL Mon':>10} "
-          f"{'MAPPO Tue':>11} {'IPPO Tue':>10} {'MAPL Tue':>10} {'E13 Tue':>9} "
-          f"{'S11 Tue':>9} {'S12 Tue':>9} {'S13 Tue':>9} {'IQL Tue':>10}")
-    print("-"*170)
+    all_models_mon = [
+        ("MAPPO",  monday_metrics),
+        ("IQL",    iql_monday_metrics),
+        ("IPPO",   ippo_monday_metrics),
+        ("MAPL",   mapl_monday_metrics),
+        ("E13",    e13_monday_metrics),
+        ("S11",    s11_monday_metrics),
+        ("S12",    s12_monday_metrics),
+        ("S13",    s13_monday_metrics),
+        ("S14",    s14_monday_metrics),
+        ("S15",    s15_monday_metrics),
+        ("S16",    s16_monday_metrics),
+        ("S17",    s17_monday_metrics),
+        ("S18",    s18_monday_metrics),
+        ("S19",    s19_monday_metrics),
+        ("S21",    s21_monday_metrics),
+        ("S22",    s22_monday_metrics),
+        ("S23",    s23_monday_metrics),
+        ("S24",    s24_monday_metrics),
+    ]
+    hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_mon)
+    print(hdr)
+    print("-" * len(hdr))
     for key in ["total_reward", "tpr", "fpr", "legit_ratio"]:
-        mm  = monday_metrics.get(key, "-")
-        pm  = ippo_monday_metrics.get(key, "-")
-        lm  = mapl_monday_metrics.get(key, "-")
-        em  = e13_monday_metrics.get(key, "-")
-        sm  = s11_monday_metrics.get(key, "-")
-        xm  = s12_monday_metrics.get(key, "-")
-        nm  = s13_monday_metrics.get(key, "-")
-        im  = iql_monday_metrics.get(key, "-")
-        mt  = tuesday_metrics.get(key, "-")
-        pt  = ippo_tuesday_metrics.get(key, "-")
-        lt  = mapl_tuesday_metrics.get(key, "-")
-        et  = e13_tuesday_metrics.get(key, "-")
-        st  = s11_tuesday_metrics.get(key, "-")
-        xt  = s12_tuesday_metrics.get(key, "-")
-        nt  = s13_tuesday_metrics.get(key, "-")
-        it  = iql_tuesday_metrics.get(key, "-")
-        print(f"{key:<18} {str(mm):>11} {str(pm):>10} {str(lm):>10} {str(em):>9} "
-              f"{str(sm):>9} {str(xm):>9} {str(nm):>9} {str(im):>10} "
-              f"{str(mt):>11} {str(pt):>10} {str(lt):>10} {str(et):>9} "
-              f"{str(st):>9} {str(xt):>9} {str(nt):>9} {str(it):>10}")
+        vals = [str(m.get(key, "-")) for _, m in all_models_mon]
+        print(f"{key:<16}" + "".join(f"{v:>10}" for v in vals))
+
+    # ── Full comparison table (Tuesday)
+    print("\n" + "="*150)
+    print("FULL COMPARISON — TUESDAY (unseen attacks)")
+    print("="*150)
+    all_models_tue = [
+        ("MAPPO",  tuesday_metrics),
+        ("IQL",    iql_tuesday_metrics),
+        ("IPPO",   ippo_tuesday_metrics),
+        ("MAPL",   mapl_tuesday_metrics),
+        ("E13",    e13_tuesday_metrics),
+        ("S11",    s11_tuesday_metrics),
+        ("S12",    s12_tuesday_metrics),
+        ("S13",    s13_tuesday_metrics),
+        ("S14",    s14_tuesday_metrics),
+        ("S15",    s15_tuesday_metrics),
+        ("S16",    s16_tuesday_metrics),
+        ("S17",    s17_tuesday_metrics),
+        ("S18",    s18_tuesday_metrics),
+        ("S19",    s19_tuesday_metrics),
+        ("S21",    s21_tuesday_metrics),
+        ("S22",    s22_tuesday_metrics),
+        ("S23",    s23_tuesday_metrics),
+        ("S24",    s24_tuesday_metrics),
+    ]
+    hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_tue)
+    print(hdr)
+    print("-" * len(hdr))
+    for key in ["total_reward", "tpr", "fpr", "legit_ratio"]:
+        vals = [str(m.get(key, "-")) for _, m in all_models_tue]
+        print(f"{key:<16}" + "".join(f"{v:>10}" for v in vals))
 
     # ── Ablation study
     df_monday = load_day(CSV_MONDAY, features)

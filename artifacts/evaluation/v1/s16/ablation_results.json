@@ -1,0 +1,385 @@
+{
+  "S1": {
+    "description": "Single agent, load-only state, blind throttle (Malialis baseline)",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S2": {
+    "description": "Single agent, 5 raw features, blind throttle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S3": {
+    "description": "Single agent, LightGBM risk, blind throttle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S4": {
+    "description": "Single agent, LightGBM risk, selective IP blocking",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S5": {
+    "description": "Single agent, LightGBM risk, selective + puzzle",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S6": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, IQL",
+    "metrics": {
+      "total_reward": 848.9974,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 62519,
+      "total_attack_blocked": 208324,
+      "tpr": 0.9462,
+      "fpr": 0.0848,
+      "legit_ratio": 0.9152,
+      "action_distribution": [
+        {
+          "forward": 29,
+          "puzzle": 626,
+          "throttle_10": 2,
+          "throttle_20": 33,
+          "throttle_30": 230,
+          "throttle_50": 48
+        },
+        {
+          "forward": 30,
+          "puzzle": 745,
+          "throttle_10": 26,
+          "throttle_20": 18,
+          "throttle_30": 10,
+          "throttle_50": 139
+        },
+        {
+          "forward": 55,
+          "puzzle": 712,
+          "throttle_10": 25,
+          "throttle_20": 1,
+          "throttle_30": 85,
+          "throttle_50": 90
+        }
+      ]
+    }
+  },
+  "S7": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, IPPO (local critics, no CTDE)",
+    "metrics": {
+      "total_reward": 885.1244,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65069,
+      "total_attack_blocked": 209184,
+      "tpr": 0.9501,
+      "fpr": 0.0475,
+      "legit_ratio": 0.9525,
+      "action_distribution": [
+        {
+          "forward": 163,
+          "puzzle": 805
+        },
+        {
+          "forward": 5,
+          "puzzle": 963
+        },
+        {
+          "puzzle": 926,
+          "throttle_10": 42
+        }
+      ]
+    }
+  },
+  "S8": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + CTDE",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  },
+  "S9": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward",
+    "metrics": {
+      "total_reward": 884.7783,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 64921,
+      "total_attack_blocked": 209208,
+      "tpr": 0.9502,
+      "fpr": 0.0496,
+      "legit_ratio": 0.9504,
+      "action_distribution": [
+        {
+          "forward": 153,
+          "puzzle": 767,
+          "throttle_30": 48
+        },
+        {
+          "forward": 18,
+          "puzzle": 950
+        },
+        {
+          "forward": 77,
+          "puzzle": 891
+        }
+      ]
+    }
+  },
+  "S10": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + extended state (7-dim)",
+    "metrics": {
+      "total_reward": 881.3385,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65182,
+      "total_attack_blocked": 208594,
+      "tpr": 0.9475,
+      "fpr": 0.0458,
+      "legit_ratio": 0.9542,
+      "action_distribution": [
+        {
+          "forward": 2,
+          "puzzle": 712,
+          "throttle_10": 241,
+          "throttle_20": 13
+        },
+        {
+          "puzzle": 814,
+          "throttle_20": 154
+        },
+        {
+          "forward": 82,
+          "puzzle": 880,
+          "throttle_50": 6
+        }
+      ]
+    }
+  },
+  "S11": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + 10-action space",
+    "metrics": {
+      "total_reward": 888.7796,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65262,
+      "total_attack_blocked": 209257,
+      "tpr": 0.9505,
+      "fpr": 0.0446,
+      "legit_ratio": 0.9554,
+      "action_distribution": [
+        {
+          "puzzle": 797,
+          "throttle_10": 1,
+          "throttle_20": 69,
+          "throttle_95": 21,
+          "block": 80
+        },
+        {
+          "puzzle": 842,
+          "throttle_20": 54,
+          "throttle_95": 70,
+          "block": 2
+        },
+        {
+          "forward": 61,
+          "puzzle": 791,
+          "throttle_10": 34,
+          "throttle_30": 82
+        }
+      ]
+    }
+  },
+  "S12": {
+    "description": "3 agents, LightGBM risk, no puzzle, MAPPO + 9-action space",
+    "metrics": {
+      "total_reward": 616.9869,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 49357,
+      "total_attack_blocked": 208234,
+      "tpr": 0.9458,
+      "fpr": 0.2775,
+      "legit_ratio": 0.7225,
+      "action_distribution": [
+        {
+          "throttle_20": 153,
+          "throttle_50": 138,
+          "throttle_90": 173,
+          "throttle_95": 504
+        },
+        {
+          "throttle_70": 785,
+          "throttle_90": 183
+        },
+        {
+          "forward": 232,
+          "throttle_90": 118,
+          "throttle_95": 618
+        }
+      ]
+    }
+  },
+  "S13": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle cost 0.05",
+    "metrics": {
+      "total_reward": 885.7107,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65037,
+      "total_attack_blocked": 209179,
+      "tpr": 0.9501,
+      "fpr": 0.0479,
+      "legit_ratio": 0.9521,
+      "action_distribution": [
+        {
+          "puzzle": 751,
+          "throttle_10": 38,
+          "throttle_30": 178,
+          "throttle_50": 1
+        },
+        {
+          "puzzle": 740,
+          "throttle_10": 215,
+          "throttle_50": 13
+        },
+        {
+          "puzzle": 963,
+          "throttle_30": 5
+        }
+      ]
+    }
+  },
+  "S14": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle_block_rate state",
+    "metrics": {
+      "total_reward": 884.6787,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65002,
+      "total_attack_blocked": 209155,
+      "tpr": 0.95,
+      "fpr": 0.0484,
+      "legit_ratio": 0.9516,
+      "action_distribution": [
+        {
+          "forward": 45,
+          "puzzle": 916,
+          "throttle_20": 7
+        },
+        {
+          "puzzle": 869,
+          "throttle_10": 4,
+          "throttle_30": 95
+        },
+        {
+          "puzzle": 842,
+          "throttle_10": 126
+        }
+      ]
+    }
+  },
+  "S15": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + risk-aware throttle",
+    "metrics": {
+      "total_reward": 888.0444,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 65239,
+      "total_attack_blocked": 209170,
+      "tpr": 0.9501,
+      "fpr": 0.045,
+      "legit_ratio": 0.955,
+      "action_distribution": [
+        {
+          "forward": 58,
+          "puzzle": 854,
+          "throttle_30": 56
+        },
+        {
+          "puzzle": 726,
+          "throttle_10": 242
+        },
+        {
+          "puzzle": 962,
+          "throttle_50": 6
+        }
+      ]
+    }
+  },
+  "S16": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + dynamic puzzle",
+    "metrics": {
+      "total_reward": 767.9876,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 62470,
+      "total_attack_blocked": 195311,
+      "tpr": 0.8871,
+      "fpr": 0.0855,
+      "legit_ratio": 0.9145,
+      "action_distribution": [
+        {
+          "puzzle": 748,
+          "throttle_10": 220
+        },
+        {
+          "puzzle": 730,
+          "throttle_30": 238
+        },
+        {
+          "puzzle": 965,
+          "throttle_20": 3
+        }
+      ]
+    }
+  },
+  "S17": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + entropy state",
+    "metrics": {
+      "total_reward": 877.461,
+      "total_steps": 968,
+      "total_benign_in": 68311,
+      "total_attack_in": 220163,
+      "total_benign_out": 64454,
+      "total_attack_blocked": 208975,
+      "tpr": 0.9492,
+      "fpr": 0.0565,
+      "legit_ratio": 0.9435,
+      "action_distribution": [
+        {
+          "forward": 190,
+          "puzzle": 674,
+          "throttle_50": 104
+        },
+        {
+          "puzzle": 963,
+          "throttle_30": 5
+        },
+        {
+          "puzzle": 966,
+          "throttle_20": 2
+        }
+      ]
+    }
+  },
+  "S18": {
+    "description": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + curriculum learning",
+    "metrics": {
+      "note": "not trained yet"
+    }
+  }
+}

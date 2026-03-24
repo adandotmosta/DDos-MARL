@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "lgbm", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "eval"],
+        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "eval"],
         help="Which stage to run",
     )
     parser.add_argument(
@@ -38,11 +38,30 @@ def parse_args() -> argparse.Namespace:
         help="Model tag — MAPPO saved/loaded from artifacts/marl/v1/experiments/<model_tag>/. "
              "Defaults to MARL_DIR (root) when not set.",
     )
+    parser.add_argument(
+        "--models",
+        type=str,
+        default=None,
+        help="Comma-separated list of models to evaluate (e.g. s23,s24,ippo). "
+             "If omitted, all models are evaluated. Only used with --stage eval.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+
+    if args.stage in ("lgbm_combined",):
+        print("\n" + "=" * 55)
+        print("STAGE 1b: LightGBM — Combined (Monday + Tuesday)")
+        print("=" * 55)
+        import subprocess
+        import sys as _sys
+        result = subprocess.run(
+            [_sys.executable, "train_lgbm_combined.py"], check=False
+        )
+        if result.returncode != 0:
+            import sys; sys.exit(result.returncode)
 
     if args.stage in ("all", "lgbm"):
         print("\n" + "=" * 55)
@@ -129,6 +148,78 @@ def main() -> None:
 
         train_s14()
 
+    if args.stage in ("s15",):
+        print("\n" + "=" * 55)
+        print("STAGE 2j: MAPPO + Local Reward + Risk-Aware Throttle (S15)")
+        print("=" * 55)
+        from src.train_s15 import train as train_s15
+
+        train_s15()
+
+    if args.stage in ("s16",):
+        print("\n" + "=" * 55)
+        print("STAGE 2k: MAPPO + Local Reward + Dynamic Puzzle (S16)")
+        print("=" * 55)
+        from src.train_s16 import train as train_s16
+
+        train_s16()
+
+    if args.stage in ("s17",):
+        print("\n" + "=" * 55)
+        print("STAGE 2l: MAPPO + Local Reward + Entropy State (S17)")
+        print("=" * 55)
+        from src.train_s17 import train as train_s17
+
+        train_s17()
+
+    if args.stage in ("s19",):
+        print("\n" + "=" * 55)
+        print("STAGE 2n: MAPPO + Local Reward + Asymmetric Reward (S19)")
+        print("=" * 55)
+        from src.train_s19 import train as train_s19
+
+        train_s19()
+
+    if args.stage in ("s21",):
+        print("\n" + "=" * 55)
+        print("STAGE 2o: MAPPO + Local Reward + Lower Threshold (S21)")
+        print("=" * 55)
+        from src.train_s21 import train as train_s21
+
+        train_s21()
+
+    if args.stage in ("s22",):
+        print("\n" + "=" * 55)
+        print("STAGE 2p: MAPPO + Counterfactual Reward (S22)")
+        print("=" * 55)
+        from src.train_s22 import train as train_s22
+
+        train_s22()
+
+    if args.stage in ("s24",):
+        print("\n" + "=" * 55)
+        print("STAGE 2r: MAPPO + Selective Puzzle + Combined LightGBM (S24)")
+        print("=" * 55)
+        from src.train_s24 import train as train_s24
+
+        train_s24()
+
+    if args.stage in ("s23",):
+        print("\n" + "=" * 55)
+        print("STAGE 2q: MAPPO + Selective Puzzle (S23)")
+        print("=" * 55)
+        from src.train_s23 import train as train_s23
+
+        train_s23()
+
+    if args.stage in ("s18",):
+        print("\n" + "=" * 55)
+        print("STAGE 2m: MAPPO + Local Reward + Curriculum Learning (S18)")
+        print("=" * 55)
+        from src.train_s18 import train as train_s18
+
+        train_s18()
+
     if args.stage in ("all", "eval"):
         print("\n" + "=" * 55)
         print("STAGE 3: Evaluation")
@@ -136,7 +227,11 @@ def main() -> None:
         # Lazy import so --stage lgbm does not require torch.
         from src.evaluate import main as evaluate
 
-        evaluate(tag=args.tag, model_tag=args.model_tag)
+        models_filter = (
+            {m.strip().lower() for m in args.models.split(",")}
+            if args.models else None
+        )
+        evaluate(tag=args.tag, model_tag=args.model_tag, models=models_filter)
 
 
 if __name__ == "__main__":

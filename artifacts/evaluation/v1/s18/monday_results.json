@@ -1,0 +1,26 @@
+{
+  "total_reward": 884.0516,
+  "total_steps": 968,
+  "total_benign_in": 68311,
+  "total_attack_in": 220163,
+  "total_benign_out": 65047,
+  "total_attack_blocked": 209183,
+  "tpr": 0.9501,
+  "fpr": 0.0478,
+  "legit_ratio": 0.9522,
+  "action_distribution": [
+    {
+      "forward": 191,
+      "puzzle": 776,
+      "throttle_10": 1
+    },
+    {
+      "puzzle": 904,
+      "throttle_10": 64
+    },
+    {
+      "puzzle": 967,
+      "throttle_20": 1
+    }
+  ]
+}

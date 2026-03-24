@@ -31,6 +31,15 @@ S11_DIR           = MARL_DIR / "ablation" / "S11"   # MAPPO + 10-action space
 S12_DIR           = MARL_DIR / "ablation" / "S12"   # MAPPO + no puzzle, 9-action space
 S13_DIR           = MARL_DIR / "ablation" / "S13"   # MAPPO + local reward + puzzle cost 0.05
 S14_DIR           = MARL_DIR / "ablation" / "S14"   # MAPPO + local reward + puzzle_block_rate state
+S15_DIR           = MARL_DIR / "ablation" / "S15"   # MAPPO + local reward + risk-aware throttle
+S16_DIR           = MARL_DIR / "ablation" / "S16"   # MAPPO + local reward + dynamic puzzle
+S17_DIR           = MARL_DIR / "ablation" / "S17"   # MAPPO + local reward + entropy state
+S18_DIR           = MARL_DIR / "ablation" / "S18"   # MAPPO + local reward + curriculum learning
+S19_DIR           = MARL_DIR / "ablation" / "S19"   # MAPPO + local reward + asymmetric reward (attack_w=3)
+S21_DIR           = MARL_DIR / "ablation" / "S21"   # MAPPO + local reward + lower threshold (0.20)
+S22_DIR           = MARL_DIR / "ablation" / "S22"   # MAPPO + counterfactual reward (COMA-style)
+S23_DIR           = MARL_DIR / "ablation" / "S23"   # MAPPO + selective puzzle (LightGBM-predicted class)
+S24_DIR           = MARL_DIR / "ablation" / "S24"   # MAPPO + selective puzzle + combined LightGBM (Monday+Tuesday)
 EVAL_DIR          = ARTIFACT_DIR / "evaluation"     / VERSION
 
 # CSV filenames
@@ -41,6 +50,8 @@ CSV_TUESDAY  = DATA_DIR / "Tuesday_19_Dec_2023.csv"
 
 # LightGBM bundle (trained on Monday only — day split)
 LGBM_BUNDLE  = BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "models" / "lgbm_bundle_monday.pkl"
+# Combined bundle trained on Monday + Tuesday — used in S24 to isolate MARL throttling quality
+LGBM_BUNDLE_COMBINED = BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "models" / "lgbm_bundle_monday_tuesday.pkl"
 FEATURES_JSON= BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "selected_features.json"
 
 # ─────────────────────────────────────────────
@@ -195,4 +206,14 @@ ABLATION_STAGES = {
     "S11": "3 agents, LightGBM risk, selective + puzzle, MAPPO + 10-action space",
     "S12": "3 agents, LightGBM risk, no puzzle, MAPPO + 9-action space",
     "S13": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle cost 0.05",
+    "S14": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle_block_rate state",
+    "S15": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + risk-aware throttle",
+    "S16": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + dynamic puzzle",
+    "S17": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + entropy state",
+    "S18": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + curriculum learning",
+    "S19": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + asymmetric reward (attack_w=3.0)",
+    "S21": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + lower threshold (0.20)",
+    "S22": "3 agents, LightGBM risk, selective + puzzle, MAPPO + counterfactual reward (COMA-style)",
+    "S23": "3 agents, LightGBM risk, selective puzzle (suspicious-only), MAPPO + local reward",
+    "S24": "3 agents, LightGBM (Mon+Tue), selective puzzle (suspicious-only), MAPPO + local reward — isolates MARL throttling quality",
 }

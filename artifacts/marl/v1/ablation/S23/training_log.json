@@ -1,0 +1,4502 @@
+[
+  {
+    "episode": 1,
+    "reward": 383.3612,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 2,
+    "reward": 385.1929,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 3,
+    "reward": 394.1664,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 4,
+    "reward": 385.7124,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 5,
+    "reward": 389.7474,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.28
+  },
+  {
+    "episode": 6,
+    "reward": 380.9215,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 7,
+    "reward": 387.103,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 8,
+    "reward": 390.4266,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 9,
+    "reward": 382.4974,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 10,
+    "reward": 383.5514,
+    "steps": 968,
+    "actor_loss": -0.025053,
+    "critic_loss": 8.382513,
+    "entropy": 2.297693,
+    "time_s": 8.36
+  },
+  {
+    "episode": 11,
+    "reward": 390.4098,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 12,
+    "reward": 398.6134,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.11
+  },
+  {
+    "episode": 13,
+    "reward": 393.0811,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 14,
+    "reward": 392.2465,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 15,
+    "reward": 396.8206,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.28
+  },
+  {
+    "episode": 16,
+    "reward": 399.2631,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 17,
+    "reward": 396.8265,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 18,
+    "reward": 392.9018,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 19,
+    "reward": 390.2307,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 20,
+    "reward": 395.9476,
+    "steps": 968,
+    "actor_loss": -0.02414,
+    "critic_loss": 13.315256,
+    "entropy": 2.286869,
+    "time_s": 8.11
+  },
+  {
+    "episode": 21,
+    "reward": 396.9396,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 22,
+    "reward": 400.8391,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 23,
+    "reward": 397.406,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 24,
+    "reward": 396.7463,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 25,
+    "reward": 402.2477,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 26,
+    "reward": 403.197,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 27,
+    "reward": 399.0411,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 28,
+    "reward": 397.8954,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 29,
+    "reward": 390.1313,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 30,
+    "reward": 388.3654,
+    "steps": 968,
+    "actor_loss": -0.023917,
+    "critic_loss": 18.627038,
+    "entropy": 2.288294,
+    "time_s": 8.0
+  },
+  {
+    "episode": 31,
+    "reward": 398.5134,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 32,
+    "reward": 407.6497,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 33,
+    "reward": 402.4645,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 34,
+    "reward": 407.5092,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 35,
+    "reward": 409.3453,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 36,
+    "reward": 404.6025,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 37,
+    "reward": 402.5105,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 38,
+    "reward": 405.249,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 39,
+    "reward": 399.2028,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 40,
+    "reward": 400.856,
+    "steps": 968,
+    "actor_loss": -0.02331,
+    "critic_loss": 25.849605,
+    "entropy": 2.282582,
+    "time_s": 7.97
+  },
+  {
+    "episode": 41,
+    "reward": 408.2653,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 42,
+    "reward": 406.8158,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 43,
+    "reward": 412.1704,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 44,
+    "reward": 407.9925,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 45,
+    "reward": 411.0539,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 46,
+    "reward": 407.5171,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 47,
+    "reward": 404.8132,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 48,
+    "reward": 412.9067,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 49,
+    "reward": 411.4361,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 50,
+    "reward": 403.7139,
+    "steps": 968,
+    "actor_loss": -0.024253,
+    "critic_loss": 30.22169,
+    "entropy": 2.268579,
+    "time_s": 8.01
+  },
+  {
+    "episode": 51,
+    "reward": 413.5528,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 52,
+    "reward": 416.0697,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 53,
+    "reward": 408.8294,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 54,
+    "reward": 416.5846,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 55,
+    "reward": 417.7055,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 56,
+    "reward": 408.289,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 57,
+    "reward": 420.4865,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 58,
+    "reward": 411.9855,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 59,
+    "reward": 415.6455,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 60,
+    "reward": 415.4335,
+    "steps": 968,
+    "actor_loss": -0.025818,
+    "critic_loss": 31.134426,
+    "entropy": 2.255857,
+    "time_s": 8.01
+  },
+  {
+    "episode": 61,
+    "reward": 416.2152,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 62,
+    "reward": 422.2713,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 63,
+    "reward": 421.6449,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 64,
+    "reward": 419.076,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 65,
+    "reward": 426.0471,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 66,
+    "reward": 415.8883,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 67,
+    "reward": 412.6226,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 68,
+    "reward": 420.8001,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 69,
+    "reward": 419.0848,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 70,
+    "reward": 411.6751,
+    "steps": 968,
+    "actor_loss": -0.025792,
+    "critic_loss": 30.506646,
+    "entropy": 2.244324,
+    "time_s": 8.13
+  },
+  {
+    "episode": 71,
+    "reward": 418.7421,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 72,
+    "reward": 422.0949,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 73,
+    "reward": 420.3889,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 74,
+    "reward": 424.2611,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 75,
+    "reward": 416.3973,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 76,
+    "reward": 430.9034,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 77,
+    "reward": 420.7075,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 78,
+    "reward": 422.0201,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 79,
+    "reward": 422.9911,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 80,
+    "reward": 418.6611,
+    "steps": 968,
+    "actor_loss": -0.024827,
+    "critic_loss": 29.371414,
+    "entropy": 2.242755,
+    "time_s": 8.07
+  },
+  {
+    "episode": 81,
+    "reward": 427.0887,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 82,
+    "reward": 422.4021,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 83,
+    "reward": 428.3813,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.11
+  },
+  {
+    "episode": 84,
+    "reward": 426.5958,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 85,
+    "reward": 421.35,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 8.67
+  },
+  {
+    "episode": 86,
+    "reward": 423.3331,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.12
+  },
+  {
+    "episode": 87,
+    "reward": 431.2255,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 88,
+    "reward": 422.4775,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 89,
+    "reward": 418.3035,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 90,
+    "reward": 426.6612,
+    "steps": 968,
+    "actor_loss": -0.023806,
+    "critic_loss": 29.012725,
+    "entropy": 2.232241,
+    "time_s": 7.96
+  },
+  {
+    "episode": 91,
+    "reward": 429.1615,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 92,
+    "reward": 418.8682,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 93,
+    "reward": 426.6946,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 94,
+    "reward": 425.481,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 95,
+    "reward": 428.0361,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 96,
+    "reward": 428.6342,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 97,
+    "reward": 430.8884,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 98,
+    "reward": 424.3097,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 99,
+    "reward": 428.0664,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 100,
+    "reward": 431.987,
+    "steps": 968,
+    "actor_loss": -0.022759,
+    "critic_loss": 28.36615,
+    "entropy": 2.215155,
+    "time_s": 8.0
+  },
+  {
+    "episode": 101,
+    "reward": 429.9774,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 102,
+    "reward": 424.5492,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 103,
+    "reward": 425.6653,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 104,
+    "reward": 422.4054,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 105,
+    "reward": 422.2304,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 106,
+    "reward": 429.3681,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 107,
+    "reward": 422.9923,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 108,
+    "reward": 434.6188,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 109,
+    "reward": 434.926,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 110,
+    "reward": 433.1282,
+    "steps": 968,
+    "actor_loss": -0.024737,
+    "critic_loss": 26.974399,
+    "entropy": 2.21438,
+    "time_s": 8.04
+  },
+  {
+    "episode": 111,
+    "reward": 421.7364,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 112,
+    "reward": 429.5708,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 113,
+    "reward": 422.9083,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 114,
+    "reward": 431.6256,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 115,
+    "reward": 424.0406,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 116,
+    "reward": 428.3349,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 117,
+    "reward": 426.0042,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 118,
+    "reward": 427.4651,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 119,
+    "reward": 434.4771,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 120,
+    "reward": 419.916,
+    "steps": 968,
+    "actor_loss": -0.02423,
+    "critic_loss": 26.362514,
+    "entropy": 2.224002,
+    "time_s": 8.02
+  },
+  {
+    "episode": 121,
+    "reward": 425.6047,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 122,
+    "reward": 426.6057,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 123,
+    "reward": 426.536,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 124,
+    "reward": 430.0166,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 125,
+    "reward": 425.8714,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 126,
+    "reward": 426.8866,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 127,
+    "reward": 428.0553,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 128,
+    "reward": 429.8326,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 129,
+    "reward": 424.5276,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 130,
+    "reward": 423.1329,
+    "steps": 968,
+    "actor_loss": -0.0234,
+    "critic_loss": 26.676422,
+    "entropy": 2.22241,
+    "time_s": 7.96
+  },
+  {
+    "episode": 131,
+    "reward": 428.6925,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 132,
+    "reward": 435.2482,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 133,
+    "reward": 430.3972,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 134,
+    "reward": 430.6058,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 135,
+    "reward": 426.3282,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 136,
+    "reward": 432.0092,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 137,
+    "reward": 430.6786,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 138,
+    "reward": 428.0493,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 139,
+    "reward": 429.0747,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 140,
+    "reward": 429.5927,
+    "steps": 968,
+    "actor_loss": -0.023272,
+    "critic_loss": 25.607343,
+    "entropy": 2.208404,
+    "time_s": 8.04
+  },
+  {
+    "episode": 141,
+    "reward": 433.8378,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 142,
+    "reward": 434.9258,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 143,
+    "reward": 435.8649,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 144,
+    "reward": 435.5968,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 145,
+    "reward": 433.732,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 146,
+    "reward": 439.0073,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 147,
+    "reward": 435.3521,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 148,
+    "reward": 438.243,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 149,
+    "reward": 430.404,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 150,
+    "reward": 439.9928,
+    "steps": 968,
+    "actor_loss": -0.024771,
+    "critic_loss": 24.955518,
+    "entropy": 2.193105,
+    "time_s": 8.04
+  },
+  {
+    "episode": 151,
+    "reward": 438.2077,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 152,
+    "reward": 438.9637,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 153,
+    "reward": 439.75,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 154,
+    "reward": 439.0544,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 155,
+    "reward": 439.1782,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 156,
+    "reward": 432.2916,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 157,
+    "reward": 435.2953,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 158,
+    "reward": 436.0025,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 159,
+    "reward": 435.1585,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 160,
+    "reward": 436.5207,
+    "steps": 968,
+    "actor_loss": -0.023336,
+    "critic_loss": 23.285653,
+    "entropy": 2.184871,
+    "time_s": 8.09
+  },
+  {
+    "episode": 161,
+    "reward": 440.0224,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 162,
+    "reward": 436.6128,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 163,
+    "reward": 439.3695,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 164,
+    "reward": 440.4934,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 165,
+    "reward": 438.6663,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 166,
+    "reward": 440.6049,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 167,
+    "reward": 441.7829,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 168,
+    "reward": 434.4215,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 169,
+    "reward": 432.2387,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 170,
+    "reward": 445.1931,
+    "steps": 968,
+    "actor_loss": -0.022536,
+    "critic_loss": 22.502451,
+    "entropy": 2.181032,
+    "time_s": 8.01
+  },
+  {
+    "episode": 171,
+    "reward": 442.4437,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 172,
+    "reward": 443.6223,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 173,
+    "reward": 441.3076,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 174,
+    "reward": 437.8149,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.3
+  },
+  {
+    "episode": 175,
+    "reward": 437.577,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 176,
+    "reward": 446.1597,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 177,
+    "reward": 436.8336,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 178,
+    "reward": 441.7901,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 179,
+    "reward": 436.9445,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 180,
+    "reward": 440.7985,
+    "steps": 968,
+    "actor_loss": -0.02311,
+    "critic_loss": 21.818205,
+    "entropy": 2.172235,
+    "time_s": 8.08
+  },
+  {
+    "episode": 181,
+    "reward": 445.9761,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 182,
+    "reward": 443.5185,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 183,
+    "reward": 448.4712,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 184,
+    "reward": 446.268,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 185,
+    "reward": 444.0402,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 186,
+    "reward": 436.8828,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 187,
+    "reward": 444.7311,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 188,
+    "reward": 442.7472,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 189,
+    "reward": 444.2227,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 190,
+    "reward": 446.2944,
+    "steps": 968,
+    "actor_loss": -0.023437,
+    "critic_loss": 21.009142,
+    "entropy": 2.131751,
+    "time_s": 8.06
+  },
+  {
+    "episode": 191,
+    "reward": 449.3605,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 192,
+    "reward": 449.4171,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 193,
+    "reward": 450.4548,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.11
+  },
+  {
+    "episode": 194,
+    "reward": 451.0207,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.22
+  },
+  {
+    "episode": 195,
+    "reward": 455.1776,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.12
+  },
+  {
+    "episode": 196,
+    "reward": 453.3543,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 197,
+    "reward": 450.1172,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 198,
+    "reward": 454.7681,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 199,
+    "reward": 447.2787,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 200,
+    "reward": 454.8397,
+    "steps": 968,
+    "actor_loss": -0.02183,
+    "critic_loss": 19.51409,
+    "entropy": 2.115353,
+    "time_s": 8.25
+  },
+  {
+    "episode": 201,
+    "reward": 457.041,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 202,
+    "reward": 456.2767,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.13
+  },
+  {
+    "episode": 203,
+    "reward": 453.1754,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 204,
+    "reward": 452.5169,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 205,
+    "reward": 459.5888,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 206,
+    "reward": 453.2152,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 207,
+    "reward": 457.6188,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 208,
+    "reward": 455.3448,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 209,
+    "reward": 451.7774,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 210,
+    "reward": 456.6525,
+    "steps": 968,
+    "actor_loss": -0.024837,
+    "critic_loss": 18.562756,
+    "entropy": 2.094187,
+    "time_s": 8.37
+  },
+  {
+    "episode": 211,
+    "reward": 463.8629,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 212,
+    "reward": 466.2179,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.11
+  },
+  {
+    "episode": 213,
+    "reward": 460.6257,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 214,
+    "reward": 465.1458,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.12
+  },
+  {
+    "episode": 215,
+    "reward": 464.8961,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 216,
+    "reward": 462.3423,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 217,
+    "reward": 454.4913,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 218,
+    "reward": 457.4683,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 219,
+    "reward": 457.9501,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 220,
+    "reward": 466.5855,
+    "steps": 968,
+    "actor_loss": -0.022635,
+    "critic_loss": 17.046356,
+    "entropy": 2.062922,
+    "time_s": 8.15
+  },
+  {
+    "episode": 221,
+    "reward": 465.4901,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 222,
+    "reward": 462.6609,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 223,
+    "reward": 462.3205,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 224,
+    "reward": 465.6778,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 225,
+    "reward": 467.0856,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 226,
+    "reward": 465.435,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 227,
+    "reward": 466.7684,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.1
+  },
+  {
+    "episode": 228,
+    "reward": 465.4718,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 229,
+    "reward": 468.3063,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 230,
+    "reward": 469.3217,
+    "steps": 968,
+    "actor_loss": -0.02207,
+    "critic_loss": 15.857096,
+    "entropy": 2.054925,
+    "time_s": 8.15
+  },
+  {
+    "episode": 231,
+    "reward": 468.0665,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 232,
+    "reward": 469.0748,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 233,
+    "reward": 474.5676,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 234,
+    "reward": 466.0038,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 235,
+    "reward": 470.8029,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 236,
+    "reward": 471.9663,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 237,
+    "reward": 467.1058,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 238,
+    "reward": 462.9516,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 239,
+    "reward": 469.0075,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 240,
+    "reward": 470.7891,
+    "steps": 968,
+    "actor_loss": -0.022665,
+    "critic_loss": 15.467345,
+    "entropy": 2.020921,
+    "time_s": 7.94
+  },
+  {
+    "episode": 241,
+    "reward": 473.6849,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 242,
+    "reward": 469.0234,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 243,
+    "reward": 468.4959,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 244,
+    "reward": 475.5827,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 245,
+    "reward": 471.6721,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 246,
+    "reward": 465.8025,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 247,
+    "reward": 474.2835,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 248,
+    "reward": 472.2354,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 249,
+    "reward": 471.3228,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 250,
+    "reward": 467.9126,
+    "steps": 968,
+    "actor_loss": -0.020938,
+    "critic_loss": 15.718557,
+    "entropy": 2.00488,
+    "time_s": 7.86
+  },
+  {
+    "episode": 251,
+    "reward": 470.2806,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 252,
+    "reward": 466.9672,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 253,
+    "reward": 468.1572,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 254,
+    "reward": 467.9764,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 255,
+    "reward": 470.5121,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 256,
+    "reward": 468.6042,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 257,
+    "reward": 468.4907,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 258,
+    "reward": 468.0827,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 259,
+    "reward": 466.8291,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 260,
+    "reward": 468.0682,
+    "steps": 968,
+    "actor_loss": -0.022793,
+    "critic_loss": 15.151246,
+    "entropy": 2.043806,
+    "time_s": 7.87
+  },
+  {
+    "episode": 261,
+    "reward": 463.914,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 262,
+    "reward": 468.719,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 263,
+    "reward": 471.2693,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 264,
+    "reward": 472.4715,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 265,
+    "reward": 463.083,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 266,
+    "reward": 466.8748,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 267,
+    "reward": 467.5848,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 268,
+    "reward": 467.4747,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 269,
+    "reward": 464.1237,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 270,
+    "reward": 471.8934,
+    "steps": 968,
+    "actor_loss": -0.022945,
+    "critic_loss": 14.740241,
+    "entropy": 2.027218,
+    "time_s": 8.05
+  },
+  {
+    "episode": 271,
+    "reward": 476.4368,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 272,
+    "reward": 472.2574,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 273,
+    "reward": 469.017,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 274,
+    "reward": 473.6527,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 275,
+    "reward": 474.0059,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 276,
+    "reward": 474.4577,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 277,
+    "reward": 469.4755,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 278,
+    "reward": 469.6122,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.12
+  },
+  {
+    "episode": 279,
+    "reward": 470.8168,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 280,
+    "reward": 469.5786,
+    "steps": 968,
+    "actor_loss": -0.020845,
+    "critic_loss": 13.678784,
+    "entropy": 2.016782,
+    "time_s": 1054.71
+  },
+  {
+    "episode": 281,
+    "reward": 471.9326,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.74
+  },
+  {
+    "episode": 282,
+    "reward": 470.7504,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.47
+  },
+  {
+    "episode": 283,
+    "reward": 478.0494,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.62
+  },
+  {
+    "episode": 284,
+    "reward": 472.5024,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.55
+  },
+  {
+    "episode": 285,
+    "reward": 470.5702,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.7
+  },
+  {
+    "episode": 286,
+    "reward": 472.7621,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.6
+  },
+  {
+    "episode": 287,
+    "reward": 478.4503,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 1029.66
+  },
+  {
+    "episode": 288,
+    "reward": 471.7354,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.73
+  },
+  {
+    "episode": 289,
+    "reward": 473.931,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.49
+  },
+  {
+    "episode": 290,
+    "reward": 477.2465,
+    "steps": 968,
+    "actor_loss": -0.0218,
+    "critic_loss": 13.297012,
+    "entropy": 2.009586,
+    "time_s": 9.91
+  },
+  {
+    "episode": 291,
+    "reward": 473.225,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.58
+  },
+  {
+    "episode": 292,
+    "reward": 473.9713,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.59
+  },
+  {
+    "episode": 293,
+    "reward": 475.627,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.6
+  },
+  {
+    "episode": 294,
+    "reward": 472.7705,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.63
+  },
+  {
+    "episode": 295,
+    "reward": 472.3047,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 4.83
+  },
+  {
+    "episode": 296,
+    "reward": 474.5271,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 297,
+    "reward": 471.5173,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 463.76
+  },
+  {
+    "episode": 298,
+    "reward": 474.5121,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.82
+  },
+  {
+    "episode": 299,
+    "reward": 472.8859,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.87
+  },
+  {
+    "episode": 300,
+    "reward": 475.0483,
+    "steps": 968,
+    "actor_loss": -0.020848,
+    "critic_loss": 12.511296,
+    "entropy": 1.999959,
+    "time_s": 945.1
+  },
+  {
+    "episode": 301,
+    "reward": 470.3222,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.51
+  },
+  {
+    "episode": 302,
+    "reward": 476.5453,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.43
+  },
+  {
+    "episode": 303,
+    "reward": 478.4109,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.82
+  },
+  {
+    "episode": 304,
+    "reward": 477.6944,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.56
+  },
+  {
+    "episode": 305,
+    "reward": 474.374,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.62
+  },
+  {
+    "episode": 306,
+    "reward": 472.778,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.57
+  },
+  {
+    "episode": 307,
+    "reward": 470.9444,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 931.72
+  },
+  {
+    "episode": 308,
+    "reward": 476.7919,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.48
+  },
+  {
+    "episode": 309,
+    "reward": 471.1899,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.43
+  },
+  {
+    "episode": 310,
+    "reward": 474.9257,
+    "steps": 968,
+    "actor_loss": -0.020265,
+    "critic_loss": 12.324087,
+    "entropy": 1.972984,
+    "time_s": 9.9
+  },
+  {
+    "episode": 311,
+    "reward": 478.7973,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.63
+  },
+  {
+    "episode": 312,
+    "reward": 472.7116,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.57
+  },
+  {
+    "episode": 313,
+    "reward": 476.4211,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.53
+  },
+  {
+    "episode": 314,
+    "reward": 475.6509,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 927.85
+  },
+  {
+    "episode": 315,
+    "reward": 476.2211,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.55
+  },
+  {
+    "episode": 316,
+    "reward": 477.5888,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.43
+  },
+  {
+    "episode": 317,
+    "reward": 477.6665,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.49
+  },
+  {
+    "episode": 318,
+    "reward": 476.1909,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.56
+  },
+  {
+    "episode": 319,
+    "reward": 476.7781,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.58
+  },
+  {
+    "episode": 320,
+    "reward": 477.3708,
+    "steps": 968,
+    "actor_loss": -0.021465,
+    "critic_loss": 12.427811,
+    "entropy": 1.975083,
+    "time_s": 9.86
+  },
+  {
+    "episode": 321,
+    "reward": 472.1224,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 876.58
+  },
+  {
+    "episode": 322,
+    "reward": 477.1522,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 323,
+    "reward": 480.6198,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.88
+  },
+  {
+    "episode": 324,
+    "reward": 475.9065,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.88
+  },
+  {
+    "episode": 325,
+    "reward": 477.1079,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.89
+  },
+  {
+    "episode": 326,
+    "reward": 471.6992,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.94
+  },
+  {
+    "episode": 327,
+    "reward": 480.0829,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.91
+  },
+  {
+    "episode": 328,
+    "reward": 477.9517,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.93
+  },
+  {
+    "episode": 329,
+    "reward": 477.3512,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.91
+  },
+  {
+    "episode": 330,
+    "reward": 473.4766,
+    "steps": 968,
+    "actor_loss": -0.022234,
+    "critic_loss": 11.91391,
+    "entropy": 1.99218,
+    "time_s": 8.08
+  },
+  {
+    "episode": 331,
+    "reward": 476.5217,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 332,
+    "reward": 477.7461,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 333,
+    "reward": 478.2632,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 334,
+    "reward": 472.1999,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 335,
+    "reward": 476.7808,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 336,
+    "reward": 476.0141,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 337,
+    "reward": 479.9792,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.26
+  },
+  {
+    "episode": 338,
+    "reward": 478.8199,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 339,
+    "reward": 481.355,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 340,
+    "reward": 477.4549,
+    "steps": 968,
+    "actor_loss": -0.023828,
+    "critic_loss": 11.929071,
+    "entropy": 1.974847,
+    "time_s": 7.94
+  },
+  {
+    "episode": 341,
+    "reward": 476.652,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 342,
+    "reward": 482.0394,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 343,
+    "reward": 482.1106,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 344,
+    "reward": 482.96,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 345,
+    "reward": 478.994,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 346,
+    "reward": 481.8656,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 347,
+    "reward": 481.2981,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 348,
+    "reward": 481.7945,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 349,
+    "reward": 477.7205,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 350,
+    "reward": 480.1885,
+    "steps": 968,
+    "actor_loss": -0.020757,
+    "critic_loss": 11.855181,
+    "entropy": 1.976637,
+    "time_s": 8.17
+  },
+  {
+    "episode": 351,
+    "reward": 487.7495,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 352,
+    "reward": 485.6391,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 353,
+    "reward": 475.0391,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 354,
+    "reward": 483.4546,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 355,
+    "reward": 479.881,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 356,
+    "reward": 479.9975,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 357,
+    "reward": 477.432,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 358,
+    "reward": 485.4984,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 359,
+    "reward": 478.5047,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 360,
+    "reward": 480.1777,
+    "steps": 968,
+    "actor_loss": -0.020655,
+    "critic_loss": 11.16856,
+    "entropy": 1.971917,
+    "time_s": 8.09
+  },
+  {
+    "episode": 361,
+    "reward": 478.113,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 362,
+    "reward": 481.7254,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 363,
+    "reward": 475.3915,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 364,
+    "reward": 477.6024,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 365,
+    "reward": 477.0257,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 366,
+    "reward": 480.1199,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 367,
+    "reward": 475.5245,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 368,
+    "reward": 479.2486,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 369,
+    "reward": 473.6285,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 370,
+    "reward": 479.2326,
+    "steps": 968,
+    "actor_loss": -0.022264,
+    "critic_loss": 10.944805,
+    "entropy": 1.983237,
+    "time_s": 8.01
+  },
+  {
+    "episode": 371,
+    "reward": 480.24,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 372,
+    "reward": 485.3947,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 373,
+    "reward": 481.6389,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 374,
+    "reward": 477.6022,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 375,
+    "reward": 480.687,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 376,
+    "reward": 480.3308,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 377,
+    "reward": 478.9174,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 378,
+    "reward": 479.9674,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 379,
+    "reward": 480.609,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 380,
+    "reward": 480.2914,
+    "steps": 968,
+    "actor_loss": -0.020954,
+    "critic_loss": 10.516036,
+    "entropy": 1.974862,
+    "time_s": 8.07
+  },
+  {
+    "episode": 381,
+    "reward": 482.2453,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 382,
+    "reward": 484.7165,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 383,
+    "reward": 486.4352,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 384,
+    "reward": 486.633,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 385,
+    "reward": 480.6826,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 386,
+    "reward": 484.3893,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 387,
+    "reward": 483.9123,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 388,
+    "reward": 489.2051,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 389,
+    "reward": 482.7491,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 390,
+    "reward": 485.0401,
+    "steps": 968,
+    "actor_loss": -0.021586,
+    "critic_loss": 10.350713,
+    "entropy": 1.960748,
+    "time_s": 8.19
+  },
+  {
+    "episode": 391,
+    "reward": 486.8617,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 392,
+    "reward": 488.8385,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.12
+  },
+  {
+    "episode": 393,
+    "reward": 486.6258,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 172.26
+  },
+  {
+    "episode": 394,
+    "reward": 486.4548,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 395,
+    "reward": 490.9363,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 357.71
+  },
+  {
+    "episode": 396,
+    "reward": 481.4763,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 397,
+    "reward": 482.4256,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.94
+  },
+  {
+    "episode": 398,
+    "reward": 482.7217,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.17
+  },
+  {
+    "episode": 399,
+    "reward": 486.0686,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 400,
+    "reward": 484.8962,
+    "steps": 968,
+    "actor_loss": -0.020906,
+    "critic_loss": 10.087016,
+    "entropy": 1.921098,
+    "time_s": 8.03
+  },
+  {
+    "episode": 401,
+    "reward": 493.252,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 402,
+    "reward": 489.7115,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.93
+  },
+  {
+    "episode": 403,
+    "reward": 490.585,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.91
+  },
+  {
+    "episode": 404,
+    "reward": 489.3838,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.12
+  },
+  {
+    "episode": 405,
+    "reward": 489.3077,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 406,
+    "reward": 491.4653,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.94
+  },
+  {
+    "episode": 407,
+    "reward": 490.8276,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.91
+  },
+  {
+    "episode": 408,
+    "reward": 493.4601,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.93
+  },
+  {
+    "episode": 409,
+    "reward": 489.6358,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 410,
+    "reward": 493.9022,
+    "steps": 968,
+    "actor_loss": -0.020259,
+    "critic_loss": 9.755016,
+    "entropy": 1.921352,
+    "time_s": 8.02
+  },
+  {
+    "episode": 411,
+    "reward": 492.3982,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 412,
+    "reward": 494.6472,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 413,
+    "reward": 489.1601,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 414,
+    "reward": 489.3878,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.94
+  },
+  {
+    "episode": 415,
+    "reward": 491.1646,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 416,
+    "reward": 489.8122,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 417,
+    "reward": 492.1848,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 418,
+    "reward": 492.7712,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 419,
+    "reward": 491.9747,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 420,
+    "reward": 493.1224,
+    "steps": 968,
+    "actor_loss": -0.021791,
+    "critic_loss": 9.411357,
+    "entropy": 1.903701,
+    "time_s": 8.02
+  },
+  {
+    "episode": 421,
+    "reward": 494.2254,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 422,
+    "reward": 491.4111,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 423,
+    "reward": 497.0092,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 424,
+    "reward": 492.9807,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 425,
+    "reward": 497.1699,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 426,
+    "reward": 497.8605,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 427,
+    "reward": 491.127,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 428,
+    "reward": 495.6906,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 429,
+    "reward": 492.8377,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 430,
+    "reward": 493.5094,
+    "steps": 968,
+    "actor_loss": -0.020433,
+    "critic_loss": 9.402333,
+    "entropy": 1.897579,
+    "time_s": 7.93
+  },
+  {
+    "episode": 431,
+    "reward": 498.7048,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 432,
+    "reward": 492.2907,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 433,
+    "reward": 493.3218,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.94
+  },
+  {
+    "episode": 434,
+    "reward": 494.2022,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 435,
+    "reward": 496.8628,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 436,
+    "reward": 493.3442,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 437,
+    "reward": 491.9191,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.11
+  },
+  {
+    "episode": 438,
+    "reward": 497.95,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 439,
+    "reward": 492.0438,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 94.56
+  },
+  {
+    "episode": 440,
+    "reward": 498.6494,
+    "steps": 968,
+    "actor_loss": -0.020245,
+    "critic_loss": 9.346775,
+    "entropy": 1.857773,
+    "time_s": 7.67
+  },
+  {
+    "episode": 441,
+    "reward": 501.1054,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 442,
+    "reward": 499.0737,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 443,
+    "reward": 496.7599,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 444,
+    "reward": 492.9279,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.91
+  },
+  {
+    "episode": 445,
+    "reward": 497.8153,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 446,
+    "reward": 495.941,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 447,
+    "reward": 494.354,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 448,
+    "reward": 492.5683,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 449,
+    "reward": 500.3457,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 450,
+    "reward": 493.2216,
+    "steps": 968,
+    "actor_loss": -0.019627,
+    "critic_loss": 9.166739,
+    "entropy": 1.850124,
+    "time_s": 7.92
+  },
+  {
+    "episode": 451,
+    "reward": 500.9384,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 452,
+    "reward": 500.0182,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 453,
+    "reward": 499.4098,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 454,
+    "reward": 497.272,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 455,
+    "reward": 499.3281,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 456,
+    "reward": 499.7675,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 457,
+    "reward": 501.1835,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 458,
+    "reward": 503.406,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 459,
+    "reward": 499.9057,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 460,
+    "reward": 498.1909,
+    "steps": 968,
+    "actor_loss": -0.019493,
+    "critic_loss": 8.936446,
+    "entropy": 1.85398,
+    "time_s": 7.9
+  },
+  {
+    "episode": 461,
+    "reward": 495.0981,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 462,
+    "reward": 497.6535,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 463,
+    "reward": 495.4619,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 464,
+    "reward": 493.8208,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.09
+  },
+  {
+    "episode": 465,
+    "reward": 499.7323,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.95
+  },
+  {
+    "episode": 466,
+    "reward": 499.5377,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 467,
+    "reward": 502.474,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.94
+  },
+  {
+    "episode": 468,
+    "reward": 500.322,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 469,
+    "reward": 499.248,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 470,
+    "reward": 493.2627,
+    "steps": 968,
+    "actor_loss": -0.02069,
+    "critic_loss": 8.729144,
+    "entropy": 1.820759,
+    "time_s": 8.1
+  },
+  {
+    "episode": 471,
+    "reward": 500.0046,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 472,
+    "reward": 501.5164,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 473,
+    "reward": 502.6324,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 474,
+    "reward": 498.6529,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 475,
+    "reward": 501.9368,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.08
+  },
+  {
+    "episode": 476,
+    "reward": 504.3997,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.97
+  },
+  {
+    "episode": 477,
+    "reward": 498.8638,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.0
+  },
+  {
+    "episode": 478,
+    "reward": 502.4517,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 479,
+    "reward": 502.7971,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.98
+  },
+  {
+    "episode": 480,
+    "reward": 501.3885,
+    "steps": 968,
+    "actor_loss": -0.020093,
+    "critic_loss": 8.716762,
+    "entropy": 1.805287,
+    "time_s": 7.96
+  },
+  {
+    "episode": 481,
+    "reward": 501.1445,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 482,
+    "reward": 503.3894,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.01
+  },
+  {
+    "episode": 483,
+    "reward": 501.0399,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 484,
+    "reward": 501.5888,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 485,
+    "reward": 503.5093,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 486,
+    "reward": 502.8581,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 487,
+    "reward": 501.1316,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.06
+  },
+  {
+    "episode": 488,
+    "reward": 498.1158,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 489,
+    "reward": 504.4473,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.96
+  },
+  {
+    "episode": 490,
+    "reward": 501.6722,
+    "steps": 968,
+    "actor_loss": -0.01884,
+    "critic_loss": 8.676451,
+    "entropy": 1.77469,
+    "time_s": 8.05
+  },
+  {
+    "episode": 491,
+    "reward": 503.6473,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.05
+  },
+  {
+    "episode": 492,
+    "reward": 501.6257,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.02
+  },
+  {
+    "episode": 493,
+    "reward": 503.2899,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 494,
+    "reward": 505.4002,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 495,
+    "reward": 504.6779,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.07
+  },
+  {
+    "episode": 496,
+    "reward": 503.7638,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 497,
+    "reward": 504.9735,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.03
+  },
+  {
+    "episode": 498,
+    "reward": 503.7621,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 3.04
+  },
+  {
+    "episode": 499,
+    "reward": 503.8484,
+    "steps": 968,
+    "actor_loss": 0.0,
+    "critic_loss": 0.0,
+    "entropy": 0.0,
+    "time_s": 2.99
+  },
+  {
+    "episode": 500,
+    "reward": 502.3477,
+    "steps": 968,
+    "actor_loss": -0.019905,
+    "critic_loss": 8.233554,
+    "entropy": 1.767827,
+    "time_s": 8.04
+  }
+]

@@ -93,9 +93,16 @@ ACTION_LABELS = {
 # Helper
 # ─────────────────────────────────────────────────────────────────────────────
 
-def assign_agents(df: pd.DataFrame, n_agents: int = N_AGENTS) -> pd.DataFrame:
+def assign_agents(df: pd.DataFrame, n_agents: int = N_AGENTS,
+                  routing_seed: int | None = None) -> pd.DataFrame:
     df = df.copy()
-    df["agent"] = df["src_ip"].apply(lambda ip: hash(str(ip)) % n_agents)
+    if routing_seed is None:
+        df["agent"] = df["src_ip"].apply(lambda ip: hash(str(ip)) % n_agents)
+    else:
+        rng = np.random.RandomState(routing_seed)
+        unique_ips = df["src_ip"].unique()
+        ip_map = {ip: int(rng.randint(0, n_agents)) for ip in unique_ips}
+        df["agent"] = df["src_ip"].map(ip_map)
     return df
 
 
@@ -262,13 +269,14 @@ class MultiAgentEnv:
         us: float = Us,
         n_agents: int = N_AGENTS,
         seed: int = 42,
+        routing_seed: int | None = None,
     ) -> None:
         self.n_agents    = n_agents
         self.window_size = window_size
         self.Us          = us
         self.rng         = np.random.default_rng(seed)
 
-        df = assign_agents(df, n_agents)
+        df = assign_agents(df, n_agents, routing_seed=routing_seed)
 
         self.routers: List[RouterEnvironment] = [
             RouterEnvironment(df, agent_id=i, bundle=bundle,

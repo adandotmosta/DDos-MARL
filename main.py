@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "s28", "s29", "eval"],
+        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "s28", "s29", "s30", "eval"],
         help="Which stage to run",
     )
     parser.add_argument(
@@ -259,6 +259,14 @@ def main() -> None:
         from src.train_s29 import train as train_s29
 
         train_s29()
+
+    if args.stage in ("s30",):
+        print("\n" + "=" * 55)
+        print("STAGE 2y: MAPPO + p_risk Tiered Profiles + Combined LightGBM (S30)")
+        print("=" * 55)
+        from src.train_s30 import train as train_s30
+
+        train_s30()
 
     if args.stage in ("s18",):
         print("\n" + "=" * 55)

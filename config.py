@@ -46,6 +46,7 @@ S26B_DIR          = MARL_DIR / "ablation" / "S26b"  # S26 + Monday-only LightGBM
 S27_DIR           = MARL_DIR / "ablation" / "S27"   # MAPPO + p_risk tiered profiles (1-p_benign routing, Monday-only)
 S28_DIR           = MARL_DIR / "ablation" / "S28"   # S27 + mixed-density training (Monday+Thursday) — fixes benign-day FPR
 S29_DIR           = MARL_DIR / "ablation" / "S29"   # IPPO + p_risk tiered profiles (no joint obs) — isolates cooperation contribution
+S30_DIR           = MARL_DIR / "ablation" / "S30"   # S27 + combined LightGBM (Mon+Tue) — isolates sensor quality vs policy quality
 EVAL_DIR          = ARTIFACT_DIR / "evaluation"     / VERSION
 
 # CSV filenames
@@ -228,4 +229,5 @@ ABLATION_STAGES = {
     "S27": "3 agents, LightGBM (Mon only), tiered profiles routing on p_risk=1-p_benign, MAPPO + local reward — tests p_risk generalisation",
     "S28": "3 agents, LightGBM (Mon only), p_risk tiered profiles, MAPPO + local reward, train on Monday+Thursday — fixes benign-day FPR",
     "S29": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO (no joint obs) — isolates cooperation vs independent adaptation",
+    "S30": "3 agents, LightGBM (Mon+Tue combined), p_risk tiered profiles, MAPPO — isolates sensor quality vs policy quality",
 }

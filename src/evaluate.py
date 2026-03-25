@@ -29,7 +29,7 @@ try:
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR, S13_DIR,
         S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
-        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR, S30_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from src.environment import MultiAgentEnv
@@ -43,7 +43,7 @@ except ImportError:
         MARL_DIR, EVAL_DIR, N_AGENTS, WINDOW_SIZE,
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR,
         S13_DIR, S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
-        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR,
+        S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR, S30_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from coopids.src.environment import MultiAgentEnv
@@ -1627,6 +1627,87 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         print(f"\nNo S29 model found at {S29_DIR} — skipping.")
         print("Run: python main.py --stage s29")
 
+    # ── S30 evaluation (MAPPO + p_risk tiered profiles + combined LightGBM)
+    # Sensor isolation: S27 (Monday-only scorer) vs S30 (combined scorer)
+    # Key question: is the Mon→Tue gap caused by sensor degradation or policy limitation?
+    s30_monday_metrics  = {}
+    s30_tuesday_metrics = {}
+    if _should_run("s30") and S30_DIR.exists() and LGBM_BUNDLE_COMBINED.exists():
+        print(f"\nLoading trained S30 from {S30_DIR}...")
+        print("  (MAPPO + p_risk routing + combined LightGBM Mon+Tue)")
+        print("  Sensor isolation: S27 (Mon-only scorer) vs S30 (combined scorer)")
+
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            JOINT_DIM as T2_JOINT_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+
+        bundle_combined = load_bundle(LGBM_BUNDLE_COMBINED)
+        features_s30    = bundle_combined["features"]
+
+        s30_mappo = MAPPO(state_dim=T2_STATE_DIM, joint_dim=T2_JOINT_DIM, action_dim=T2_ACTION_DIM)
+        s30_mappo.load(S30_DIR)
+
+        # Monday
+        df_mon_30 = load_day(CSV_MONDAY, features_s30)
+        env_s30_mon = TieredEnvV2(df=df_mon_30, bundle=bundle_combined, n_agents=N_AGENTS)
+        print(f"\nEvaluating S30 on Monday (seen attacks, combined scorer)...")
+        print(df_mon_30["label"].value_counts().to_string())
+        s30_monday_metrics = run_episode(env_s30_mon, s30_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s30_monday_metrics['tpr']:.4f}  FPR: {s30_monday_metrics['fpr']:.4f}")
+        print(f"  (S27 Monday: TPR=0.9956, FPR=0.0276)")
+        for i, dist in enumerate(s30_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s30_monday_results.json", "w") as f:
+            json.dump(s30_monday_metrics, f, indent=2)
+
+        # Tuesday — key test
+        df_tue_30 = load_day(CSV_TUESDAY, features_s30)
+        env_s30_tue = TieredEnvV2(df=df_tue_30, bundle=bundle_combined, n_agents=N_AGENTS)
+        print(f"\nEvaluating S30 on Tuesday (unseen attacks, combined scorer)...")
+        print(df_tue_30["label"].value_counts().to_string())
+        s30_tuesday_metrics = run_episode(env_s30_tue, s30_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s30_tuesday_metrics['tpr']:.4f}  FPR: {s30_tuesday_metrics['fpr']:.4f}")
+        print(f"  (S27 Tuesday: TPR=0.8716, FPR=0.0668)")
+        print(f"  → If S30 >> S27: sensor was bottleneck.")
+        print(f"  → If S30 ≈ S27: MARL converges to near-fixed policies regardless.")
+        for i, dist in enumerate(s30_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s30_tuesday_results.json", "w") as f:
+            json.dump(s30_tuesday_metrics, f, indent=2)
+
+        # Thursday
+        if CSV_THURSDAY.exists():
+            df_thu_30 = load_day(CSV_THURSDAY, features_s30)
+            env_s30_thu = TieredEnvV2(df=df_thu_30, bundle=bundle_combined, n_agents=N_AGENTS)
+            print(f"\nEvaluating S30 on Thursday (unseen)...")
+            print(df_thu_30["label"].value_counts().to_string())
+            s30_thu = run_episode(env_s30_thu, s30_mappo, action_labels=T2_ACTION_LABELS)
+            print(f"  TPR: {s30_thu['tpr']:.4f}  FPR: {s30_thu['fpr']:.4f}")
+            for i, dist in enumerate(s30_thu["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s30_thursday_results.json", "w") as f:
+                json.dump(s30_thu, f, indent=2)
+
+        # Saturday
+        if CSV_SATURDAY.exists():
+            df_sat_30 = load_day(CSV_SATURDAY, features_s30)
+            env_s30_sat = TieredEnvV2(df=df_sat_30, bundle=bundle_combined, n_agents=N_AGENTS)
+            print(f"\nEvaluating S30 on Saturday (unseen benign-only)...")
+            print(df_sat_30["label"].value_counts().to_string())
+            s30_sat = run_episode(env_s30_sat, s30_mappo, action_labels=T2_ACTION_LABELS)
+            print(f"  TPR: {s30_sat['tpr']:.4f}  FPR: {s30_sat['fpr']:.4f}")
+            for i, dist in enumerate(s30_sat["action_distribution"]):
+                print(f"    Router {i+1}: {dist}")
+            with open(out_dir / "s30_saturday_results.json", "w") as f:
+                json.dump(s30_sat, f, indent=2)
+    else:
+        print(f"\nNo S30 model found at {S30_DIR} — skipping.")
+        print("Run: python main.py --stage s30")
+
     # ── Full comparison table (Monday)
     print("\n" + "="*150)
     print("FULL COMPARISON — MONDAY (seen attacks)")
@@ -1656,6 +1737,7 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S27",    s27_monday_metrics),
         ("S28",    s28_monday_metrics),
         ("S29",    s29_monday_metrics),
+        ("S30",    s30_monday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_mon)
     print(hdr)
@@ -1693,6 +1775,7 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S27",    s27_tuesday_metrics),
         ("S28",    s28_tuesday_metrics),
         ("S29",    s29_tuesday_metrics),
+        ("S30",    s30_tuesday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_tue)
     print(hdr)
@@ -1722,7 +1805,7 @@ if __name__ == "__main__":
                         "(e.g. s23,s24,s27,s29). If omitted, all are evaluated. "
                         "Valid names: mappo, iql, ippo, mapl, e13, s11, s12, s13, s14, "
                         "s15, s16, s17, s18, s19, s21, s22, s23, s24, s25, s26, s26b, "
-                        "s27, s28, s29")
+                        "s27, s28, s29, s30")
     args = p.parse_args()
     models_set = (
         {m.strip().lower() for m in args.models.split(",")}

@@ -1,0 +1,12 @@
+{
+  "total_reward": 866.1339,
+  "total_steps": 968,
+  "total_benign_in": 68311,
+  "total_attack_in": 220163,
+  "total_benign_out": 67109,
+  "total_attack_blocked": 216484,
+  "tpr": 0.9833,
+  "fpr": 0.0176,
+  "legit_ratio": 0.9824,
+  "action_distribution": []
+}

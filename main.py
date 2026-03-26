@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "s28", "s29", "s30", "eval"],
+        choices=["all", "lgbm", "lgbm_combined", "marl", "iql", "ippo", "mapl", "e13", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s21", "s22", "s23", "s24", "s25", "s26", "s26b", "s27", "s28", "s29", "s30", "s31", "s32", "s33", "s34", "s35", "s36", "s37", "s38", "eval"],
         help="Which stage to run",
     )
     parser.add_argument(
@@ -267,6 +267,64 @@ def main() -> None:
         from src.train_s30 import train as train_s30
 
         train_s30()
+
+    if args.stage in ("s31",):
+        print("\n" + "=" * 55)
+        print("STAGE S31: IPPO + p_risk Tiered Profiles + Monday-only LightGBM + 6 agents (S31)")
+        print("=" * 55)
+        from src.train_s31 import train as train_s31
+
+        train_s31()
+
+    if args.stage in ("s32",):
+        print("\n" + "=" * 55)
+        print("STAGE S32: IPPO + p_risk Tiered Profiles + 1-dim state [p_risk only] (S32)")
+        print("=" * 55)
+        from src.train_s32 import train as train_s32
+
+        train_s32()
+
+    if args.stage in ("s33",):
+        print("\n" + "=" * 55)
+        print("STAGE S33: MAPPO + Shared IP Blocklist + 5-dim state (S33)")
+        print("=" * 55)
+        from src.train_s33 import train as train_s33
+        train_s33()
+
+    if args.stage in ("s34",):
+        print("\n" + "=" * 55)
+        print("STAGE S34: IPPO + Shared IP Blocklist + 5-dim state (S34)")
+        print("=" * 55)
+        from src.train_s34 import train as train_s34
+        train_s34()
+
+    if args.stage in ("s35",):
+        print("\n" + "=" * 55)
+        print("STAGE S35: MAPPO + Victim Routing + Shared IP Blocklist (S35)")
+        print("=" * 55)
+        from src.train_s35 import train as train_s35
+        train_s35()
+
+    if args.stage in ("s36",):
+        print("\n" + "=" * 55)
+        print("STAGE S36: IPPO + Victim Routing + Shared IP Blocklist (S36)")
+        print("=" * 55)
+        from src.train_s36 import train as train_s36
+        train_s36()
+
+    if args.stage in ("s37",):
+        print("\n" + "=" * 55)
+        print("STAGE S37: MAPPO + p_risk Tiered Profiles + 6 agents (S37)")
+        print("=" * 55)
+        from src.train_s37 import train as train_s37
+        train_s37()
+
+    if args.stage in ("s38",):
+        print("\n" + "=" * 55)
+        print("STAGE S38: IPPO + p_risk Tiered Profiles + ECMP 5-tuple routing (S38)")
+        print("=" * 55)
+        from src.train_s38 import train as train_s38
+        train_s38()
 
     if args.stage in ("s18",):
         print("\n" + "=" * 55)

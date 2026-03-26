@@ -30,6 +30,7 @@ try:
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR, S13_DIR,
         S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
         S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR, S30_DIR,
+        S31_DIR, S32_DIR, S33_DIR, S34_DIR, S35_DIR, S36_DIR, S37_DIR, S38_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from src.environment import MultiAgentEnv
@@ -44,6 +45,7 @@ except ImportError:
         ABLATION_STAGES, ACTIONS, S11_DIR, S12_DIR,
         S13_DIR, S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
         S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR, S30_DIR,
+        S31_DIR, S32_DIR, S33_DIR, S34_DIR, S35_DIR, S36_DIR, S37_DIR, S38_DIR,
         LGBM_BUNDLE_COMBINED,
     )
     from coopids.src.environment import MultiAgentEnv
@@ -1708,6 +1710,339 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         print(f"\nNo S30 model found at {S30_DIR} — skipping.")
         print("Run: python main.py --stage s30")
 
+    # ── S31 evaluation (IPPO + p_risk tiered profiles + 6 agents)
+    s31_monday_metrics  = {}
+    s31_tuesday_metrics = {}
+    if _should_run("s31") and S31_DIR.exists():
+        print(f"\nLoading trained S31 from {S31_DIR}...")
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+        N_AGENTS_S31 = 6
+        s31_ippo = IPPO(state_dim=T2_STATE_DIM, action_dim=T2_ACTION_DIM, n_agents=N_AGENTS_S31)
+        s31_ippo.load(S31_DIR)
+        features_s31 = bundle["features"]
+
+        df_mon_31 = load_day(CSV_MONDAY, features_s31)
+        env_s31_mon = TieredEnvV2(df=df_mon_31, bundle=bundle, n_agents=N_AGENTS_S31)
+        print(f"\nEvaluating S31 on Monday (seen attacks)...")
+        print(df_mon_31["label"].value_counts().to_string())
+        s31_monday_metrics = run_episode_ippo(env_s31_mon, s31_ippo)
+        print(f"  TPR: {s31_monday_metrics['tpr']:.4f}  FPR: {s31_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s31_monday_results.json", "w") as f:
+            json.dump(s31_monday_metrics, f, indent=2)
+
+        df_tue_31 = load_day(CSV_TUESDAY, features_s31)
+        env_s31_tue = TieredEnvV2(df=df_tue_31, bundle=bundle, n_agents=N_AGENTS_S31)
+        print(f"\nEvaluating S31 on Tuesday (unseen attacks)...")
+        print(df_tue_31["label"].value_counts().to_string())
+        s31_tuesday_metrics = run_episode_ippo(env_s31_tue, s31_ippo)
+        print(f"  TPR: {s31_tuesday_metrics['tpr']:.4f}  FPR: {s31_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s31_tuesday_results.json", "w") as f:
+            json.dump(s31_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S31 model found at {S31_DIR} — skipping.")
+        print("Run: python main.py --stage s31")
+
+    # ── S32 evaluation (IPPO + 1-dim state [p_risk only])
+    # Special eval: env returns 4-dim state, we project to 1-dim before passing to IPPO.
+    s32_monday_metrics  = {}
+    s32_tuesday_metrics = {}
+    if _should_run("s32") and S32_DIR.exists():
+        print(f"\nLoading trained S32 from {S32_DIR}...")
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+        STATE_DIM_S32 = 1
+        s32_ippo = IPPO(state_dim=STATE_DIM_S32, action_dim=T2_ACTION_DIM, n_agents=N_AGENTS)
+        s32_ippo.load(S32_DIR)
+        features_s32 = bundle["features"]
+
+        def _to_prisk(states):
+            return [np.array([1.0 - s[1]], dtype=np.float32) for s in states]
+
+        def _run_s32(env, ippo):
+            local_states_full, _ = env.reset()
+            local_states = _to_prisk(local_states_full)
+            total_reward = total_steps = 0
+            total_benign_in = total_benign_out = total_attack_in = total_attack_blocked = 0
+            done = False
+            while not done:
+                actions = []
+                for actor in ippo.actors:
+                    obs_t  = torch.FloatTensor(local_states[len(actions)]).unsqueeze(0)
+                    dist   = actor.get_dist(obs_t)
+                    actions.append(int(dist.probs.argmax().item()))
+                next_full, _, reward, done = env.step(actions)
+                info = env.last_step_info
+                total_benign_in      += info["benign_total"]
+                total_attack_in      += info["attack_total"]
+                total_benign_out     += info["benign_forwarded"]
+                total_attack_blocked += info["attack_blocked"]
+                total_reward += float(np.mean(reward)) if isinstance(reward, list) else reward
+                total_steps  += 1
+                local_states = _to_prisk(next_full)
+            tpr = total_attack_blocked / total_attack_in if total_attack_in > 0 else 0.0
+            fpr = 1.0 - (total_benign_out / total_benign_in if total_benign_in > 0 else 0.0)
+            return {"total_reward": round(total_reward, 4), "total_steps": total_steps,
+                    "total_benign_in": total_benign_in, "total_attack_in": total_attack_in,
+                    "total_benign_out": total_benign_out, "total_attack_blocked": total_attack_blocked,
+                    "tpr": round(tpr, 4), "fpr": round(fpr, 4),
+                    "legit_ratio": round(1.0 - fpr, 4), "action_distribution": []}
+
+        df_mon_32 = load_day(CSV_MONDAY, features_s32)
+        env_s32_mon = TieredEnvV2(df=df_mon_32, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S32 on Monday (seen attacks)...")
+        s32_monday_metrics = _run_s32(env_s32_mon, s32_ippo)
+        print(f"  TPR: {s32_monday_metrics['tpr']:.4f}  FPR: {s32_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s32_monday_results.json", "w") as f:
+            json.dump(s32_monday_metrics, f, indent=2)
+
+        df_tue_32 = load_day(CSV_TUESDAY, features_s32)
+        env_s32_tue = TieredEnvV2(df=df_tue_32, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S32 on Tuesday (unseen attacks)...")
+        s32_tuesday_metrics = _run_s32(env_s32_tue, s32_ippo)
+        print(f"  TPR: {s32_tuesday_metrics['tpr']:.4f}  FPR: {s32_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s32_tuesday_results.json", "w") as f:
+            json.dump(s32_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S32 model found at {S32_DIR} — skipping.")
+        print("Run: python main.py --stage s32")
+
+    # ── S33 evaluation (MAPPO + shared IP blocklist + 5-dim state)
+    s33_monday_metrics  = {}
+    s33_tuesday_metrics = {}
+    if _should_run("s33") and S33_DIR.exists():
+        print(f"\nLoading trained S33 from {S33_DIR}...")
+        from src.environment_tiered_v3 import (
+            MultiAgentEnvV3 as TieredEnvV3,
+            STATE_DIM as T3_STATE_DIM,
+            JOINT_DIM as T3_JOINT_DIM,
+            ACTION_DIM as T3_ACTION_DIM,
+            ACTION_LABELS as T3_ACTION_LABELS,
+        )
+        s33_mappo = MAPPO(state_dim=T3_STATE_DIM, joint_dim=T3_JOINT_DIM, action_dim=T3_ACTION_DIM)
+        s33_mappo.load(S33_DIR)
+        features_s33 = bundle["features"]
+
+        df_mon_33 = load_day(CSV_MONDAY, features_s33)
+        env_s33_mon = TieredEnvV3(df=df_mon_33, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S33 on Monday (seen attacks)...")
+        print(df_mon_33["label"].value_counts().to_string())
+        s33_monday_metrics = run_episode(env_s33_mon, s33_mappo, action_labels=T3_ACTION_LABELS)
+        print(f"  TPR: {s33_monday_metrics['tpr']:.4f}  FPR: {s33_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s33_monday_results.json", "w") as f:
+            json.dump(s33_monday_metrics, f, indent=2)
+
+        df_tue_33 = load_day(CSV_TUESDAY, features_s33)
+        env_s33_tue = TieredEnvV3(df=df_tue_33, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S33 on Tuesday (unseen attacks)...")
+        print(df_tue_33["label"].value_counts().to_string())
+        s33_tuesday_metrics = run_episode(env_s33_tue, s33_mappo, action_labels=T3_ACTION_LABELS)
+        print(f"  TPR: {s33_tuesday_metrics['tpr']:.4f}  FPR: {s33_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s33_tuesday_results.json", "w") as f:
+            json.dump(s33_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S33 model found at {S33_DIR} — skipping.")
+        print("Run: python main.py --stage s33")
+
+    # ── S34 evaluation (IPPO + shared IP blocklist + 5-dim state)
+    s34_monday_metrics  = {}
+    s34_tuesday_metrics = {}
+    if _should_run("s34") and S34_DIR.exists():
+        print(f"\nLoading trained S34 from {S34_DIR}...")
+        from src.environment_tiered_v3 import (
+            MultiAgentEnvV3 as TieredEnvV3,
+            STATE_DIM as T3_STATE_DIM,
+            ACTION_DIM as T3_ACTION_DIM,
+            ACTION_LABELS as T3_ACTION_LABELS,
+        )
+        s34_ippo = IPPO(state_dim=T3_STATE_DIM, action_dim=T3_ACTION_DIM, n_agents=N_AGENTS)
+        s34_ippo.load(S34_DIR)
+        features_s34 = bundle["features"]
+
+        df_mon_34 = load_day(CSV_MONDAY, features_s34)
+        env_s34_mon = TieredEnvV3(df=df_mon_34, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S34 on Monday (seen attacks)...")
+        print(df_mon_34["label"].value_counts().to_string())
+        s34_monday_metrics = run_episode_ippo(env_s34_mon, s34_ippo)
+        print(f"  TPR: {s34_monday_metrics['tpr']:.4f}  FPR: {s34_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s34_monday_results.json", "w") as f:
+            json.dump(s34_monday_metrics, f, indent=2)
+
+        df_tue_34 = load_day(CSV_TUESDAY, features_s34)
+        env_s34_tue = TieredEnvV3(df=df_tue_34, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S34 on Tuesday (unseen attacks)...")
+        print(df_tue_34["label"].value_counts().to_string())
+        s34_tuesday_metrics = run_episode_ippo(env_s34_tue, s34_ippo)
+        print(f"  TPR: {s34_tuesday_metrics['tpr']:.4f}  FPR: {s34_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s34_tuesday_results.json", "w") as f:
+            json.dump(s34_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S34 model found at {S34_DIR} — skipping.")
+        print("Run: python main.py --stage s34")
+
+    # ── S35 evaluation (MAPPO + victim routing + shared IP blocklist)
+    s35_monday_metrics  = {}
+    s35_tuesday_metrics = {}
+    if _should_run("s35") and S35_DIR.exists():
+        print(f"\nLoading trained S35 from {S35_DIR}...")
+        from src.environment_tiered_v4 import (
+            MultiAgentEnvV4 as TieredEnvV4,
+            STATE_DIM as T4_STATE_DIM,
+            JOINT_DIM as T4_JOINT_DIM,
+            ACTION_DIM as T4_ACTION_DIM,
+            ACTION_LABELS as T4_ACTION_LABELS,
+        )
+        s35_mappo = MAPPO(state_dim=T4_STATE_DIM, joint_dim=T4_JOINT_DIM, action_dim=T4_ACTION_DIM)
+        s35_mappo.load(S35_DIR)
+        features_s35 = bundle["features"]
+
+        df_mon_35 = load_day(CSV_MONDAY, features_s35)
+        env_s35_mon = TieredEnvV4(df=df_mon_35, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S35 on Monday (seen attacks)...")
+        print(df_mon_35["label"].value_counts().to_string())
+        s35_monday_metrics = run_episode(env_s35_mon, s35_mappo, action_labels=T4_ACTION_LABELS)
+        print(f"  TPR: {s35_monday_metrics['tpr']:.4f}  FPR: {s35_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s35_monday_results.json", "w") as f:
+            json.dump(s35_monday_metrics, f, indent=2)
+
+        df_tue_35 = load_day(CSV_TUESDAY, features_s35)
+        env_s35_tue = TieredEnvV4(df=df_tue_35, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S35 on Tuesday (unseen attacks)...")
+        print(df_tue_35["label"].value_counts().to_string())
+        s35_tuesday_metrics = run_episode(env_s35_tue, s35_mappo, action_labels=T4_ACTION_LABELS)
+        print(f"  TPR: {s35_tuesday_metrics['tpr']:.4f}  FPR: {s35_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s35_tuesday_results.json", "w") as f:
+            json.dump(s35_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S35 model found at {S35_DIR} — skipping.")
+        print("Run: python main.py --stage s35")
+
+    # ── S36 evaluation (IPPO + victim routing + shared IP blocklist)
+    s36_monday_metrics  = {}
+    s36_tuesday_metrics = {}
+    if _should_run("s36") and S36_DIR.exists():
+        print(f"\nLoading trained S36 from {S36_DIR}...")
+        from src.environment_tiered_v4 import (
+            MultiAgentEnvV4 as TieredEnvV4,
+            STATE_DIM as T4_STATE_DIM,
+            ACTION_DIM as T4_ACTION_DIM,
+            ACTION_LABELS as T4_ACTION_LABELS,
+        )
+        s36_ippo = IPPO(state_dim=T4_STATE_DIM, action_dim=T4_ACTION_DIM, n_agents=N_AGENTS)
+        s36_ippo.load(S36_DIR)
+        features_s36 = bundle["features"]
+
+        df_mon_36 = load_day(CSV_MONDAY, features_s36)
+        env_s36_mon = TieredEnvV4(df=df_mon_36, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S36 on Monday (seen attacks)...")
+        print(df_mon_36["label"].value_counts().to_string())
+        s36_monday_metrics = run_episode_ippo(env_s36_mon, s36_ippo)
+        print(f"  TPR: {s36_monday_metrics['tpr']:.4f}  FPR: {s36_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s36_monday_results.json", "w") as f:
+            json.dump(s36_monday_metrics, f, indent=2)
+
+        df_tue_36 = load_day(CSV_TUESDAY, features_s36)
+        env_s36_tue = TieredEnvV4(df=df_tue_36, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S36 on Tuesday (unseen attacks)...")
+        print(df_tue_36["label"].value_counts().to_string())
+        s36_tuesday_metrics = run_episode_ippo(env_s36_tue, s36_ippo)
+        print(f"  TPR: {s36_tuesday_metrics['tpr']:.4f}  FPR: {s36_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s36_tuesday_results.json", "w") as f:
+            json.dump(s36_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S36 model found at {S36_DIR} — skipping.")
+        print("Run: python main.py --stage s36")
+
+    # ── S37 evaluation (MAPPO + p_risk tiered profiles + 6 agents)
+    s37_monday_metrics  = {}
+    s37_tuesday_metrics = {}
+    if _should_run("s37") and S37_DIR.exists():
+        print(f"\nLoading trained S37 from {S37_DIR}...")
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as TieredEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+        N_AGENTS_S37  = 6
+        JOINT_DIM_S37 = T2_STATE_DIM * N_AGENTS_S37
+        s37_mappo = MAPPO(state_dim=T2_STATE_DIM, joint_dim=JOINT_DIM_S37,
+                          action_dim=T2_ACTION_DIM, n_agents=N_AGENTS_S37)
+        s37_mappo.load(S37_DIR)
+        features_s37 = bundle["features"]
+
+        df_mon_37 = load_day(CSV_MONDAY, features_s37)
+        env_s37_mon = TieredEnvV2(df=df_mon_37, bundle=bundle, n_agents=N_AGENTS_S37)
+        print(f"\nEvaluating S37 on Monday (seen attacks)...")
+        print(df_mon_37["label"].value_counts().to_string())
+        s37_monday_metrics = run_episode(env_s37_mon, s37_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s37_monday_metrics['tpr']:.4f}  FPR: {s37_monday_metrics['fpr']:.4f}")
+        with open(out_dir / "s37_monday_results.json", "w") as f:
+            json.dump(s37_monday_metrics, f, indent=2)
+
+        df_tue_37 = load_day(CSV_TUESDAY, features_s37)
+        env_s37_tue = TieredEnvV2(df=df_tue_37, bundle=bundle, n_agents=N_AGENTS_S37)
+        print(f"\nEvaluating S37 on Tuesday (unseen attacks)...")
+        print(df_tue_37["label"].value_counts().to_string())
+        s37_tuesday_metrics = run_episode(env_s37_tue, s37_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s37_tuesday_metrics['tpr']:.4f}  FPR: {s37_tuesday_metrics['fpr']:.4f}")
+        with open(out_dir / "s37_tuesday_results.json", "w") as f:
+            json.dump(s37_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S37 model found at {S37_DIR} — skipping.")
+        print("Run: python main.py --stage s37")
+
+    # ── S38 evaluation (IPPO + ECMP 5-tuple routing)
+    s38_monday_metrics  = {}
+    s38_tuesday_metrics = {}
+    if _should_run("s38") and S38_DIR.exists():
+        print(f"\nLoading trained S38 from {S38_DIR}...")
+        from src.environment_tiered_ecmp import (
+            MultiAgentEnvECMP,
+            STATE_DIM as T2_STATE_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+        s38_ippo = IPPO(state_dim=T2_STATE_DIM, action_dim=T2_ACTION_DIM, n_agents=N_AGENTS)
+        s38_ippo.load(S38_DIR)
+        features_s38 = bundle["features"]
+
+        df_mon_38 = load_day(CSV_MONDAY,
+                             features_s38 + ["src_port", "dst_port", "protocol"])
+        env_s38_mon = MultiAgentEnvECMP(df=df_mon_38, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S38 on Monday (seen attacks)...")
+        print(df_mon_38["label"].value_counts().to_string())
+        s38_monday_metrics = run_episode_ippo(env_s38_mon, s38_ippo)
+        print(f"  TPR: {s38_monday_metrics['tpr']:.4f}  FPR: {s38_monday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s38_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s38_monday_results.json", "w") as f:
+            json.dump(s38_monday_metrics, f, indent=2)
+
+        df_tue_38 = load_day(CSV_TUESDAY,
+                             features_s38 + ["src_port", "dst_port", "protocol"])
+        env_s38_tue = MultiAgentEnvECMP(df=df_tue_38, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S38 on Tuesday (unseen attacks)...")
+        print(df_tue_38["label"].value_counts().to_string())
+        s38_tuesday_metrics = run_episode_ippo(env_s38_tue, s38_ippo)
+        print(f"  TPR: {s38_tuesday_metrics['tpr']:.4f}  FPR: {s38_tuesday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s38_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s38_tuesday_results.json", "w") as f:
+            json.dump(s38_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S38 model found at {S38_DIR} — skipping.")
+        print("Run: python main.py --stage s38")
+
     # ── Full comparison table (Monday)
     print("\n" + "="*150)
     print("FULL COMPARISON — MONDAY (seen attacks)")
@@ -1738,6 +2073,14 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S28",    s28_monday_metrics),
         ("S29",    s29_monday_metrics),
         ("S30",    s30_monday_metrics),
+        ("S31",    s31_monday_metrics),
+        ("S32",    s32_monday_metrics),
+        ("S33",    s33_monday_metrics),
+        ("S34",    s34_monday_metrics),
+        ("S35",    s35_monday_metrics),
+        ("S36",    s36_monday_metrics),
+        ("S37",    s37_monday_metrics),
+        ("S38",    s38_monday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_mon)
     print(hdr)
@@ -1776,6 +2119,14 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S28",    s28_tuesday_metrics),
         ("S29",    s29_tuesday_metrics),
         ("S30",    s30_tuesday_metrics),
+        ("S31",    s31_tuesday_metrics),
+        ("S32",    s32_tuesday_metrics),
+        ("S33",    s33_tuesday_metrics),
+        ("S34",    s34_tuesday_metrics),
+        ("S35",    s35_tuesday_metrics),
+        ("S36",    s36_tuesday_metrics),
+        ("S37",    s37_tuesday_metrics),
+        ("S38",    s38_tuesday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_tue)
     print(hdr)

@@ -47,6 +47,14 @@ S27_DIR           = MARL_DIR / "ablation" / "S27"   # MAPPO + p_risk tiered prof
 S28_DIR           = MARL_DIR / "ablation" / "S28"   # S27 + mixed-density training (Monday+Thursday) — fixes benign-day FPR
 S29_DIR           = MARL_DIR / "ablation" / "S29"   # IPPO + p_risk tiered profiles (no joint obs) — isolates cooperation contribution
 S30_DIR           = MARL_DIR / "ablation" / "S30"   # S27 + combined LightGBM (Mon+Tue) — isolates sensor quality vs policy quality
+S31_DIR           = MARL_DIR / "ablation" / "S31"   # IPPO + p_risk tiered profiles + 6 agents
+S32_DIR           = MARL_DIR / "ablation" / "S32"   # IPPO + p_risk tiered profiles + 1-dim state [p_risk only]
+S33_DIR           = MARL_DIR / "ablation" / "S33"   # MAPPO + shared IP blocklist + 5-dim state
+S34_DIR           = MARL_DIR / "ablation" / "S34"   # IPPO + shared IP blocklist + 5-dim state
+S35_DIR           = MARL_DIR / "ablation" / "S35"   # MAPPO + victim routing + shared IP blocklist
+S36_DIR           = MARL_DIR / "ablation" / "S36"   # IPPO + victim routing + shared IP blocklist
+S37_DIR           = MARL_DIR / "ablation" / "S37"   # MAPPO + p_risk tiered profiles + 6 agents
+S38_DIR           = MARL_DIR / "ablation" / "S38"   # IPPO + p_risk tiered profiles + ECMP 5-tuple routing
 EVAL_DIR          = ARTIFACT_DIR / "evaluation"     / VERSION
 
 # CSV filenames
@@ -230,4 +238,12 @@ ABLATION_STAGES = {
     "S28": "3 agents, LightGBM (Mon only), p_risk tiered profiles, MAPPO + local reward, train on Monday+Thursday — fixes benign-day FPR",
     "S29": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO (no joint obs) — isolates cooperation vs independent adaptation",
     "S30": "3 agents, LightGBM (Mon+Tue combined), p_risk tiered profiles, MAPPO — isolates sensor quality vs policy quality",
+    "S31": "6 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO — tests whether more agents improve performance",
+    "S32": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO + 1-dim state [p_risk only] — tests if 4-dim state adds anything",
+    "S33": "3 agents, LightGBM (Mon only), p_risk tiered profiles + shared IP blocklist, MAPPO — first shared coordination signal",
+    "S34": "3 agents, LightGBM (Mon only), p_risk tiered profiles + shared IP blocklist, IPPO — shared signal without CTDE",
+    "S35": "3 agents, LightGBM (Mon only), victim routing + shared IP blocklist, MAPPO — asymmetric routing, CTDE coordination",
+    "S36": "3 agents, LightGBM (Mon only), victim routing + shared IP blocklist, IPPO — asymmetric routing, no CTDE",
+    "S37": "6 agents, LightGBM (Mon only), p_risk tiered profiles, MAPPO — tests whether CTDE scales better than IPPO at higher agent counts",
+    "S38": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO + ECMP 5-tuple routing — most realistic ISP deployment model",
 }

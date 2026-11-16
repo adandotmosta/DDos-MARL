@@ -1,1 +1,0 @@
-# CoopIDS source package

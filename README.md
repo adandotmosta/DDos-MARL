@@ -221,3 +221,7 @@ Download: https://www.unb.ca/cic/datasets/ddos-2024.html
 - virtual environments, presentation files and scratch logs
 
 Because weights are not committed, running the evaluation requires training the models first.
+
+## License
+
+MIT, see [LICENSE](LICENSE).

@@ -14,8 +14,7 @@ The full write-up is in [report/report.pdf](report/report.pdf). The stage-by-sta
 6. [Setup](#setup)
 7. [Reproducing the experiments](#reproducing-the-experiments)
 8. [Dataset](#dataset)
-9. [Main findings](#main-findings)
-10. [What is and isn't in this repository](#what-is-and-isnt-in-this-repository)
+9. [What is and isn't in this repository](#what-is-and-isnt-in-this-repository)
 
 ## The idea in one minute
 
@@ -212,16 +211,6 @@ Download: https://www.unb.ca/cic/datasets/ddos-2024.html
 | `Tuesday_19_Dec_2023.csv` | 85,479 | Zero-shot test. 5 unseen attack types |
 | `Thursday_14_Dec_2023.csv` | 105,087 | Benign only (false-positive checks, mixed-day ablations) |
 | `Saturday_16_Dec_2023.csv` | 189,678 | Benign only |
-
-## Main findings
-
-1. **CTDE matters at scale, not at small scale.** At 3 agents MAPPO ≈ IPPO. At 6 agents IPPO falls by about 26 points while MAPPO falls by about 8 (S31 vs S37), because the shared critic pools signal across agents.
-2. **The risk scorer is the generalisation bottleneck.** Changing the policy (algorithm, reward, state) barely moves Tuesday TPR. Changing the scorer moves it by 10–40 points.
-3. **Routing topology matters.** Hashing by source IP keeps one attacker's flows on one router. Realistic ECMP 5-tuple routing scatters them and costs about 7–8 points of Tuesday TPR (S38).
-4. **Tiered profiles solved puzzle dominance.** Choosing a window-level threshold profile, instead of a per-flow action, let the policy focus on *when* to be strict and stopped agents from always picking CAPTCHA.
-5. **Reward design is not critical.** Local and global reward give the same aggregate results in the tiered setup (S40 ≈ S27).
-6. **A small MLP can replace LightGBM** at a cost of about 8 points of zero-shot TPR (S39).
-7. **Honest limits.** On this dataset agents converge to near-fixed per-router thresholds. MARL's demonstrated value is *automatic threshold tuning*, not within-episode adaptation, and its gain over a well-calibrated static "firm" profile is small (about 1.6 points on Monday). Existing IDS datasets are designed for classification rather than sequential decision-making, which limits how much cooperation can emerge. This is discussed in [ablation_notes.md](ablation_notes.md).
 
 ## What is and isn't in this repository
 

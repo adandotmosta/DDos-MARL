@@ -1,28 +1,28 @@
 {
-  "total_reward": 861.9644,
+  "total_reward": 863.7375,
   "total_steps": 962,
   "total_benign_in": 49965,
   "total_attack_in": 8193,
-  "total_benign_out": 46391,
-  "total_attack_blocked": 7323,
-  "tpr": 0.8938,
-  "fpr": 0.0715,
-  "legit_ratio": 0.9285,
+  "total_benign_out": 46581,
+  "total_attack_blocked": 7273,
+  "tpr": 0.8877,
+  "fpr": 0.0677,
+  "legit_ratio": 0.9323,
   "action_distribution": [
     {
-      "firm": 962
+      "passive": 1,
+      "firm": 961
     },
     {
-      "passive": 62,
-      "light": 54,
-      "aggressive": 5,
-      "lockdown": 841
+      "passive": 48,
+      "light": 46,
+      "aggressive": 1,
+      "lockdown": 867
     },
     {
-      "light": 72,
-      "moderate": 13,
-      "aggressive": 598,
-      "lockdown": 279
+      "light": 11,
+      "aggressive": 705,
+      "lockdown": 246
     }
   ]
 }

@@ -1,14 +1,3 @@
-"""
-mappo.py
-MAPPO implementation for CoopIDS.
-
-Components:
-  Actor          — local policy (obs_i → action)
-  Critic         — centralized value (joint_obs → value)
-  RolloutBuffer  — stores transitions per episode
-  MAPPO          — wraps actors + critic + PPO update
-"""
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -38,141 +27,60 @@ except ImportError:
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Actor
-# ─────────────────────────────────────────────────────────────────────────────
-
 class Actor(nn.Module):
-    """
-    Local policy network for one agent.
-    Input:  local obs  (STATE_DIM,)
-    Output: action probabilities  (ACTION_DIM,)
-
-    Used at execution time — only sees local obs (CTDE).
-    """
-
-    def __init__(
-        self,
-        state_dim:  int = STATE_DIM,
-        action_dim: int = ACTION_DIM,
-        hidden_dim: int = HIDDEN_DIM,
-    ) -> None:
+    def __init__(self, state_dim=STATE_DIM, action_dim=ACTION_DIM, hidden_dim=HIDDEN_DIM):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(state_dim, hidden_dim),
-            nn.Tanh(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.Tanh(),
+            nn.Linear(state_dim, hidden_dim), nn.Tanh(),
+            nn.Linear(hidden_dim, hidden_dim), nn.Tanh(),
             nn.Linear(hidden_dim, action_dim),
         )
 
-    def forward(self, obs: torch.Tensor) -> torch.Tensor:
-        """Returns raw logits."""
+    def forward(self, obs):
         return self.net(obs)
 
-    def get_dist(self, obs: torch.Tensor) -> Categorical:
-        logits = self.forward(obs)
-        return Categorical(logits=logits)
+    def get_dist(self, obs):
+        return Categorical(logits=self.forward(obs))
 
     def act(self, obs: np.ndarray) -> Tuple[int, float]:
-        """
-        Sample action from policy.
-        Returns (action, log_prob) as Python scalars.
-        """
         obs_t  = torch.FloatTensor(obs).unsqueeze(0)
         dist   = self.get_dist(obs_t)
         action = dist.sample()
-        logp   = dist.log_prob(action)
-        return int(action.item()), float(logp.item())
+        return int(action.item()), float(dist.log_prob(action).item())
 
-    def evaluate(
-        self,
-        obs: torch.Tensor,
-        actions: torch.Tensor,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Returns log_probs and entropy for given obs/actions.
-        Used during PPO update.
-        """
-        dist    = self.get_dist(obs)
-        logp    = dist.log_prob(actions)
-        entropy = dist.entropy()
-        return logp, entropy
+    def evaluate(self, obs, actions):
+        dist = self.get_dist(obs)
+        return dist.log_prob(actions), dist.entropy()
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Critic (Centralized)
-# ─────────────────────────────────────────────────────────────────────────────
 
 class Critic(nn.Module):
-    """
-    Centralized value network.
-    Input:  joint obs  (JOINT_DIM,)  — all agents' states concatenated
-    Output: scalar value estimate
-
-    Only used during training (CTDE).
-    """
-
-    def __init__(
-        self,
-        joint_dim:  int = JOINT_DIM,
-        hidden_dim: int = HIDDEN_DIM,
-    ) -> None:
+    def __init__(self, joint_dim=JOINT_DIM, hidden_dim=HIDDEN_DIM):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(joint_dim, hidden_dim),
-            nn.Tanh(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.Tanh(),
+            nn.Linear(joint_dim, hidden_dim), nn.Tanh(),
+            nn.Linear(hidden_dim, hidden_dim), nn.Tanh(),
             nn.Linear(hidden_dim, 1),
         )
 
-    def forward(self, joint_obs: torch.Tensor) -> torch.Tensor:
-        """Returns scalar value estimate."""
+    def forward(self, joint_obs):
         return self.net(joint_obs).squeeze(-1)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# RolloutBuffer
-# ─────────────────────────────────────────────────────────────────────────────
-
 class RolloutBuffer:
-    """
-    Stores one episode of transitions for all agents.
-
-    Stores per step:
-      - local_obs[i]:  obs for each agent i
-      - joint_obs:     concatenated obs (for critic)
-      - actions[i]:    action for each agent i
-      - log_probs[i]:  log prob for each agent i
-      - reward:        global scalar reward
-      - done:          episode done flag
-      - value:         critic value estimate
-    """
-
-    def __init__(self, n_agents: int = N_AGENTS) -> None:
-        self.n_agents  = n_agents
+    def __init__(self, n_agents: int = N_AGENTS):
+        self.n_agents = n_agents
         self.clear()
 
-    def clear(self) -> None:
-        self.local_obs  = [[] for _ in range(self.n_agents)]
-        self.joint_obs  = []
-        self.actions    = [[] for _ in range(self.n_agents)]
-        self.log_probs  = [[] for _ in range(self.n_agents)]
-        self.rewards    = []
-        self.dones      = []
-        self.values     = []
+    def clear(self):
+        self.local_obs = [[] for _ in range(self.n_agents)]
+        self.joint_obs = []
+        self.actions   = [[] for _ in range(self.n_agents)]
+        self.log_probs = [[] for _ in range(self.n_agents)]
+        self.rewards   = []
+        self.dones     = []
+        self.values    = []
 
-    def store(
-        self,
-        local_obs:  List[np.ndarray],
-        joint_obs:  np.ndarray,
-        actions:    List[int],
-        log_probs:  List[float],
-        reward:     float,
-        done:       bool,
-        value:      float,
-    ) -> None:
+    def store(self, local_obs, joint_obs, actions, log_probs, reward, done, value):
         for i in range(self.n_agents):
             self.local_obs[i].append(local_obs[i].copy())
             self.actions[i].append(actions[i])
@@ -182,41 +90,26 @@ class RolloutBuffer:
         self.dones.append(done)
         self.values.append(value)
 
-    def __len__(self) -> int:
+    def __len__(self):
         return len(self.rewards)
 
-    def compute_returns_and_advantages(
-        self,
-        last_value: float,
-        gamma:      float = GAMMA,
-        gae_lambda: float = GAE_LAMBDA,
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Compute GAE advantages and discounted returns.
-        """
+    def compute_returns_and_advantages(self, last_value, gamma=GAMMA, gae_lambda=GAE_LAMBDA):
         T      = len(self.rewards)
         values = np.array(self.values + [last_value], dtype=np.float32)
         rewards= np.array(self.rewards, dtype=np.float32)
         dones  = np.array(self.dones,   dtype=np.float32)
 
         advantages = np.zeros(T, dtype=np.float32)
-        gae        = 0.0
-
+        gae = 0.0
         for t in reversed(range(T)):
-            delta = rewards[t] + gamma * values[t+1] * (1 - dones[t]) - values[t]
-            gae   = delta + gamma * gae_lambda * (1 - dones[t]) * gae
-            advantages[t] = gae
+            delta        = rewards[t] + gamma * values[t+1] * (1 - dones[t]) - values[t]
+            gae          = delta + gamma * gae_lambda * (1 - dones[t]) * gae
+            advantages[t]= gae
 
         returns = advantages + values[:T]
         return returns, advantages
 
-    def get_tensors(
-        self,
-        agent_id:    int,
-        returns:     np.ndarray,
-        advantages:  np.ndarray,
-    ) -> dict:
-        """Return tensors for one agent's PPO update."""
+    def get_tensors(self, agent_id, returns, advantages):
         return {
             "obs":        torch.FloatTensor(np.array(self.local_obs[agent_id])),
             "joint_obs":  torch.FloatTensor(np.array(self.joint_obs)),
@@ -227,39 +120,17 @@ class RolloutBuffer:
         }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# MAPPO
-# ─────────────────────────────────────────────────────────────────────────────
-
 class MAPPO:
-    """
-    Multi-Agent PPO with Centralized Training Decentralized Execution.
-
-    - One Actor per agent (local obs → action)
-    - One shared Critic (joint obs → value)
-    - PPO clipped objective
-    - Shared reward → all actors receive same return signal
-    """
-
     def __init__(
         self,
-        n_agents:    int   = N_AGENTS,
-        state_dim:   int   = STATE_DIM,
-        joint_dim:   int   = JOINT_DIM,
-        action_dim:  int   = ACTION_DIM,
-        hidden_dim:  int   = HIDDEN_DIM,
-        lr_actor:    float = LR_ACTOR,
-        lr_critic:   float = LR_CRITIC,
-        clip_eps:    float = CLIP_EPS,
-        entropy_coef:float = ENTROPY_COEF,
-        value_coef:  float = VALUE_COEF,
-        max_grad:    float = MAX_GRAD_NORM,
-        epochs:      int   = EPOCHS_PER_UPDATE,
-        batch_size:  int   = BATCH_SIZE,
-        gamma:       float = GAMMA,
-        gae_lambda:  float = GAE_LAMBDA,
-        device:      str   = "cpu",
-    ) -> None:
+        n_agents=N_AGENTS, state_dim=STATE_DIM, joint_dim=JOINT_DIM,
+        action_dim=ACTION_DIM, hidden_dim=HIDDEN_DIM,
+        lr_actor=LR_ACTOR, lr_critic=LR_CRITIC, clip_eps=CLIP_EPS,
+        entropy_coef=ENTROPY_COEF, value_coef=VALUE_COEF,
+        max_grad=MAX_GRAD_NORM, epochs=EPOCHS_PER_UPDATE,
+        batch_size=BATCH_SIZE, gamma=GAMMA, gae_lambda=GAE_LAMBDA,
+        device="cpu",
+    ):
         self.n_agents     = n_agents
         self.clip_eps     = clip_eps
         self.entropy_coef = entropy_coef
@@ -270,167 +141,93 @@ class MAPPO:
         self.gamma        = gamma
         self.gae_lambda   = gae_lambda
         self.device       = torch.device(device)
+        self.update_count = 0
 
-        # One actor per agent
         self.actors = [
             Actor(state_dim, action_dim, hidden_dim).to(self.device)
             for _ in range(n_agents)
         ]
-
-        # Shared centralized critic
         self.critic = Critic(joint_dim, hidden_dim).to(self.device)
-
-        # Separate optimizer per actor + one for critic
         self.actor_optimizers = [
-            optim.Adam(actor.parameters(), lr=lr_actor)
-            for actor in self.actors
+            optim.Adam(a.parameters(), lr=lr_actor) for a in self.actors
         ]
         self.critic_optimizer = optim.Adam(self.critic.parameters(), lr=lr_critic)
 
-        # Logging
-        self.update_count = 0
-
-    # ── Act ──────────────────────────────────────────────────────────────────
-
-    def act(
-        self,
-        local_states: List[np.ndarray],
-        joint_obs:    np.ndarray,
-    ) -> Tuple[List[int], List[float], float]:
-        """
-        Sample actions for all agents.
-        Returns:
-            actions:   list of action ints
-            log_probs: list of log probs
-            value:     critic estimate
-        """
-        actions   = []
-        log_probs = []
-
+    def act(self, local_states, joint_obs):
+        actions, log_probs = [], []
         for i, actor in enumerate(self.actors):
-            action, logp = actor.act(local_states[i])
-            actions.append(action)
-            log_probs.append(logp)
-
-        # Critic value from joint obs
+            a, lp = actor.act(local_states[i])
+            actions.append(a)
+            log_probs.append(lp)
         joint_t = torch.FloatTensor(joint_obs).unsqueeze(0).to(self.device)
         with torch.no_grad():
             value = float(self.critic(joint_t).item())
-
         return actions, log_probs, value
 
-    # ── Update ───────────────────────────────────────────────────────────────
-
     def update(self, buffer: RolloutBuffer, last_value: float = 0.0) -> dict:
-        """
-        PPO update using collected rollout.
-        Returns dict of losses for logging.
-        """
         returns, advantages = buffer.compute_returns_and_advantages(
             last_value, self.gamma, self.gae_lambda
         )
+        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
 
-        # Normalize advantages
-        adv_mean = advantages.mean()
-        adv_std  = advantages.std() + 1e-8
-        advantages = (advantages - adv_mean) / adv_std
-
-        total_actor_loss  = 0.0
-        total_critic_loss = 0.0
-        total_entropy     = 0.0
-
+        total_actor_loss = total_critic_loss = total_entropy = 0.0
         T = len(buffer)
 
-        for epoch in range(self.epochs):
-            # Random mini-batch indices
+        for _ in range(self.epochs):
             indices = np.random.permutation(T)
-
             for start in range(0, T, self.batch_size):
-                batch_idx = indices[start: start + self.batch_size]
+                idx = indices[start: start + self.batch_size]
 
-                # ── Critic update (shared across agents)
-                batch_joint = torch.FloatTensor(
-                    np.array(buffer.joint_obs)[batch_idx]
-                ).to(self.device)
-                batch_ret = torch.FloatTensor(returns[batch_idx]).to(self.device)
+                batch_joint = torch.FloatTensor(np.array(buffer.joint_obs)[idx]).to(self.device)
+                batch_ret   = torch.FloatTensor(returns[idx]).to(self.device)
+                batch_adv   = torch.FloatTensor(advantages[idx]).to(self.device)
 
-                values_pred = self.critic(batch_joint)
-                critic_loss = nn.MSELoss()(values_pred, batch_ret)
-
+                critic_loss = nn.MSELoss()(self.critic(batch_joint), batch_ret)
                 self.critic_optimizer.zero_grad()
                 (self.value_coef * critic_loss).backward()
                 nn.utils.clip_grad_norm_(self.critic.parameters(), self.max_grad)
                 self.critic_optimizer.step()
-
                 total_critic_loss += critic_loss.item()
 
-                # ── Actor update (one per agent)
-                batch_adv = torch.FloatTensor(advantages[batch_idx]).to(self.device)
-
-                for i, (actor, opt) in enumerate(
-                    zip(self.actors, self.actor_optimizers)
-                ):
-                    tensors = buffer.get_tensors(i, returns, advantages)
-
-                    batch_obs     = tensors["obs"][batch_idx].to(self.device)
-                    batch_actions = tensors["actions"][batch_idx].to(self.device)
-                    batch_old_lp  = tensors["old_logp"][batch_idx].to(self.device)
-
-                    new_logp, entropy = actor.evaluate(batch_obs, batch_actions)
-
-                    # PPO clipped ratio
-                    ratio = torch.exp(new_logp - batch_old_lp)
-                    surr1 = ratio * batch_adv
-                    surr2 = torch.clamp(ratio, 1 - self.clip_eps, 1 + self.clip_eps) * batch_adv
-
-                    actor_loss = (
-                        -torch.min(surr1, surr2).mean()
-                        - self.entropy_coef * entropy.mean()
+                for i, (actor, opt) in enumerate(zip(self.actors, self.actor_optimizers)):
+                    t = buffer.get_tensors(i, returns, advantages)
+                    new_logp, entropy = actor.evaluate(
+                        t["obs"][idx].to(self.device),
+                        t["actions"][idx].to(self.device),
                     )
-
+                    ratio  = torch.exp(new_logp - t["old_logp"][idx].to(self.device))
+                    surr1  = ratio * batch_adv
+                    surr2  = torch.clamp(ratio, 1 - self.clip_eps, 1 + self.clip_eps) * batch_adv
+                    aloss  = -torch.min(surr1, surr2).mean() - self.entropy_coef * entropy.mean()
                     opt.zero_grad()
-                    actor_loss.backward()
+                    aloss.backward()
                     nn.utils.clip_grad_norm_(actor.parameters(), self.max_grad)
                     opt.step()
-
-                    total_actor_loss += actor_loss.item()
+                    total_actor_loss += aloss.item()
                     total_entropy    += entropy.mean().item()
 
         self.update_count += 1
-        n_updates = self.epochs * max(1, T // self.batch_size)
-
+        n = self.epochs * max(1, T // self.batch_size)
         return {
-            "actor_loss":  total_actor_loss  / (n_updates * self.n_agents),
-            "critic_loss": total_critic_loss / n_updates,
-            "entropy":     total_entropy     / (n_updates * self.n_agents),
+            "actor_loss":  total_actor_loss  / (n * self.n_agents),
+            "critic_loss": total_critic_loss / n,
+            "entropy":     total_entropy     / (n * self.n_agents),
             "update":      self.update_count,
         }
 
-    # ── Save / Load ───────────────────────────────────────────────────────────
-
-    def save(self, save_dir: Path) -> None:
-        """Save all actors and critic to save_dir."""
+    def save(self, save_dir: Path):
         save_dir = Path(save_dir)
         save_dir.mkdir(parents=True, exist_ok=True)
-
         for i, actor in enumerate(self.actors):
             torch.save(actor.state_dict(), save_dir / f"actor_r{i+1}.pt")
-
         torch.save(self.critic.state_dict(), save_dir / "critic.pt")
 
-    def load(self, save_dir: Path) -> None:
-        """Load all actors and critic from save_dir."""
+    def load(self, save_dir: Path):
         save_dir = Path(save_dir)
-
         for i, actor in enumerate(self.actors):
-            path = save_dir / f"actor_r{i+1}.pt"
-            if path.exists():
-                actor.load_state_dict(
-                    torch.load(path, map_location=self.device)
-                )
-
-        critic_path = save_dir / "critic.pt"
-        if critic_path.exists():
-            self.critic.load_state_dict(
-                torch.load(critic_path, map_location=self.device)
-            )
+            p = save_dir / f"actor_r{i+1}.pt"
+            if p.exists():
+                actor.load_state_dict(torch.load(p, map_location=self.device))
+        cp = save_dir / "critic.pt"
+        if cp.exists():
+            self.critic.load_state_dict(torch.load(cp, map_location=self.device))

@@ -1,0 +1,42 @@
+{
+  "linear_probe": {
+    "accuracy": 0.6148527708559998,
+    "per_class": {
+      "Benign": {
+        "precision": 0.7378371451401348,
+        "recall": 0.9789957991598319,
+        "f1-score": 0.8414790360990037,
+        "support": 49990.0
+      },
+      "Suspicious": {
+        "precision": 0.40331491712707185,
+        "recall": 0.002674384525205158,
+        "f1-score": 0.00531353495650908,
+        "support": 27296.0
+      },
+      "Attack": {
+        "precision": 0.18683114555327113,
+        "recall": 0.43256438423044064,
+        "f1-score": 0.2609528017082689,
+        "support": 8193.0
+      },
+      "accuracy": 0.6148527708559998,
+      "macro avg": {
+        "precision": 0.44266106927349264,
+        "recall": 0.47141152263849256,
+        "f1-score": 0.3692484575879272,
+        "support": 85479.0
+      },
+      "weighted avg": {
+        "precision": 0.5782013177385538,
+        "recall": 0.6148527708559998,
+        "f1-score": 0.5188240570100014,
+        "support": 85479.0
+      }
+    }
+  },
+  "embed_dim": 6,
+  "epochs": 80,
+  "temperature": 0.5,
+  "final_loss": 5.7899894781795
+}

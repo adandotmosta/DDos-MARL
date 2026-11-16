@@ -31,6 +31,7 @@ try:
         S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
         S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR, S30_DIR,
         S31_DIR, S32_DIR, S33_DIR, S34_DIR, S35_DIR, S36_DIR, S37_DIR, S38_DIR,
+        S39_DIR, S40_DIR, FEATURES_JSON,
         LGBM_BUNDLE_COMBINED,
     )
     from src.environment import MultiAgentEnv
@@ -46,6 +47,7 @@ except ImportError:
         S13_DIR, S14_DIR, S15_DIR, S16_DIR, S17_DIR, S18_DIR,
         S19_DIR, S21_DIR, S22_DIR, S23_DIR, S24_DIR, S25_DIR, S26B_DIR, S27_DIR, S28_DIR, S29_DIR, S30_DIR,
         S31_DIR, S32_DIR, S33_DIR, S34_DIR, S35_DIR, S36_DIR, S37_DIR, S38_DIR,
+        S39_DIR, S40_DIR, FEATURES_JSON,
         LGBM_BUNDLE_COMBINED,
     )
     from coopids.src.environment import MultiAgentEnv
@@ -2043,6 +2045,107 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         print(f"\nNo S38 model found at {S38_DIR} — skipping.")
         print("Run: python main.py --stage s38")
 
+    # ── S39 evaluation (End-to-End FlowEncoder + MAPPO)
+    s39_monday_metrics  = {}
+    s39_tuesday_metrics = {}
+    if _should_run("s39") and S39_DIR.exists():
+        print(f"\nLoading trained S39 from {S39_DIR}...")
+        from src.flow_encoder import FlowEncoder, load_feature_names, build_handshake_mapping, prepare_features
+        from src.environment_e2e import (
+            MultiAgentEnvE2E,
+            STATE_DIM as E2E_STATE_DIM,
+            ACTION_DIM as E2E_ACTION_DIM,
+            JOINT_DIM as E2E_JOINT_DIM,
+            ACTION_LABELS as E2E_ACTION_LABELS,
+        )
+
+        # Load encoder and preprocessing
+        s39_encoder = FlowEncoder.load(S39_DIR, n_features=42, embed_dim=3, hidden=64)
+        with open(S39_DIR / "preprocessing.pkl", "rb") as f:
+            s39_preproc = pickle.load(f)
+        s39_features = s39_preproc["features"]
+        s39_hs_map   = s39_preproc["hs_mapping"]
+        s39_imputer  = s39_preproc["imputer"]
+        s39_scaler   = s39_preproc["scaler"]
+
+        s39_mappo = MAPPO(state_dim=E2E_STATE_DIM, joint_dim=E2E_JOINT_DIM,
+                          action_dim=E2E_ACTION_DIM, n_agents=N_AGENTS)
+        s39_mappo.load(S39_DIR)
+
+        # Monday eval
+        df_mon_39 = load_day(CSV_MONDAY, s39_features)
+        X_mon_39, _, _ = prepare_features(df_mon_39, s39_features, s39_hs_map, s39_imputer, s39_scaler)
+        env_s39_mon = MultiAgentEnvE2E(df=df_mon_39, X_preprocessed=X_mon_39,
+                                        encoder=s39_encoder, n_agents=N_AGENTS)
+        print(f"\nEvaluating S39 on Monday (seen attacks)...")
+        print(df_mon_39["label"].value_counts().to_string())
+        s39_monday_metrics = run_episode(env_s39_mon, s39_mappo, action_labels=E2E_ACTION_LABELS)
+        print(f"  TPR: {s39_monday_metrics['tpr']:.4f}  FPR: {s39_monday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s39_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s39_monday_results.json", "w") as f:
+            json.dump(s39_monday_metrics, f, indent=2)
+
+        # Tuesday eval
+        df_tue_39 = load_day(CSV_TUESDAY, s39_features)
+        X_tue_39, _, _ = prepare_features(df_tue_39, s39_features, s39_hs_map, s39_imputer, s39_scaler)
+        env_s39_tue = MultiAgentEnvE2E(df=df_tue_39, X_preprocessed=X_tue_39,
+                                        encoder=s39_encoder, n_agents=N_AGENTS)
+        print(f"\nEvaluating S39 on Tuesday (unseen attacks)...")
+        print(df_tue_39["label"].value_counts().to_string())
+        s39_tuesday_metrics = run_episode(env_s39_tue, s39_mappo, action_labels=E2E_ACTION_LABELS)
+        print(f"  TPR: {s39_tuesday_metrics['tpr']:.4f}  FPR: {s39_tuesday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s39_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s39_tuesday_results.json", "w") as f:
+            json.dump(s39_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S39 model found at {S39_DIR} — skipping.")
+        print("Run: python main.py --stage s39")
+
+    # ── S40 evaluation (MAPPO + global reward — same env as S27)
+    s40_monday_metrics  = {}
+    s40_tuesday_metrics = {}
+    if _should_run("s40") and S40_DIR.exists():
+        print(f"\nLoading trained S40 from {S40_DIR}...")
+        from src.environment_tiered_v2 import (
+            MultiAgentEnv as MultiAgentEnvV2,
+            STATE_DIM as T2_STATE_DIM,
+            JOINT_DIM as T2_JOINT_DIM,
+            ACTION_DIM as T2_ACTION_DIM,
+            ACTION_LABELS as T2_ACTION_LABELS,
+        )
+        s40_mappo = MAPPO(state_dim=T2_STATE_DIM, joint_dim=T2_JOINT_DIM,
+                          action_dim=T2_ACTION_DIM, n_agents=N_AGENTS)
+        s40_mappo.load(S40_DIR)
+
+        df_mon_40 = load_day(CSV_MONDAY, features)
+        env_s40_mon = MultiAgentEnvV2(df=df_mon_40, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S40 on Monday (seen attacks)...")
+        s40_monday_metrics = run_episode(env_s40_mon, s40_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s40_monday_metrics['tpr']:.4f}  FPR: {s40_monday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s40_monday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s40_monday_results.json", "w") as f:
+            json.dump(s40_monday_metrics, f, indent=2)
+
+        df_tue_40 = load_day(CSV_TUESDAY, features)
+        env_s40_tue = MultiAgentEnvV2(df=df_tue_40, bundle=bundle, n_agents=N_AGENTS)
+        print(f"\nEvaluating S40 on Tuesday (unseen attacks)...")
+        s40_tuesday_metrics = run_episode(env_s40_tue, s40_mappo, action_labels=T2_ACTION_LABELS)
+        print(f"  TPR: {s40_tuesday_metrics['tpr']:.4f}  FPR: {s40_tuesday_metrics['fpr']:.4f}")
+        print(f"  Action distribution per agent:")
+        for i, dist in enumerate(s40_tuesday_metrics["action_distribution"]):
+            print(f"    Router {i+1}: {dist}")
+        with open(out_dir / "s40_tuesday_results.json", "w") as f:
+            json.dump(s40_tuesday_metrics, f, indent=2)
+    else:
+        print(f"\nNo S40 model found at {S40_DIR} — skipping.")
+        print("Run: python main.py --stage s40")
+
     # ── Full comparison table (Monday)
     print("\n" + "="*150)
     print("FULL COMPARISON — MONDAY (seen attacks)")
@@ -2081,6 +2184,8 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S36",    s36_monday_metrics),
         ("S37",    s37_monday_metrics),
         ("S38",    s38_monday_metrics),
+        ("S39",    s39_monday_metrics),
+        ("S40",    s40_monday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_mon)
     print(hdr)
@@ -2127,6 +2232,8 @@ def main(tag: str = "baseline", model_tag: str | None = None, models: set | None
         ("S36",    s36_tuesday_metrics),
         ("S37",    s37_tuesday_metrics),
         ("S38",    s38_tuesday_metrics),
+        ("S39",    s39_tuesday_metrics),
+        ("S40",    s40_tuesday_metrics),
     ]
     hdr = f"{'Metric':<16}" + "".join(f"{n:>10}" for n, _ in all_models_tue)
     print(hdr)

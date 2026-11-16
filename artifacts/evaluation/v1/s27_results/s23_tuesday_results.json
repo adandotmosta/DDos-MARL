@@ -1,0 +1,29 @@
+{
+  "total_reward": 667.3521,
+  "total_steps": 962,
+  "total_benign_in": 49965,
+  "total_attack_in": 8193,
+  "total_benign_out": 49927,
+  "total_attack_blocked": 10,
+  "tpr": 0.0012,
+  "fpr": 0.0008,
+  "legit_ratio": 0.9992,
+  "action_distribution": [
+    {
+      "throttle_90": 757,
+      "block": 205
+    },
+    {
+      "forward": 76,
+      "throttle_30": 21,
+      "throttle_90": 124,
+      "throttle_95": 111,
+      "block": 630
+    },
+    {
+      "forward": 13,
+      "throttle_10": 36,
+      "throttle_95": 913
+    }
+  ]
+}

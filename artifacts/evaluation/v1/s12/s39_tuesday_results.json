@@ -1,0 +1,32 @@
+{
+  "total_reward": 842.9778,
+  "total_steps": 962,
+  "total_benign_in": 49965,
+  "total_attack_in": 8193,
+  "total_benign_out": 47098,
+  "total_attack_blocked": 6879,
+  "tpr": 0.8396,
+  "fpr": 0.0574,
+  "legit_ratio": 0.9426,
+  "action_distribution": [
+    {
+      "passive": 1,
+      "light": 264,
+      "moderate": 684,
+      "lockdown": 13
+    },
+    {
+      "passive": 1,
+      "light": 288,
+      "moderate": 198,
+      "lockdown": 475
+    },
+    {
+      "light": 44,
+      "moderate": 597,
+      "firm": 4,
+      "aggressive": 1,
+      "lockdown": 316
+    }
+  ]
+}

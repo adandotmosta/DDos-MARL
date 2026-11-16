@@ -9,9 +9,17 @@ my_env312/
 __pycache__/
 *.pyc
 
-# Large datasets and artifacts
+# Large datasets
 BCC-2024/*.csv
 BCC-2024 copy/
+
+# Model binaries
+*.npy
+*.pt
+*.pkl
+*.npz
+
+# Risk model artifacts (keep only selected_features.json)
 Risk_Model/artifacts/*
 !Risk_Model/artifacts/vae/
 Risk_Model/artifacts/vae/*
@@ -19,8 +27,23 @@ Risk_Model/artifacts/vae/*
 Risk_Model/artifacts/vae/v1/*
 !Risk_Model/artifacts/vae/v1/selected_features.json
 
-# Model binaries / arrays
-*.npy
-*.pt
-*.pkl
-*.npz
+# Scratch / logs
+bm.txt
+training_run.log
+ideas.md
+
+# Presentation files
+*.key
+*.pptx
+Presentation/
+Presentations/
+
+# Old duplicate code
+MARL/
+
+# LaTeX build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out

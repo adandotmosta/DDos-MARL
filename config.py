@@ -1,249 +1,177 @@
-"""
-config.py
-Central configuration for CoopIDS.
-All hyperparameters, paths, and constants in one place.
-Change values here — everything else reads from here.
-"""
-
 from pathlib import Path
 
-# ─────────────────────────────────────────────
-# Safe BASE_DIR for both script and notebook
-# ─────────────────────────────────────────────
 try:
     BASE_DIR = Path(__file__).resolve().parent
 except NameError:
     BASE_DIR = Path.cwd()
 
-# ─────────────────────────────────────────────
 # Paths
-# ─────────────────────────────────────────────
 DATA_DIR     = BASE_DIR / "BCC-2024"
 ARTIFACT_DIR = BASE_DIR / "artifacts"
 VERSION      = "v1"
 
-PREPROCESS_DIR    = ARTIFACT_DIR / "preprocessing" / VERSION
-LGBM_DIR          = ARTIFACT_DIR / "lgbm"          / VERSION
-MARL_DIR          = ARTIFACT_DIR / "marl"           / VERSION
-MAPL_DIR          = MARL_DIR / "ablation" / "S9"    # MAPPO + local reward
-E13_DIR           = MARL_DIR / "ablation" / "S10"   # MAPPO + extended state (E13)
-S11_DIR           = MARL_DIR / "ablation" / "S11"   # MAPPO + 10-action space
-S12_DIR           = MARL_DIR / "ablation" / "S12"   # MAPPO + no puzzle, 9-action space
-S13_DIR           = MARL_DIR / "ablation" / "S13"   # MAPPO + local reward + puzzle cost 0.05
-S14_DIR           = MARL_DIR / "ablation" / "S14"   # MAPPO + local reward + puzzle_block_rate state
-S15_DIR           = MARL_DIR / "ablation" / "S15"   # MAPPO + local reward + risk-aware throttle
-S16_DIR           = MARL_DIR / "ablation" / "S16"   # MAPPO + local reward + dynamic puzzle
-S17_DIR           = MARL_DIR / "ablation" / "S17"   # MAPPO + local reward + entropy state
-S18_DIR           = MARL_DIR / "ablation" / "S18"   # MAPPO + local reward + curriculum learning
-S19_DIR           = MARL_DIR / "ablation" / "S19"   # MAPPO + local reward + asymmetric reward (attack_w=3)
-S21_DIR           = MARL_DIR / "ablation" / "S21"   # MAPPO + local reward + lower threshold (0.20)
-S22_DIR           = MARL_DIR / "ablation" / "S22"   # MAPPO + counterfactual reward (COMA-style)
-S23_DIR           = MARL_DIR / "ablation" / "S23"   # MAPPO + selective puzzle (LightGBM-predicted class)
-S24_DIR           = MARL_DIR / "ablation" / "S24"   # MAPPO + selective puzzle + combined LightGBM (Monday+Tuesday)
-S25_DIR           = MARL_DIR / "ablation" / "S25"   # MAPPO + puzzle on flagged IPs + p_attack pass rates + combined LightGBM
-S26_DIR           = MARL_DIR / "ablation" / "S26"   # MAPPO + tiered action profiles (block/puzzle/forward by p_attack)
-S26B_DIR          = MARL_DIR / "ablation" / "S26b"  # S26 + Monday-only LightGBM (isolates MARL contribution)
-S27_DIR           = MARL_DIR / "ablation" / "S27"   # MAPPO + p_risk tiered profiles (1-p_benign routing, Monday-only)
-S28_DIR           = MARL_DIR / "ablation" / "S28"   # S27 + mixed-density training (Monday+Thursday) — fixes benign-day FPR
-S29_DIR           = MARL_DIR / "ablation" / "S29"   # IPPO + p_risk tiered profiles (no joint obs) — isolates cooperation contribution
-S30_DIR           = MARL_DIR / "ablation" / "S30"   # S27 + combined LightGBM (Mon+Tue) — isolates sensor quality vs policy quality
-S31_DIR           = MARL_DIR / "ablation" / "S31"   # IPPO + p_risk tiered profiles + 6 agents
-S32_DIR           = MARL_DIR / "ablation" / "S32"   # IPPO + p_risk tiered profiles + 1-dim state [p_risk only]
-S33_DIR           = MARL_DIR / "ablation" / "S33"   # MAPPO + shared IP blocklist + 5-dim state
-S34_DIR           = MARL_DIR / "ablation" / "S34"   # IPPO + shared IP blocklist + 5-dim state
-S35_DIR           = MARL_DIR / "ablation" / "S35"   # MAPPO + victim routing + shared IP blocklist
-S36_DIR           = MARL_DIR / "ablation" / "S36"   # IPPO + victim routing + shared IP blocklist
-S37_DIR           = MARL_DIR / "ablation" / "S37"   # MAPPO + p_risk tiered profiles + 6 agents
-S38_DIR           = MARL_DIR / "ablation" / "S38"   # IPPO + p_risk tiered profiles + ECMP 5-tuple routing
-EVAL_DIR          = ARTIFACT_DIR / "evaluation"     / VERSION
+PREPROCESS_DIR = ARTIFACT_DIR / "preprocessing" / VERSION
+LGBM_DIR       = ARTIFACT_DIR / "lgbm"          / VERSION
+MARL_DIR       = ARTIFACT_DIR / "marl"           / VERSION
+EVAL_DIR       = ARTIFACT_DIR / "evaluation"     / VERSION
 
-# CSV filenames
+# Ablation stage directories
+S11_DIR  = MARL_DIR / "ablation" / "S11"
+S12_DIR  = MARL_DIR / "ablation" / "S12"
+S13_DIR  = MARL_DIR / "ablation" / "S13"
+S14_DIR  = MARL_DIR / "ablation" / "S14"
+S15_DIR  = MARL_DIR / "ablation" / "S15"
+S16_DIR  = MARL_DIR / "ablation" / "S16"
+S17_DIR  = MARL_DIR / "ablation" / "S17"
+S18_DIR  = MARL_DIR / "ablation" / "S18"
+S19_DIR  = MARL_DIR / "ablation" / "S19"
+S21_DIR  = MARL_DIR / "ablation" / "S21"
+S22_DIR  = MARL_DIR / "ablation" / "S22"
+S23_DIR  = MARL_DIR / "ablation" / "S23"
+S24_DIR  = MARL_DIR / "ablation" / "S24"
+S25_DIR  = MARL_DIR / "ablation" / "S25"
+S26_DIR  = MARL_DIR / "ablation" / "S26"
+S26B_DIR = MARL_DIR / "ablation" / "S26b"
+S27_DIR  = MARL_DIR / "ablation" / "S27"
+S28_DIR  = MARL_DIR / "ablation" / "S28"
+S29_DIR  = MARL_DIR / "ablation" / "S29"
+S30_DIR  = MARL_DIR / "ablation" / "S30"
+S31_DIR  = MARL_DIR / "ablation" / "S31"
+S32_DIR  = MARL_DIR / "ablation" / "S32"
+S33_DIR  = MARL_DIR / "ablation" / "S33"
+S34_DIR  = MARL_DIR / "ablation" / "S34"
+S35_DIR  = MARL_DIR / "ablation" / "S35"
+S36_DIR  = MARL_DIR / "ablation" / "S36"
+S37_DIR  = MARL_DIR / "ablation" / "S37"
+S38_DIR  = MARL_DIR / "ablation" / "S38"
+S39_DIR  = MARL_DIR / "ablation" / "S39"
+S40_DIR  = MARL_DIR / "ablation" / "S40"
+MAPL_DIR = MARL_DIR / "ablation" / "S9"
+E13_DIR  = MARL_DIR / "ablation" / "S10"
+
+# Data files
 CSV_THURSDAY = DATA_DIR / "Thursday_14_Dec_2023.csv"
 CSV_SATURDAY = DATA_DIR / "Saturday_16_Dec_2023.csv"
 CSV_MONDAY   = DATA_DIR / "Monday_18_Dec_2023.csv"
 CSV_TUESDAY  = DATA_DIR / "Tuesday_19_Dec_2023.csv"
 
-# LightGBM bundle (trained on Monday only — day split)
-LGBM_BUNDLE  = BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "models" / "lgbm_bundle_monday.pkl"
-# Combined bundle trained on Monday + Tuesday — used in S24 to isolate MARL throttling quality
+# LightGBM bundles
+LGBM_BUNDLE          = BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "models" / "lgbm_bundle_monday.pkl"
 LGBM_BUNDLE_COMBINED = BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "models" / "lgbm_bundle_monday_tuesday.pkl"
-FEATURES_JSON= BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "selected_features.json"
+FEATURES_JSON        = BASE_DIR / "Risk_Model" / "artifacts" / "vae" / "v1" / "selected_features.json"
 
-# ─────────────────────────────────────────────
 # Preprocessing
-# ─────────────────────────────────────────────
-WINDOW_SIZE  = 30     # seconds per window
-VAL_RATIO    = 0.2    # time-ordered val split
-RANDOM_SEED  = 42
-N_AGENTS     = 3
+WINDOW_SIZE = 30      # seconds per window
+VAL_RATIO   = 0.2
+RANDOM_SEED = 42
+N_AGENTS    = 3
 
-# ─────────────────────────────────────────────
 # LightGBM
-# ─────────────────────────────────────────────
-LGBM_LABEL_MAP = {
-    "Benign":     0,
-    "Suspicious": 1,
-    "Attack":     2,
-}
-LGBM_IDX_TO_LABEL = {0: "benign", 1: "suspicious", 2: "attack"}
+LGBM_LABEL_MAP     = {"Benign": 0, "Suspicious": 1, "Attack": 2}
+LGBM_IDX_TO_LABEL  = {0: "benign", 1: "suspicious", 2: "attack"}
+LGBM_THRESHOLD     = 0.35
 
-# Best threshold from threshold sweep (day split, best F1)
-LGBM_THRESHOLD = 0.35
-
-# ─────────────────────────────────────────────
 # Environment
-# ─────────────────────────────────────────────
-
-# Server capacity in bytes/s
-# Used for Malialis-style reward normalization
-Us = 1e8
-
-# IP risk table — how long before an entry expires (seconds)
-IP_TIMEOUT = 300
-
-# Minimum P(attack) for a flow to be added to IP risk table
+Us             = 1e8      # server capacity (bytes/s)
+IP_TIMEOUT     = 300
 BASE_THRESHOLD = 0.35
-
-# State normalisation constants
-# Max flows expected in a single 30s window (attack windows ~600-800 flows)
 FLOW_COUNT_MAX = 1000
-# Soft ceiling for IP risk table size (used to normalise ip_table_ratio)
 IP_TABLE_MAX   = 500
-# Max unique src IPs expected in a 30s window (DDoS windows ~500+ sources)
 UNIQUE_IP_MAX  = 500
 
-# Victim machine IPs (from paper Table A1)
 VICTIM_IPS = {
-    "3.96.128.96",    # Windows-machine-1
-    "99.79.45.168",   # Linux-admin-1
-    "15.222.45.224",  # Linux-webserver
-    "35.182.194.19",  # Windows-machine-2
-    "3.99.186.200",   # Windows-machine-3
-    "35.183.15.52",   # Windows-machine-4
+    "3.96.128.96",
+    "99.79.45.168",
+    "15.222.45.224",
+    "35.182.194.19",
+    "3.99.186.200",
+    "35.183.15.52",
 }
 
-# Puzzle: probability a flow passes challenge given its true label
 PUZZLE_PASS = {
-    "Benign":     0.95,   # legitimate users almost always solve
-    "Suspicious": 0.50,   # uncertain — 50/50
-    "Attack":     0.05,   # bots almost never solve
+    "Benign":     0.95,
+    "Suspicious": 0.50,
+    "Attack":     0.05,
 }
 
-# Reward weights
-# reward = REWARD_LEGIT_W * legit_ratio - REWARD_ATTACK_W * attack_ratio
-# Symmetric baseline: both = 1.0
-# Asymmetric (attacks more important): REWARD_ATTACK_W > 1.0
 REWARD_LEGIT_W  = 1.0
 REWARD_ATTACK_W = 1.0
-# Cost subtracted per puzzle action taken each step (summed across agents).
-# 0.0 = no penalty (default, preserves all prior experiments).
-# Try 0.01 / 0.05 / 0.10 to study the TPR–puzzle-use tradeoff.
-PUZZLE_COST = 0.0
+PUZZLE_COST     = 0.0
+LOCAL_REWARD    = False
 
-# Per-agent local reward experiment
-# False → shared global reward (default, all experiments above)
-# True  → each agent rewarded on its own router's flows only
-LOCAL_REWARD = False
-
-# Drop probabilities for throttle actions
-# action_id → drop probability
 DROP_PROBS = {
-    2: 0.10,  # throttle_10
-    3: 0.20,  # throttle_20
-    4: 0.30,  # throttle_30
-    5: 0.50,  # throttle_50
-    6: 0.70,  # throttle_70
-    7: 0.90,  # throttle_90
-    8: 0.95,  # throttle_95
-    9: 1.00,  # block
+    2: 0.10, 3: 0.20, 4: 0.30, 5: 0.50,
+    6: 0.70, 7: 0.90, 8: 0.95, 9: 1.00,
 }
 
-# Action space
 ACTIONS = {
-    0: "forward",
-    1: "puzzle",
-    2: "throttle_10",
-    3: "throttle_20",
-    4: "throttle_30",
-    5: "throttle_50",
-    6: "throttle_70",
-    7: "throttle_90",
-    8: "throttle_95",
-    9: "block",
+    0: "forward", 1: "puzzle",
+    2: "throttle_10", 3: "throttle_20", 4: "throttle_30",
+    5: "throttle_50", 6: "throttle_70", 7: "throttle_90",
+    8: "throttle_95", 9: "block",
 }
-ACTION_DIM = len(ACTIONS)  # 10
+ACTION_DIM = len(ACTIONS)
 
-# ─────────────────────────────────────────────
-# MARL — State dimensions
-# ─────────────────────────────────────────────
-# E13 — Extended state with spatial features
-# False → 5-dim state (baseline): [p_attack, p_benign, p_suspicious, ip_table_ratio, flow_count_norm]
-# True  → 7-dim state (E13):      above + [unique_src_ips_norm, attack_ip_ratio]
+# State dimensions
 EXTENDED_STATE = False
-
 STATE_DIM  = 7 if EXTENDED_STATE else 5
-JOINT_DIM  = STATE_DIM * N_AGENTS   # 21 if extended, 15 baseline
+JOINT_DIM  = STATE_DIM * N_AGENTS
 
-# ─────────────────────────────────────────────
-# MARL — Training
-# ─────────────────────────────────────────────
-N_EPISODES    = 500
-GAMMA         = 0.99       # discount factor
-GAE_LAMBDA    = 0.95       # GAE lambda for advantage estimation
-LR_ACTOR      = 3e-4       # actor learning rate
-LR_CRITIC     = 1e-3       # critic learning rate
-CLIP_EPS      = 0.2        # PPO clip epsilon
-ENTROPY_COEF  = 0.01       # entropy bonus coefficient
-VALUE_COEF    = 0.5        # value loss coefficient
-MAX_GRAD_NORM = 0.5        # gradient clipping
-UPDATE_EVERY  = 10         # episodes between MAPPO updates
-EPOCHS_PER_UPDATE = 4      # PPO epochs per update
-BATCH_SIZE    = 64
-HIDDEN_DIM    = 128        # actor/critic hidden layer size
+# MARL training
+N_EPISODES        = 500
+GAMMA             = 0.99
+GAE_LAMBDA        = 0.95
+LR_ACTOR          = 3e-4
+LR_CRITIC         = 1e-3
+CLIP_EPS          = 0.2
+ENTROPY_COEF      = 0.01
+VALUE_COEF        = 0.5
+MAX_GRAD_NORM     = 0.5
+UPDATE_EVERY      = 10
+EPOCHS_PER_UPDATE = 4
+BATCH_SIZE        = 64
+HIDDEN_DIM        = 128
+CHECKPOINT_EVERY  = 50
 
-# Checkpoint every N episodes
-CHECKPOINT_EVERY = 50
-
-# ─────────────────────────────────────────────
-# Ablation study stage names
-# ─────────────────────────────────────────────
 ABLATION_STAGES = {
-    "S1": "Single agent, load-only state, blind throttle (Malialis baseline)",
-    "S2": "Single agent, 5 raw features, blind throttle",
-    "S3": "Single agent, LightGBM risk, blind throttle",
-    "S4": "Single agent, LightGBM risk, selective IP blocking",
-    "S5": "Single agent, LightGBM risk, selective + puzzle",
-    "S6": "3 agents, LightGBM risk, selective + puzzle, IQL",
-    "S7": "3 agents, LightGBM risk, selective + puzzle, IPPO (local critics, no CTDE)",
-    "S8": "3 agents, LightGBM risk, selective + puzzle, MAPPO + CTDE",
-    "S9": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward",
-    "S10": "3 agents, LightGBM risk, selective + puzzle, MAPPO + extended state (7-dim)",
-    "S11": "3 agents, LightGBM risk, selective + puzzle, MAPPO + 10-action space",
-    "S12": "3 agents, LightGBM risk, no puzzle, MAPPO + 9-action space",
-    "S13": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle cost 0.05",
-    "S14": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + puzzle_block_rate state",
-    "S15": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + risk-aware throttle",
-    "S16": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + dynamic puzzle",
-    "S17": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + entropy state",
-    "S18": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + curriculum learning",
-    "S19": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + asymmetric reward (attack_w=3.0)",
-    "S21": "3 agents, LightGBM risk, selective + puzzle, MAPPO + local reward + lower threshold (0.20)",
-    "S22": "3 agents, LightGBM risk, selective + puzzle, MAPPO + counterfactual reward (COMA-style)",
-    "S23": "3 agents, LightGBM risk, selective puzzle (suspicious-only), MAPPO + local reward",
-    "S24": "3 agents, LightGBM (Mon+Tue), selective puzzle (suspicious-only), MAPPO + local reward — isolates MARL throttling quality",
-    "S25": "3 agents, LightGBM (Mon+Tue), puzzle on flagged IPs + p_attack pass rates, MAPPO + local reward — oracle-free puzzle",
-    "S26": "3 agents, LightGBM (Mon+Tue), tiered action profiles (block/puzzle/forward by p_attack), MAPPO + local reward — no IP table, no throttle",
-    "S26b": "3 agents, LightGBM (Mon only), tiered action profiles (block/puzzle/forward by p_attack), MAPPO + local reward — isolates MARL contribution",
-    "S27": "3 agents, LightGBM (Mon only), tiered profiles routing on p_risk=1-p_benign, MAPPO + local reward — tests p_risk generalisation",
-    "S28": "3 agents, LightGBM (Mon only), p_risk tiered profiles, MAPPO + local reward, train on Monday+Thursday — fixes benign-day FPR",
-    "S29": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO (no joint obs) — isolates cooperation vs independent adaptation",
-    "S30": "3 agents, LightGBM (Mon+Tue combined), p_risk tiered profiles, MAPPO — isolates sensor quality vs policy quality",
-    "S31": "6 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO — tests whether more agents improve performance",
-    "S32": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO + 1-dim state [p_risk only] — tests if 4-dim state adds anything",
-    "S33": "3 agents, LightGBM (Mon only), p_risk tiered profiles + shared IP blocklist, MAPPO — first shared coordination signal",
-    "S34": "3 agents, LightGBM (Mon only), p_risk tiered profiles + shared IP blocklist, IPPO — shared signal without CTDE",
-    "S35": "3 agents, LightGBM (Mon only), victim routing + shared IP blocklist, MAPPO — asymmetric routing, CTDE coordination",
-    "S36": "3 agents, LightGBM (Mon only), victim routing + shared IP blocklist, IPPO — asymmetric routing, no CTDE",
-    "S37": "6 agents, LightGBM (Mon only), p_risk tiered profiles, MAPPO — tests whether CTDE scales better than IPPO at higher agent counts",
-    "S38": "3 agents, LightGBM (Mon only), p_risk tiered profiles, IPPO + ECMP 5-tuple routing — most realistic ISP deployment model",
+    "S1":  "Single agent, load-only state, blind throttle (Malialis baseline)",
+    "S2":  "Single agent, 5 raw features, blind throttle",
+    "S3":  "Single agent, LightGBM risk, blind throttle",
+    "S4":  "Single agent, LightGBM risk, selective IP blocking",
+    "S5":  "Single agent, LightGBM risk, selective + puzzle",
+    "S6":  "3 agents, IQL",
+    "S7":  "3 agents, IPPO (local critics)",
+    "S8":  "3 agents, MAPPO + CTDE",
+    "S9":  "3 agents, MAPPO + local reward",
+    "S10": "3 agents, MAPPO + extended state (7-dim)",
+    "S11": "3 agents, MAPPO + 10-action space",
+    "S12": "3 agents, MAPPO + no puzzle, 9-action space",
+    "S13": "3 agents, MAPPO + puzzle cost 0.05",
+    "S14": "3 agents, MAPPO + puzzle_block_rate state",
+    "S15": "3 agents, MAPPO + risk-aware throttle",
+    "S16": "3 agents, MAPPO + dynamic puzzle",
+    "S17": "3 agents, MAPPO + entropy state",
+    "S18": "3 agents, MAPPO + curriculum learning",
+    "S19": "3 agents, MAPPO + asymmetric reward (attack_w=3)",
+    "S21": "3 agents, MAPPO + lower threshold (0.20)",
+    "S22": "3 agents, MAPPO + counterfactual reward (COMA-style)",
+    "S23": "3 agents, MAPPO + selective puzzle (suspicious-only)",
+    "S24": "3 agents, LightGBM (Mon+Tue), selective puzzle",
+    "S25": "3 agents, LightGBM (Mon+Tue), puzzle on flagged IPs",
+    "S26": "3 agents, LightGBM (Mon+Tue), tiered profiles (p_attack routing)",
+    "S26b":"3 agents, LightGBM (Mon only), tiered profiles (p_attack routing)",
+    "S27": "3 agents, LightGBM (Mon only), tiered profiles (p_risk routing)  — FINAL MODEL",
+    "S28": "3 agents, p_risk tiered, train on Monday+Thursday",
+    "S29": "3 agents, IPPO + p_risk tiered — cooperation ablation",
+    "S30": "3 agents, LightGBM (Mon+Tue), p_risk tiered — sensor ablation",
+    "S31": "6 agents, IPPO + p_risk tiered",
+    "S32": "3 agents, IPPO + 1-dim state [p_risk only]",
+    "S33": "3 agents, MAPPO + shared IP blocklist",
+    "S34": "3 agents, IPPO + shared IP blocklist",
+    "S35": "3 agents, MAPPO + victim routing + shared IP blocklist",
+    "S36": "3 agents, IPPO + victim routing + shared IP blocklist",
+    "S37": "6 agents, MAPPO + p_risk tiered — scaling ablation",
+    "S38": "3 agents, IPPO + ECMP 5-tuple routing",
+    "S39": "3 agents, MAPPO + end-to-end FlowEncoder (no LightGBM)",
+    "S40": "3 agents, MAPPO + global reward — reward ablation",
 }

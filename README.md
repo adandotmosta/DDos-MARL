@@ -2,7 +2,7 @@
 
 CoopIDS is a research project that studies whether several cooperating reinforcement-learning agents, placed at different ISP edge routers, can learn to filter DDoS traffic better than a fixed rule. It uses **MAPPO** (Multi-Agent PPO, centralised training / decentralised execution), a pre-trained **LightGBM risk scorer**, and a small set of **tiered defence profiles**. It is evaluated on real cloud traffic (BCCC-cPacket-Cloud-DDoS-2024), including **attack types never seen in training**.
 
-The full write-up is in [report/report.pdf](report/report.pdf). The stage-by-stage lab notebook is [ablation_notes.md](ablation_notes.md), and the detailed design is [ARCHI.md](ARCHI.md).
+The full write-up is in [report/report.pdf](report/report.pdf). The detailed design is in [ARCHI.md](ARCHI.md).
 
 ## Contents
 
@@ -89,7 +89,7 @@ Plots for every experiment are in [artifacts/plots/](artifacts/plots/) (TPR/FPR 
 
 ## Ablation study (S1–S42)
 
-The project is a long sequence of controlled experiments, each changing one thing. Full reasoning and numbers for each are in [ablation_notes.md](ablation_notes.md).
+The project is a long sequence of controlled experiments, each changing one thing. Full results per stage are in [artifacts/evaluation/](artifacts/evaluation/) and the report.
 
 | Stages | What was studied |
 |--------|------------------|
@@ -117,7 +117,6 @@ The project is a long sequence of controlled experiments, each changing one thin
 ├── config.py               # Paths, hyperparameters, stage output dirs
 ├── requirements.txt
 ├── ARCHI.md                # Detailed architecture / design document
-├── ablation_notes.md       # Lab notebook for all stages S1–S40 + conclusions
 ├── Risk_Model/             # LightGBM risk scorer: training, baselines, inference helper
 │   └── artifacts/vae/v1/selected_features.json   # the 42 selected features
 ├── src/

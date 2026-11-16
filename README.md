@@ -32,6 +32,16 @@ The full write-up is in [report/report.pdf](report/report.pdf). The stage-by-sta
 4. The reward favours forwarding legitimate traffic and stopping attack traffic.
 5. A **centralised critic** sees all agents' observations during training only. At run time each agent acts on its own local state (CTDE).
 
+### Architecture
+
+**Overall system (CTDE).** Each router has its own risk scorer, state aggregation, actor and tiered action. The centralised critic sees the joint 12-dim state and is used only during training.
+
+![CoopIDS CTDE architecture](assets/architecture_ctde.png)
+
+**What one router does, step by step.** Window *t* observes and acts. Window *t+30 s* enforces the action, computes the reward and updates the policy. The bottom panel shows how the three routers share knowledge through the critic.
+
+![Per-router agent loop and CTDE](assets/architecture_agent_loop.png)
+
 ### Tiered action profiles
 
 | ID | Profile    | T_block | T_puzzle |
